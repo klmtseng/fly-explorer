@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>果蠅腦 — 140,024 顆神經元</title>
+<style>
+  /* DESIGN.md 定案字型(Google Fonts;artifact CSP 允許 fonts.googleapis.com)。用 @import 是因為 build_artifact 只搬 <style>,不搬 <link>。 */
+  @import url("https://fonts.googleapis.com/css2?family=Huninn&family=Bricolage+Grotesque:wght@600;800&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+  html,body{margin:0;height:100%;background:#07090a;overflow:hidden;
+    touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;
+    font-family:"IBM Plex Sans","PingFang TC","Noto Sans TC",system-ui,sans-serif;color:#dfe6e0}
+  /* canvas 釘成覆蓋整個視窗的固定層:確保它是拖曳事件的接收者,
+     不會因為版面流動而被其他元素蓋住。z-index 0 讓 UI(z>0)畫在上面。 */
+  canvas{display:block;position:fixed;inset:0;z-index:0;touch-action:none}
+  #top,#perf,#bottom{z-index:2}
+  #gaugeHost{width:min(320px,100%);height:112px;
+    background:rgba(8,12,10,.72);border:1px solid #2a3330;border-radius:3px;backdrop-filter:blur(6px)}
+  #gaugeHost canvas.gauge{width:100%;height:100%;display:block}
+  #pip{position:relative;width:min(320px,100%);height:150px;border:1px solid #3a4258;border-radius:3px;
+    background:transparent;pointer-events:none}
+  #pip .pipTitle{position:absolute;left:8px;top:6px;font:10.5px "IBM Plex Mono",monospace;color:#9AA8C4;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+  /* 頁尾:兩行依序堆疊,寬度由容器決定,不可能互疊(絕對定位互疊是本專案第三次栽) */
+  #pip .pipFoot{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:2px;
+    padding:4px 8px 5px;background:linear-gradient(transparent,rgba(8,12,10,.85) 40%);font-family:"IBM Plex Mono",monospace}
+  #pip #pipRead{font-size:10px;color:#dfe6e0;opacity:.9;line-height:1.3}
+  #pip .pipNote{font-size:9px;color:#8a93a8;opacity:.85;line-height:1.3}
+  #panels{display:contents}
+  #pip .pipNote .short,#pip .pipTitle .short{display:none}
+  #top{position:fixed;left:12px;top:12px;display:flex;flex-direction:column;align-items:flex-start;
+    gap:8px;max-width:min(400px,calc(100vw - 24px));pointer-events:none}   /* 400:七顆模式鈕一列(360 會把 － 擠到第二行) */
+  #top > *{pointer-events:auto}
+  #hud{font-size:12px;line-height:1.6;text-shadow:0 1px 3px rgba(0,0,0,.9);pointer-events:none}
+  #hud b{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:500;display:block}
+  #legend{font-size:11.5px;line-height:1.9;
+    font-family:"IBM Plex Mono",monospace;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+  #legend i{display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%}
+  #perf{position:fixed;right:16px;top:14px;font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;text-align:right;opacity:.75;text-shadow:0 1px 3px rgba(0,0,0,.9);
+    max-width:38vw;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  #legend{columns:2;column-gap:18px}
+  #bottom{position:fixed;left:0;right:0;bottom:0;display:flex;flex-direction:column;
+    align-items:center;gap:8px;padding:0 12px 12px;pointer-events:none}
+  #bottom > *{pointer-events:auto}
+  /* 純文字層不吃觸控:手機上階段字幕疊在果蠅下半身,若吃事件,拖那裡就轉不動(使用者實機) */
+  #stage,#prov{pointer-events:none}
+  /* 字幕開關(2026-09-16):關掉時字幕區與放電計數一起收,只留一枚洋紅角標——「這段是注入/我們加的」永遠看得到 */
+  #stage .itag{display:none}
+  body.nocap #stage > *:not(.itag),body.nocap #spk{display:none!important}   /* !important:手機的四行截斷規則特異性更高,會把說明段又打開 */
+  body.nocap #stage .itag{display:inline-block;font:500 10px "IBM Plex Mono",monospace;color:#C8629E;border:1px solid #C8629E;padding:2px 7px;border-radius:2px;text-shadow:none}
+  #stage{text-align:center;text-shadow:0 1px 4px rgba(0,0,0,.95);max-width:min(560px,94vw)}
+  #stage b{display:block;font-size:15px;margin-bottom:2px}
+  #stage .cnt{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;opacity:.7;margin-top:3px}
+  #stage .inj{color:#C8629E}
+  #stage .src{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;opacity:.45;margin-top:2px}
+  #player{display:flex;align-items:center;gap:12px;padding:9px 14px;
+    background:rgba(10,14,12,.82);border:1px solid #2a3330;border-radius:3px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;backdrop-filter:blur(6px)}
+  #player button{background:none;border:1px solid #3d4a45;color:#dfe6e0;
+    width:30px;height:26px;cursor:pointer;font-size:12px;border-radius:2px}
+  #player button:focus-visible,#speed:focus-visible,#scrub:focus-visible{outline:2px solid #C8629E}
+  #scrub{width:min(240px,42vw);accent-color:#8fe3a8}
+  #clock{min-width:62px;text-align:right;white-space:nowrap}
+  #clock .inj{color:#C8629E}
+  #speed{background:#141a17;color:#dfe6e0;border:1px solid #3d4a45;font-size:11px;padding:3px}
+  #prov{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 16px;
+    font-size:10.5px;opacity:.75;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+  #prov i{display:inline-block;width:18px;height:0;margin-right:6px;vertical-align:middle}
+  #prov .dot{border-top:3px dotted #8fe3a8}
+  #prov .inj{border-top:2px dashed #C8629E}
+  #prov .drw{border-top:1.5px solid #9AA8C4}
+  #prov .mus{border-top:2px solid #E8A34A}
+  #prov em{font-style:normal;opacity:.55}
+  #legend{columns:1}
+  #modes{display:flex;flex-wrap:wrap;gap:0;row-gap:6px}
+  #modes button{font:500 10.5px/1 "IBM Plex Mono",monospace;padding:6px 10px;cursor:pointer;
+    background:rgba(10,14,12,.7);border:1px solid #2a3330;color:#96a29a}
+  #modes button:first-child{border-radius:2px 0 0 2px}
+  #modes button:last-child{border-radius:0 2px 2px 0;border-left:0}
+  #modes button.sep{margin-left:8px;border-left:1px solid #2a3330;border-radius:2px}
+  #modes button.sep[aria-pressed="true"]{color:#9AA8C4;border-color:#4a5468;background:#1a1d24}
+  #modes button[aria-pressed="true"]{background:#1d2a22;color:#8fe3a8;border-color:#3d5a48}
+  #modes button:focus-visible{outline:2px solid #C8629E;outline-offset:-2px}
+  @media (max-width:560px){
+    #prov{font-size:9px;gap:2px 10px} #prov em{display:none}   /* 手機:圖例的括號註解收掉,英文版底欄長高會把計數器頂到面板上 */
+    /* 播放列塞進 308px:原本 30+240+62+選單 ≈ 416px,播放鈕與速度選單雙雙超出螢幕(使用者實機截圖)。
+       時間軸改彈性、速度選單限寬(瀏覽器會截掉選項文字尾巴,選單展開時仍看得到全文) */
+    #player{gap:6px;padding:7px 8px;width:100%;box-sizing:border-box}
+    #scrub{flex:1 1 60px;min-width:60px;width:auto}
+    #clock{min-width:0;font-size:11px}
+    #speed{max-width:96px;font-size:10px;padding:3px 2px}
+    #stage{font-size:12px} #stage b{font-size:13.5px}
+    #stage > span:not(.cnt):not(.src):not(.itag){display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}   /* 手機:長字幕最多四行,否則底欄長高把計數器頂到面板上(英文版實測) */
+    #legend{font-size:9.5px;line-height:1.6}
+    #modes button{padding:5px 7px;font-size:9.5px} #modes button.sep{margin-left:5px} #modes .ic{display:none}   /* 七顆鈕塞進一列,不折行吃掉主畫面 */
+  }
+  @media (max-width:560px){
+    #hud{font-size:11px} #hud b{font-size:13.5px}
+    #perf{font-size:10px;max-width:34vw}
+    #gaugeHost{width:100%;height:92px}
+    #panels{display:flex;flex-direction:row;gap:6px;width:100%}
+    /* 電壓計 42% / PiP 58%:對半分時 PiP 的標題與讀數全部折行,果蠅剩一枚縮圖(無頭截圖確認) */
+    #top{width:calc(100vw - 24px)}     /* 否則 #top 縮到最寬子元素(模式鈕列)的寬度,面板列只剩 200px */
+    #gaugeHost{flex:0 0 40%;width:auto;height:132px}
+    #pip{flex:1 1 auto;width:auto;height:132px}
+    #pip .pipTitle .long{display:none} #pip .pipTitle .short{display:inline}
+    #pip #pipRead .rd{display:block} #pip #pipRead .sep{display:none}
+    #pip .pipNote .long{display:none} #pip .pipNote .short{display:inline}
+    #stage .src{display:none}
+    #mCards{display:none}   /* 索引入口在小籤列的「📖 全部」;第八顆鈕會把模式列擠成兩行 */
+    #mZoomIn,#mZoomOut{display:none}   /* 手機用兩指縮放;加了「字幕」鈕後這兩顆會把模式列擠成兩行 */
+    #hud #sub{display:none}   /* 抽樣 1/2 的說明在階段字幕裡還有一份 */
+    #pip .pipNote{font-size:8.5px}
+    #top{gap:6px;max-width:calc(100vw - 24px)}
+
+  }
+
+  /* ===== 說明卡抽屜:DESIGN.md「標本劇場 + 一張紙」。舞台不動,兩套皮膚只換這張紙。 ===== */
+  #spk{font:500 11px "IBM Plex Mono",monospace;color:#c9cbc4;text-shadow:0 1px 3px rgba(0,0,0,.9);pointer-events:none}
+  #spk b{color:#8fe3a8;font-weight:500}   /* 數字是真資料 → 允許發光綠 */
+  #spk .inj{color:#C8629E}
+  #chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  #chips button{font:500 11px/1 "IBM Plex Mono",monospace;padding:6px 10px;border-radius:14px;cursor:pointer;
+    background:rgba(20,26,22,.85);border:1px solid #3d5a48;color:#8fe3a8;backdrop-filter:blur(6px)}
+  #chips button.all{color:#9AA8C4;border-color:#3a4258}
+  #sheet[hidden]{display:none}
+  #sheet{position:fixed;z-index:5;right:12px;top:12px;bottom:12px;width:min(400px,calc(100vw - 24px));
+    display:flex;flex-direction:column;color:var(--ink);font-family:"Noto Sans TC","PingFang TC",system-ui,sans-serif;
+    box-shadow:0 8px 40px rgba(0,0,0,.6)}
+  /* 兒童「探索票」W1 午後陽光 */
+  #sheet.kid{--paper:#F6E3BE;--card:#FFF8E8;--ink:#3A2614;--muted:#7C5D3C;--act:#3B6FD9;--mark:#D2452B;--edge:#E0C79A;
+    background:var(--paper);border:1px solid var(--edge);border-radius:4px;
+    background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.018) 0 1px,transparent 1px 3px)}
+  /* 教科書「圖鑑頁」 */
+  #sheet.more{--paper:#EDE8DF;--card:#FAF7F0;--ink:#25221E;--muted:#686057;--act:#243D83;--mark:#862F36;--edge:#C9C1B2;
+    background:var(--card);border:1px solid var(--edge);border-radius:0}
+  .sheetBar{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--edge);flex-wrap:wrap}
+  .sheetBar .grp{display:flex;border:1px solid var(--edge);border-radius:3px;overflow:hidden;background:var(--card)}
+  .sheetBar .grp button{font:600 11px/1 "Source Sans 3","Noto Sans TC",sans-serif;padding:7px 10px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+  .sheetBar .grp button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .sheetBar .lnk{margin-left:auto;font:600 11px "Source Sans 3","Noto Sans TC",sans-serif;background:none;border:0;color:var(--act);cursor:pointer;text-decoration:underline}
+  #sheetClose{width:28px;height:26px;background:none;border:1px solid var(--edge);color:var(--ink);border-radius:2px;cursor:pointer}
+  #sheetBody{flex:1 1 auto;overflow:auto;padding:14px 16px 18px;line-height:1.65}
+  #sheetBody h3{font:600 11px "Source Sans 3","Noto Sans TC",sans-serif;letter-spacing:.08em;color:var(--muted);margin:14px 0 6px}
+  #sheetBody ul.idx{list-style:none;margin:0;padding:0}
+  #sheetBody ul.idx button{width:100%;text-align:left;padding:8px 10px;margin:3px 0;background:var(--card);border:1px solid var(--edge);color:var(--ink);border-radius:4px;cursor:pointer;font:500 14px "Noto Sans TC",sans-serif}
+  .sheetNav{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--edge);font:500 11px "IBM Plex Mono",monospace;color:var(--muted)}
+  .sheetNav button{width:30px;height:26px;background:var(--card);border:1px solid var(--edge);color:var(--ink);border-radius:2px;cursor:pointer}
+  .sheetNav button:disabled{opacity:.3;cursor:default}
+  .sheetNav .marks{margin-left:auto;font-size:9.5px}
+  /* 卡片本體:兒童 */
+  #sheet.kid .num{font:800 40px/1 "Bricolage Grotesque",sans-serif;color:var(--mark);letter-spacing:-.03em}
+  #sheet.kid .mod{font:500 12px "Noto Sans TC",sans-serif;color:var(--muted);letter-spacing:.06em;margin:2px 0 6px}
+  #sheet.kid h2{font:400 26px/1.3 "Huninn","Noto Sans TC",sans-serif;margin:0 0 10px;color:var(--ink)}
+  #sheet.kid .txt{font:400 17px/1.65 "Noto Sans TC",sans-serif;margin:0 0 12px}
+  #sheet.kid .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  #sheet.kid .fact{flex:1 1 120px;border:1px solid var(--edge);border-radius:4px;background:var(--card);padding:8px 10px;font-size:12px;line-height:1.4;color:var(--muted)}
+  #sheet.kid .fact b{display:block;font:800 18px "Bricolage Grotesque","Noto Sans TC",sans-serif;color:var(--ink);margin-bottom:2px;letter-spacing:-.01em}
+  #sheet.kid .fact details{margin-top:4px;font-size:10px} #sheet.kid .fact code{font-size:9.5px;word-break:break-all}
+  #sheet.kid .q{border:1.5px solid var(--edge);border-radius:4px;padding:10px 12px;margin:0 0 12px;background:rgba(255,255,255,.35)}
+  #sheet.kid .q .qt{margin:0 0 8px;font:400 20px/1.35 "Huninn","Noto Sans TC",sans-serif}
+  #sheet.kid .q .opts{display:flex;flex-direction:column;gap:8px}
+  #sheet.kid .q .opt{min-height:48px;text-align:left;padding:8px 14px;border:1.5px solid var(--edge);background:var(--card);color:var(--ink);border-radius:4px;cursor:pointer;font:600 16px/1.3 "Noto Sans TC",sans-serif}
+  #sheet.kid .q .opt.ok{border-color:var(--mark);color:var(--mark);box-shadow:inset 0 0 0 1px var(--mark)}
+  #sheet.kid .q .opt.no{border-color:var(--act);color:var(--act)} #sheet.kid .q .opt.dim{opacity:.45}
+  #sheet.kid .q .fb{margin:10px 0 0;font:400 17px/1.5 "Huninn","Noto Sans TC",sans-serif} #sheet.kid .q .fb.ok{color:var(--mark)} #sheet.kid .q .fb.no{color:var(--act)}
+  /* 卡片本體:教科書 */
+  #sheet.more .num{display:none}
+  #sheet.more .mod{font:600 13px "Source Sans 3","Noto Sans TC",sans-serif;color:var(--mark);letter-spacing:.02em}
+  #sheet.more h2{font:700 21px/1.35 "Noto Serif TC",serif;margin:4px 0 8px}
+  #sheet.more .txt{font:400 15px/1.7 "Noto Sans TC",sans-serif;margin:0 0 10px}
+  #sheet.more table.ftab{width:100%;border-collapse:collapse;font:400 12px/1.4 "Source Sans 3","Noto Sans TC",sans-serif;margin-top:6px}
+  #sheet.more .ftab th{text-align:left;font:600 11px "Source Sans 3",sans-serif;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid var(--ink);padding:4px 5px}
+  #sheet.more .ftab td{padding:5px;border-bottom:1px solid #D9D2C4;vertical-align:top;color:var(--ink)}
+  #sheet.more .ftab td b{font:600 13px "Source Sans 3",sans-serif;color:var(--mark)} #sheet.more .ftab code{font-size:9.5px;color:var(--muted);word-break:break-all}
+  #sheet.more .refs{margin:10px 0 0;padding:0;list-style:none;font:400 11px/1.5 "Source Sans 3","Noto Sans TC",sans-serif;color:var(--muted)}
+  #sheet.more .refs li{padding-left:1.6em;text-indent:-1.6em;margin:2px 0}
+  #sheet.more .q{border:1px solid var(--edge);padding:10px 12px;margin:0 0 12px}
+  #sheet.more .q .qt{margin:0 0 8px;font:600 15px/1.5 "Noto Sans TC",sans-serif}
+  #sheet.more .q .opts{display:flex;flex-direction:column;gap:6px}
+  #sheet.more .q .opt{text-align:left;padding:7px 10px;border:1px solid var(--edge);background:var(--card);color:var(--ink);cursor:pointer;font:400 14px "Noto Sans TC",sans-serif}
+  #sheet.more .q .opt.ok{border-color:var(--mark);color:var(--mark)} #sheet.more .q .opt.no{border-color:var(--act);color:var(--act)} #sheet.more .q .opt.dim{opacity:.45}
+  #sheet.more .q .fb{margin:8px 0 0;font-weight:600} #sheet.more .q .fb.ok{color:var(--mark)} #sheet.more .q .fb.no{color:var(--act)}
+  @media (max-width:560px){
+    #sheet{top:auto;bottom:0;max-height:78vh;box-shadow:0 -6px 0 rgba(0,0,0,.35)}
+    #sheet.kid{left:12px;right:12px;width:auto;border-radius:4px 4px 0 0;border-bottom:0}
+    #sheet.more{left:0;right:0;width:100%;border-left:0;border-right:0;border-bottom:0}
+    #sheetBody{padding:12px 14px 16px} #chips button{font-size:10px;padding:5px 8px}
+    #sheet.kid h2{font-size:24px}
+  }
+
+  /* ===== 首頁三扇門 + 引導版導覽列(2026-09-16 三分流示意版) ===== */
+  #home[hidden]{display:none}
+  #home{position:fixed;inset:0;z-index:8;background:rgba(7,9,10,.96);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:36px 20px 40px;gap:16px;overflow:auto;box-sizing:border-box;
+    font-family:"Noto Sans TC","PingFang TC",system-ui,sans-serif;color:#dfe6e0}
+  #home h1{font:800 clamp(24px,6vw,40px)/1.15 "Bricolage Grotesque","Noto Sans TC",sans-serif;letter-spacing:-.02em;margin:0;text-align:center}
+  #home .north{font:500 12px "IBM Plex Mono",monospace;color:#8fe3a8;text-align:center;margin:0}
+  #home .doors{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;max-width:960px}
+  #home .door{flex:1 1 260px;max-width:300px;min-height:150px;text-align:left;border-radius:4px;padding:16px 18px;cursor:pointer;display:flex;flex-direction:column;gap:6px;border:1px solid}
+  #home .door b{display:block;font-size:22px;line-height:1.2}
+  #home .door span{font-size:13.5px;line-height:1.5;opacity:.85}
+  #home .door small{font:500 11px "IBM Plex Mono",monospace;opacity:.7;margin-top:auto}
+  #home .door.kid{background:#F6E3BE;color:#3A2614;border-color:#E0C79A} #home .door.kid b{font:400 24px "Huninn","Noto Sans TC",sans-serif;color:#D2452B}
+  #home .door.more{background:#FAF7F0;color:#25221E;border-color:#C9C1B2} #home .door.more b{font:700 22px "Noto Serif TC",serif;color:#862F36}
+  #home .door.free{background:#0c1210;color:#dfe6e0;border-color:#3d5a48} #home .door.free b{font:500 20px "IBM Plex Mono",monospace;color:#8fe3a8}
+  #home .foot{font-size:11px;color:#8a938d;text-align:center;max-width:60ch}
+  #trackNav[hidden]{display:none}
+  #trackNav{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(10,14,12,.85);border:1px solid #2a3330;border-radius:3px;backdrop-filter:blur(6px);font:500 12px "IBM Plex Mono",monospace;color:#dfe6e0}
+  #trackNav button{background:none;border:1px solid #3d4a45;color:#dfe6e0;padding:6px 12px;border-radius:2px;cursor:pointer;font:600 13px "Noto Sans TC",sans-serif}
+  #trackNav button:disabled{opacity:.3;cursor:default}
+  #trackNav .home{font-size:11px;color:#9AA8C4;border-color:#3a4258}
+  /* 引導模式:舞台只留字幕 + 導覽列 + 紙;其他儀表全收 */
+  body.track #modes,body.track #panels,body.track #legend,body.track #perf,body.track #chips,body.track #player,body.track #prov,body.track #hud #sub,body.track .sheetNav,body.track #sheetIndexBtn,body.track #sheetClose{display:none!important}
+  body.track #sheet{bottom:64px}
+  body.track #trackNav{position:fixed;left:12px;right:12px;bottom:10px;z-index:6;justify-content:center}   /* 導覽列要在紙之上,不然手機被紙蓋住 */
+  body.track #bottom{right:calc(min(400px,100vw - 24px) + 24px)}   /* 桌機:字幕避開右欄的紙 */
+  @media (max-width:560px){ body.track #bottom{right:0} body.track #trackNav .tx{display:none} body.track #trackNav button{padding:6px 14px;font-size:15px} body.track #sheet{max-height:54vh;bottom:66px} #home .door{min-height:96px;padding:12px 14px} #home .door b{font-size:20px} #home h1{font-size:26px} }
+
+  /* ===== 引導版 scrollytelling:舞台釘在背後,文字往上捲(2026-09-16) ===== */
+  #scrolly[hidden]{display:none}
+  #scrolly{position:fixed;inset:0;z-index:4;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-y;
+    font-family:"Noto Sans TC","PingFang TC",system-ui,sans-serif}
+  #scrolly .hero{height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px 18vh;pointer-events:none}
+  #scrolly .hero h1{font:800 clamp(34px,9vw,84px)/1.02 "Bricolage Grotesque","Noto Sans TC",sans-serif;letter-spacing:-.03em;margin:0;color:#dfe6e0;text-shadow:0 2px 12px rgba(0,0,0,.8);max-width:12ch}
+  body.kid #scrolly .hero h1{font-family:"Huninn","Noto Sans TC",sans-serif;font-weight:400;letter-spacing:0}
+  #scrolly .hero p{font:500 14px "IBM Plex Mono",monospace;color:#8fe3a8;margin:12px 0 0;text-shadow:0 1px 4px rgba(0,0,0,.9)}
+  #scrolly .hero .dn{font:500 12px "IBM Plex Mono",monospace;color:#8a938d;margin-top:22px}
+  #scrolly .sec{position:relative;display:flex;align-items:flex-start;pointer-events:none}   /* 紙貼在段首,靠 sticky 整段跟著走 */
+  #scrolly .sec.left{justify-content:flex-start;padding-left:6vw} #scrolly .sec.right{justify-content:flex-end;padding-right:6vw}
+  #scrolly .sec.full{justify-content:center;align-items:flex-start;padding-top:12vh}
+  #scrolly .paper{position:sticky;top:18vh;max-height:64vh;overflow:auto;pointer-events:auto;width:min(420px,88vw);padding:18px 20px;line-height:1.65;color:var(--ink);
+    transform-origin:center;transition:opacity .25s ease-out,transform .25s ease-out;box-shadow:0 10px 40px rgba(0,0,0,.55)}
+  #scrolly .sec.full .paper{top:30vh;width:auto;max-width:90vw;text-align:center;background:none;box-shadow:none;border:0;padding:0}
+  #scrolly .sec.full .line{font:800 clamp(22px,5vw,44px)/1.15 "Bricolage Grotesque","Noto Sans TC",sans-serif;color:#dfe6e0;text-shadow:0 2px 12px rgba(0,0,0,.9);margin:0}
+  body.kid #scrolly .sec.full .line{font-family:"Huninn","Noto Sans TC",sans-serif;font-weight:400}
+  body.kid #scrolly .paper{--paper:#F6E3BE;--card:#FFF8E8;--ink:#3A2614;--muted:#7C5D3C;--act:#3B6FD9;--mark:#D2452B;--edge:#E0C79A;
+    background:var(--paper);border:1px solid var(--edge);border-radius:4px;background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.018) 0 1px,transparent 1px 3px)}
+  body.more #scrolly .paper{--paper:#EDE8DF;--card:#FAF7F0;--ink:#25221E;--muted:#686057;--act:#243D83;--mark:#862F36;--edge:#C9C1B2;
+    background:var(--card);border:1px solid var(--edge)}
+  body.kid #scrolly .paper .num{font:800 40px/1 "Bricolage Grotesque",sans-serif;color:var(--mark);letter-spacing:-.03em}
+  body.kid #scrolly .paper .mod{font:500 12px "Noto Sans TC",sans-serif;color:var(--muted);letter-spacing:.06em;margin:2px 0 6px}
+  body.kid #scrolly .paper h2{font:400 24px/1.3 "Huninn","Noto Sans TC",sans-serif;margin:0 0 10px}
+  body.kid #scrolly .paper .txt{font:400 16px/1.65 "Noto Sans TC",sans-serif;margin:0 0 12px}
+  body.kid #scrolly .paper .facts{display:flex;flex-wrap:wrap;gap:8px}
+  body.kid #scrolly .paper .fact{flex:1 1 110px;border:1px solid var(--edge);border-radius:4px;background:var(--card);padding:8px 10px;font-size:12px;line-height:1.4;color:var(--muted)}
+  body.kid #scrolly .paper .fact b{display:block;font:800 18px "Bricolage Grotesque","Noto Sans TC",sans-serif;color:var(--ink)}
+  body.kid #scrolly .paper .fact details{font-size:10px} body.kid #scrolly .paper code{font-size:9.5px;word-break:break-all}
+  body.kid #scrolly .paper .q{border:1.5px solid var(--edge);border-radius:4px;padding:10px 12px;margin:0 0 12px;background:rgba(255,255,255,.35)}
+  body.kid #scrolly .paper .q .qt{margin:0 0 8px;font:400 19px/1.35 "Huninn","Noto Sans TC",sans-serif}
+  body.kid #scrolly .paper .q .opts{display:flex;flex-direction:column;gap:8px}
+  body.kid #scrolly .paper .q .opt{min-height:44px;text-align:left;padding:8px 14px;border:1.5px solid var(--edge);background:var(--card);color:var(--ink);border-radius:4px;cursor:pointer;font:600 15px "Noto Sans TC",sans-serif}
+  body.kid #scrolly .paper .q .opt.ok{border-color:var(--mark);color:var(--mark)} body.kid #scrolly .paper .q .opt.no{border-color:var(--act);color:var(--act)} body.kid #scrolly .paper .q .opt.dim{opacity:.45}
+  body.kid #scrolly .paper .q .fb{margin:10px 0 0;font:400 16px/1.5 "Huninn","Noto Sans TC",sans-serif} body.kid #scrolly .paper .q .fb.ok{color:var(--mark)} body.kid #scrolly .paper .q .fb.no{color:var(--act)}
+  body.more #scrolly .paper .num{display:none}
+  body.more #scrolly .paper .mod{font:600 12px "Source Sans 3","Noto Sans TC",sans-serif;color:var(--mark)}
+  body.more #scrolly .paper h2{font:700 20px/1.35 "Noto Serif TC",serif;margin:4px 0 8px}
+  body.more #scrolly .paper .txt{font:400 14px/1.7 "Noto Sans TC",sans-serif;margin:0 0 10px}
+  body.more #scrolly .paper table.ftab{width:100%;border-collapse:collapse;font:400 11.5px/1.4 "Source Sans 3","Noto Sans TC",sans-serif}
+  body.more #scrolly .paper .ftab th{text-align:left;font:600 10.5px "Source Sans 3",sans-serif;color:var(--muted);border-bottom:1px solid var(--ink);padding:4px}
+  body.more #scrolly .paper .ftab td{padding:4px;border-bottom:1px solid #D9D2C4;vertical-align:top;color:var(--ink)}
+  body.more #scrolly .paper .ftab td b{font:600 12.5px "Source Sans 3",sans-serif;color:var(--mark)} body.more #scrolly .paper code{font-size:9px;color:var(--muted);word-break:break-all}
+  body.more #scrolly .paper .refs{margin:8px 0 0;padding:0;list-style:none;font:400 10.5px/1.5 "Source Sans 3","Noto Sans TC",sans-serif;color:var(--muted)} body.more #scrolly .paper .refs li{padding-left:1.6em;text-indent:-1.6em}
+  body.more #scrolly .paper .q{border:1px solid var(--edge);padding:10px 12px;margin:0 0 12px} body.more #scrolly .paper .q .qt{margin:0 0 8px;font:600 14px/1.5 "Noto Sans TC",sans-serif}
+  body.more #scrolly .paper .q .opts{display:flex;flex-direction:column;gap:6px} body.more #scrolly .paper .q .opt{text-align:left;padding:7px 10px;border:1px solid var(--edge);background:var(--card);color:var(--ink);cursor:pointer;font:400 13.5px "Noto Sans TC",sans-serif}
+  body.more #scrolly .paper .q .opt.ok{border-color:var(--mark);color:var(--mark)} body.more #scrolly .paper .q .opt.no{border-color:var(--act);color:var(--act)} body.more #scrolly .paper .q .opt.dim{opacity:.45}
+  body.more #scrolly .paper .q .fb{margin:8px 0 0;font-weight:600} body.more #scrolly .paper .q .fb.ok{color:var(--mark)} body.more #scrolly .paper .q .fb.no{color:var(--act)}
+  #scrolly .end{height:70vh;display:flex;align-items:center;justify-content:center;pointer-events:none}
+  #scrolly .end button{pointer-events:auto;font:600 16px "Noto Sans TC",sans-serif;padding:14px 22px;border-radius:4px;border:1px solid #3d5a48;background:#0c1210;color:#8fe3a8;cursor:pointer}
+  #exitTrack[hidden]{display:none}
+  #exitTrack{position:fixed;top:12px;right:12px;z-index:7;font:500 11px "IBM Plex Mono",monospace;padding:6px 10px;border-radius:2px;border:1px solid #3a4258;background:rgba(10,14,12,.8);color:#9AA8C4;cursor:pointer}
+  body.track #stage,body.track #spk,body.track #hud{display:none!important}
+  @media (max-width:560px){
+    #scrolly .sec.left,#scrolly .sec.right{justify-content:center;padding:0}
+    #scrolly .paper{top:36vh;width:calc(100vw - 24px);padding:14px 16px;max-height:56vh}   /* 手機:紙黏在下 56vh,腦在上方;長卡片在紙裡自己捲 */
+    #scrolly .hero{padding-bottom:14vh}
+  }
+</style>
+</head>
+<body>
+<!-- 頂部改成單一 flex 直欄:HUD → 模式鈕 → 電壓計 → 圖例 依序堆疊。
+     使用者實機回報電壓計壓住 HUD 副標,絕對定位互疊的老毛病,跟底部同一種修法。 -->
+<div id="top">
+  <div id="hud"><b id="count">載入中…</b><span id="sub"></span></div>
+  <div id="modes"><button id="mCal" aria-pressed="true" data-en="Calcium">鈣成像</button><button id="mGrp" aria-pressed="false" data-en="Groups">功能分色</button><button id="mShell" aria-pressed="true" class="sep" data-en="Body">身體</button><button id="mCap" aria-pressed="true" title="顯示/隱藏舞台字幕" data-en="Text">字幕</button><button id="mHome" class="sep" title="回到預設視角,果蠅置中"><span class="ic">⌖ </span><span data-en="Fit">歸位</span></button><button id="mSpin" class="sep" aria-pressed="false" title="自動慢慢轉,看各個角度"><span class="ic">⟳ </span><span data-en="Spin">自轉</span></button><button id="mZoomIn" class="sep" title="放大" aria-label="放大">＋</button><button id="mZoomOut" title="縮小" aria-label="縮小">－</button><button id="mCards" class="sep" title="說明卡片索引">📖<span class="ic" data-en=" Cards"> 卡片</span></button></div>
+  <!-- 巨纖維膜電壓計:資料層(引擎 --trace-out 原樣輸出),讓人看到閾值以下的爬升 -->
+  <!-- 桌機:電壓計與 PiP 上下堆疊(display:contents);手機:並排一列,把直式螢幕的高度還給主畫面 -->
+  <div id="panels">
+  <div id="gaugeHost" hidden></div>
+  <div id="legend" hidden></div>
+  <!-- 實體小視窗:形狀是我們畫的(④),動作由真實放電驅動(②),幅度為示意 -->
+  <div id="pip" hidden><span class="pipTitle"><span class="long" data-en="Fly body · drawn by us">果蠅身體 · 我們畫的</span><span class="short" data-en="Body · drawn">身體 · 我們畫的</span></span><div class="pipFoot"><span id="pipRead"></span><span class="pipNote"><span class="long" data-en="Direction and timing from real spikes; amplitude illustrative (no muscles or physics in the connectome)">動作方向與時機來自真實放電;幅度是示意——連接組沒有肌肉與物理</span><span class="short" data-en="timing real; amplitude illustrative">時機來自真實放電;幅度示意</span></span></div></div>
+  </div>
+</div>
+<div id="perf"></div>
+
+<!-- 底部改成單一 flex 直欄容器,元素依序堆疊,不再絕對定位互相蓋住。
+     出處圖例規範見 docs/visual_provenance.md:資料會發光,我們畫的不發光。 -->
+<div id="bottom">
+  <div id="trackNav" hidden><button id="tHome" class="home">↩<span class="tx" data-en=" Switch version"> 換版本</span></button><button id="tPrev">←<span class="tx" data-en=" Back"> 上一步</span></button><span id="tPos"></span><button id="tNext"><span class="tx" data-en="Next ">下一步 </span>→</button></div>
+  <div id="spk" hidden></div>
+  <div id="chips" hidden></div>
+  <div id="stage" hidden></div>
+  <div id="player" hidden>
+    <button id="play" aria-label="播放">▶</button>
+    <input id="scrub" type="range" min="0" max="249" value="0" step="1" aria-label="時間軸">
+    <span id="clock">0.0 ms</span>
+    <select id="speed" aria-label="播放速度">
+      <option value="0.005" data-en="1/200 speed (50 s)">1/200 速（50 秒）</option>
+      <option value="0.01" data-en="1/100 speed (25 s)">1/100 速（25 秒）</option>
+      <option value="0.02" selected data-en="1/50 speed (12.5 s)">1/50 速（12.5 秒）</option>
+      <option value="0.05" data-en="1/20 speed (5 s)">1/20 速（5 秒）</option>
+      <option value="0.2" data-en="1/5 speed">1/5 速</option>
+      <option value="1" data-en="real time (0.25 s)">原速（0.25 秒）</option>
+    </select>
+  </div>
+  <div id="prov">
+    <span><i class="dot"></i><span data-en="Glow = real neurons, real activity">發光 ＝ 真實神經元位置與活動</span></span>
+    <span><i class="inj"></i><span data-en="Magenta = injected by us (model can't compute it)">洋紅 ＝ 模型算不出,我們注入的</span></span>
+    <span><i class="drw"></i><span data-en="Line art = body we drew">線稿 ＝ 我們畫的身體</span><em data-en="(scaled to the nervous system; abdomen illustrative)">（比例對位神經系統,腹部為示意）</em></span>
+    <span><i class="mus"></i><span data-en="Amber = nerve→muscle, drawn by us (not in the connectome)">琥珀 ＝ 神經→肌肉,連接組沒有,我們畫的</span><em data-en="(timing from real motor neurons)">（時機來自真實運動神經元）</em></span>
+  </div>
+</div>
+<div id="scrolly" hidden></div>
+<button id="exitTrack" hidden data-en="↩ Switch version">↩ 換版本</button>
+<!-- 首頁三扇門:選了才進舞台。示意版,結構先對,美術後補。 -->
+<div id="home">
+  <h1 data-en="A real fly brain">果蠅腦,真的那一顆</h1>
+  <p class="north" data-en="What lights up is a real brain computing.">你看到亮起來的,是一顆真的腦在算。</p>
+  <div class="doors">
+    <button class="door kid" data-track="kid"><b data-en="Kids">小朋友版</b><span data-en="Step by step: the eye sees something, the signal races through, legs and wings move. With quizzes.">一頁一頁帶你看:眼睛看到東西、訊號怎麼跑、腳和翅膀怎麼動。有問答。</span><small data-en="13 steps · about 10 min">13 步 · 約 10 分鐘</small></button>
+    <button class="door more" data-track="more"><b data-en="In depth">專業版</b><span data-en="The same path with full numbers, sources and model limits. Like a field guide.">同一條路,換成完整的數字、出處與模型限制。像翻一本圖鑑。</span><small data-en="13 steps · references on every step">13 步 · 每步附參考文獻</small></button>
+    <button class="door free" data-track="free"><b data-en="Explore freely">自由探索</b><span data-en="The whole stage is yours: rotate, zoom, play, open cards. All 33 cards.">整個舞台交給你:轉、放大、播放、點卡片。33 張卡都在。</span><small data-en="3D · all instruments on">3D · 儀表全開</small></button>
+  </div>
+  <p class="foot" data-en="Data: MaleCNS v1.0 (Berg et al. 2026, CC-BY 4.0) · Model: Shiu et al. 2024 · What glows is real data; line art is ours">資料:MaleCNS v1.0(Berg et al. 2026,CC-BY 4.0)· 模型:Shiu et al. 2024 · 發光的是真資料,線稿是我們畫的</p>
+</div>
+<!-- 說明卡抽屜:兩組切換(層/語)+ 一次一張;桌機在右側、手機從下方升起。內容來自 content/cards.json 打包。 -->
+<div id="sheet" hidden role="dialog" aria-label="說明卡">
+  <div class="sheetBar">
+    <div class="grp" role="group"><button data-lvl="kid">小朋友</button><button data-lvl="more">想知道更多</button></div>
+    <div class="grp" role="group"><button data-lang="zh">中文</button><button data-lang="en">EN</button></div>
+    <button id="sheetIndexBtn" class="lnk">所有卡片</button>
+    <button id="sheetClose" aria-label="關閉">✕</button>
+  </div>
+  <div id="sheetBody"></div>
+  <div class="sheetNav"><button id="cPrev" aria-label="上一張">‹</button><span id="cPos"></span><button id="cNext" aria-label="下一張">›</button><span id="sheetMarks" class="marks"></span></div>
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

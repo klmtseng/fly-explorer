@@ -1,0 +1,11 @@
+cards=33 orphan_numbers=10
+   hex-columns more 1,771
+   hex-columns more 1,771
+   escape-converge more 6,362
+   escape-converge more 4,862
+   escape-speed more 1,771
+   model-vs-real kid 0.93
+   vs-mammal more 0.04
+   vs-llm more 0.04
+   whats-next more 54.8
+   tried-visual-frontend more 114.9

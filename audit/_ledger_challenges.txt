@@ -1,0 +1,567 @@
+========================================================================================
+歷史失手回收 → 本次 audit 的【強制挑戰】(共 187 類,來自 194 筆)
+每一類都要明確回答:本研究會不會犯同一個?怎麼驗證它沒犯?
+========================================================================================
+
+[1] 算術/協定 bug  (high, 首見於 repr-lab)
+    偵測器:報酬先確認 log vs simple(log→expm1(Σlog)、simple→prod(1+r)-1);MDD 除『當時』running peak;headline 必須有純 OOS 分段
+
+[2] 捏造/不可查證引用  (high, 首見於 rimworld-study)
+    偵測器:每一條引用的標題/arXiv id 必須解析到真實來源;grep 出所有引用逐一查證,查不到就刪
+
+[3] 恆真句 PASS / 建構必然的檢查  (high, 首見於 dramaturge)
+    偵測器:對每個 PASS 問:它有可能 FAIL 嗎?還是由建構/定義必然為真?建構必然的標為『一致性檢查』,不得當實證證據
+
+[4] 把相關當獨立 / 混淆變數  (high, 首見於 dramaturge)
+    偵測器:宣稱度量 X 是『獨立訊號』時,對疑似混淆變數做殘差化(迴歸 + group dummy 或偏相關),要求控制混淆後殘差效應仍顯著(|t|>2);或設計解耦條件讓兩者反向
+
+[5] 接受虛無當證據 (absence of evidence ≠ evidence of absence)  (high, 首見於 validity-audit(self))
+    偵測器:撤回/否定一個效應時,別把『不顯著』寫成『無效應』;報 df/CI/檢定力,borderline 要做等價檢定或說『在此檢定力下無法偵測』;確認推論單位不是偽複製
+
+[6] 偽控制組測試(行為改變斷言無對照組)  (high, 首見於 fishbowl)
+    偵測器:對每個「處理 X 改變了行為」的測試,先跑「無 X」的對照確認斷言會 FAIL;整合測試的處理效果可能被主線/事件副作用頂替(seed=11 無耳語同窗口也出現 call_father);修正時注意隱式初始狀態敏感(需求赤字壓過關鍵詞→A/B 不分叉),fixture 要鎖定驅動變因
+
+[7] 結構耦合使子系統靜默空轉(字樣 grep 抓不到)  (high, 首見於 fishbowl)
+    偵測器:引擎一般化後,新消費者上線必跑「子系統活性檢查」:隨機事件/回應器/排程實際發生率>0;寫死的枚舉表(類別權重/名冊)= 耦合,即使不含專有名詞;中性閘門要含結構字樣且豁免需顯式標記
+
+[8] 小樣本排名當統計確立(檢定力不足)  (high, 首見於 worldcup-2026)
+    偵測器:模型排名(A比B好)在下結論前必做 paired Wilcoxon+t on 同一批比賽;純OOS/lockbox 段落單獨報 p 值;小樣本(n<200)差距~0.005 幾乎必不顯著->語言軟化為『點估計較佳』而非『顯著優於』;dev顯著≠lockbox顯著
+
+[9] 負結果的公平性(整合方式決定特徵有沒有被公平測試)  (high, 首見於 worldcup-2026)
+    偵測器:下『特徵無效』結論前,確認整合機制真的給了特徵公平機會:①檢查特徵訊號是否到達模型(係數方向/大小合理)②檢查加法的槓桿方向對不對(收縮先驗只會把 MLE 已超過先驗目標的強隊往回拉=反向,不是公平測試)③把權重 grid 掃到極端(w->1)確認無隱藏極小值④確認不是缺資料偽裝成冗餘(join 覆蓋率)⑤至少一種整合是公平的才能下負結論
+
+[10] 修正鍵在相關但錯的變數上(混淆變數未分層)  (high, 首見於 worldcup-2026)
+    偵測器:對一個「某群組偏誤」下修正前,先把該群組沿疑似混淆軸分層(場地中性/主場、賽事層級、聯賽…)確認偏誤是否真屬於你用來 key 的那個變數:①分層算各子群偏誤,看是否集中在某一層 ②跑安慰劑—同一混淆軸在群組外是否也有同效應(有=非該群組特異)③偏誤 vs 預測值分位,判乘法 vs 加法函數形式 ④點估計換 mean/median 看估計器是否被尾巴拉偏。key 對了才 validate。
+
+[11] 審計範圍盲區(否證宣稱≠系統健康)  (high, 首見於 validity-audit(skill 本身))
+    偵測器:受審對象是「已部署系統/管線/專案結案/交付物」時,否證式審計(威脅模型=宣稱是假的)必然漏掉「沒人宣稱過但會咬人的」:①不可重生資產(point-in-time ledger/外部快照)有無備份、repo 是否單機 ②交付物是否被以最終使用方式端到端跑過(.tex 編譯過?cron 從 cron 環境跑過?)③計畫中未來檢定的檢定力 ④已知簡化是否集中列表 ⑤配額/長度/成長極限 ⑥孤兒雙入口寫同一檔 ⑦機會成本明說。→ 已機制化為 SKILL 第3段 references/system-review.md(條件觸發)。
+
+[12] 覆蓋宣稱未重數  (high, 首見於 study-forge)
+    偵測器:任何『全部/涵蓋 X 個』宣稱必須機器重數對照真值表;生成指示含『跳過』者,跳過清單必須出現在交付說明
+
+[13] meta旗標造假(無意)  (high, 首見於 study-forge)
+    偵測器:grep 所有 verified/approved 旗標,逐個問『誰、用什麼方式驗的』;模型自驗只准寫 model_reviewed
+
+[14] 非連續時序的 rolling 聚合(TTM/移動窗跨斷檔)  (high, 首見於 tw-valuation)
+    偵測器:rolling(N) 前先驗證相鄰列的日期間距 ≤ 窗口容許值(如 TTM 的 diff(3)≤370 天);兩表 inner join 後列數銳減(53→38)即紅旗,聚合統計要在 join 前的連續序列上算
+
+[15] guarded assert 讓測試靜默空轉(pass=None 即跳過)  (high, 首見於 tw-valuation)
+    偵測器:測試中 if x is not None: assert 模式一律紅旗——None 必須是 fail 不是 skip;驗收時對每個測試問『輸入錯到什麼程度它才會 FAIL』並實際弄壞一次
+
+[16] 基期錨定偏誤(循環股反推DCF/正常化用谷底年而非run-rate)  (high, 首見於 tw-valuation)
+    偵測器:循環股做反推DCF或正常化盈餘時,基期不得只用最近完整財年(可能落在谷底/尖峰);必並列(a)最近財年(b)最新季年化run-rate(c)mid-cycle三種,看隱含成長差多少。獨立reviewer換基期即翻轉結論=紅旗。
+
+[17] 倍數比較未對齊循環位置(谷底EV/EBITDA vs 同業峰值)  (high, 首見於 tw-valuation)
+    偵測器:peer comp下EV/EBITDA或PE最貴/最便宜結論前,確認標的與同業在同一循環位置:標的TTM EBITDA是否谷底(近幾季OM遠低於歷史)、同業是否峰值(營收YoY+50%以上)。對齊=用normalized EBITDA重算;谷底倍數vs峰值倍數=apples-to-oranges,不得當硬事實。
+
+[18] 分類遊戲的區分特徵不在玩家可見資訊內(卡面不可解)  (high, 首見於 study-forge/pattern_dig)
+    偵測器:歸納/分類型教材,逐回合驗「玩家做判定當下可見的欄位」是否足以唯一區分各類別:①列出可見欄位 vs 區分特徵所在欄位 ②兩類別若形態簽名(如 v==ved,ved==vpp)完全相同=約定俗成邊界,不可同場對決 ③修法優先改設計(拆場/補顯示),不是加提示;閘門加已知混淆對黑名單
+
+[19] 死參數偵測只查鍵名不追消費鏈  (high, 首見於 skewer-hunter)
+    偵測器:參數審計要追三段:key被讀入變數→變數被讀取→讀取結果影響行為;『載入即算活』會漏 loaded-but-unused(boar_charge_damage)與載入後被覆寫(knockback 影子覆寫);grep 鍵名只完成第一段
+
+[20] 測試全綠但數值組合使核心機制實質失效  (high, 首見於 skewer-hunter)
+    偵測器:行為參數要做活性/可達性驗證:每個 AI 狀態列觸發條件帶實際數值心算可否發生(AWARE 對非山豬=1幀穿透);追逐玩法必查 max(獵物逃速) vs 玩家速度(兔196>150=永遠追不上);單元測試驗公式正確,不驗參數組合下機制是否活著
+
+[21] 負載上限計數對象錯誤(額度吃掉核心任務)  (high, 首見於 study-forge/evolution)
+    偵測器:為防雪崩加每日上限時,驗上限的計數對象:計「拉入的正題數」不是「作答次數」——否則使用者答錯越多,當日核心任務(到期複習)被自己的錯誤鎖死;測法=模擬高錯誤率日,斷言到期題仍可全數拉入
+
+[22] 重現腳本參數錯位致真發現被誤判為不存在  (high, 首見於 ?)
+    偵測器:重現腳本的參數順序必對照原始碼函式簽名核一次;第一次跑出的『安全/PASS』結果用第二種寫法交叉驗證再採信
+
+[23] 去識別化只掃字面模式,漏掉語意側寫  (high, 首見於 claude-skills-marketplace/agent-from-scratch)
+    偵測器:對外發佈前的去識別化必須有一輪「語意側寫審查」:fresh reviewer 用「能否反推作者身分/雇主/工作內容」為問題通讀全文,不依賴建造者的 grep 清單
+
+[24] 文案事實錨點未對 live 部署重驗  (high, 首見於 career 文案)
+    偵測器:文案裡每個指向線上產品的數字/特性,發文前 curl live 站重驗(meta/實際資源),不得只對記憶或本機 repo
+
+[25] 把 best-effort blocklist 說成確定性保證  (high, 首見於 ai-parliament)
+    偵測器:任何『內容過濾保證』宣稱:先分類機制是 blocklist 還是咽喉點白名單/硬遮蔽;blocklist 一律標 best-effort,要保證就在單一咽喉點做結構性遮蔽並以對抗句型測試釘死
+
+[26] 遮蔽清單漏『廠商名=常用詞』雙義詞與可擴充點  (high, 首見於 ai-parliament)
+    偵測器:列品牌清單時逐廠商問『它的日常詞形是什麼』(Google/Meta 這類雙義詞要顯式決策並記理由);清單覆蓋範圍必須跟著可設定點動態生成,不得硬編碼現役集合
+
+[27] 中文TTS孤立拉丁字母發音不清(教學主角聽不見)  (high, 首見於 junior-math-lab)
+    偵測器:中文語音教材含代數字母/英文符號時,say()層必轉中文唸法(x→艾克斯,y→歪);上線前全量 whisper STT 回讀(強制 -l zh),孤立字母被兩個模型同時漏掉=發音缺陷非轉寫誤差
+
+[28] 拆站/複製 repo 後公開門面檔未重寫(README/PROGRESS 描述舊專案)  (high, 首見於 junior-math-lab)
+    偵測器:從既有專案複製起新公開 repo 時,README/PROGRESS/LICENSE 逐檔 head 檢查;subagent 宣稱「已改 README」必抽驗實檔(同型第3次:宣稱≠實物)
+
+[29] UI視覺問題未經視覺重現就宣稱修好(三輪誤修)  (high, 首見於 skewer-hunter)
+    偵測器:UI/畫面症狀必須先截圖重現、定位症狀在哪一層(遊戲內viewport/HTML canvas/快取)再修:量測 canvas rect vs 症狀區域;修後同路徑截圖驗證消失才准宣稱;灰塊實為 Godot default_clear_color,前兩輪各修錯層(遊戲內letterbox/HTML CSS)並誤怪快取;另 subset_font.sh 交付後從未端到端執行(heredoc壞),同型S2
+
+[30] 派工單禁令被違反但回報宣稱遵守  (high, 首見於 skewer-hunter)
+    偵測器:brief 中「不准另寫/必須重用X」類約束,驗收不採信回報文字:機器驗證(grep 公式/邏輯是否出現第二份、新函式是否只是既有函式的呼叫端);同公式兩處=紅旗,即使測試比對過(比對測試可能只餵讓兩者相等的輸入)
+
+[31] 整合模擬用拋棄式實例,單例生命週期零覆蓋  (high, 首見於 skewer-hunter)
+    偵測器:headless sim 宣稱證明閉環時,查它操作真 runtime 單例還是 .new() fresh 實例;跨日累加/reset鏈/多輪殘留必須有同一組實例連跑多輪的測試,否則明標未覆蓋
+
+[32] 死碼機制被完整測試供奉(出貨數值使其不可達)  (high, 首見於 skewer-hunter)
+    偵測器:新機制驗收必算「出貨資料下的可達性」:觸發門檻 vs 擊殺所需次數(deer hp50/傷25/門檻2=永遠死在門檻上)、觸發後的數值是否反向破壞(暴起速度>玩家=不可閃避);單元測試綠只證公式,不證機制在實際參數下活著——此為 tests-green-gameplay-dead 的資料版
+
+[33] 獨立驗算漏掉答案的離散屬性(嚴格/非嚴格、開閉、邊界歸屬)  (high, 首見於 junior-math-lab)
+    偵測器:check/驗算函式對含離散屬性的答案(不等號開閉、開閉圈、含不含邊界)必須顯式驗邊界值歸屬;反向斷言閘門的竄改集要含「概念上最近的錯答」(< ↔ ≤、鄰接象限、指數±1),數值±1 竄改抓不到這類;抽樣驗 boundary±1 恆漏 boundary 本身
+
+[34] localStorage persist 無 version/migrate(schema 演進洗存檔)  (high, 首見於 restaurant-game)
+    偵測器:任何 persist 到 localStorage 的 store 上線前查 version/migrate/partialize 三件套是否齊;並模擬舊 blob(缺欄位/NaN/null)rehydrate,斷言不產 undefined/NaN
+
+[35] 初始狀態工廠淺拷貝共享巢狀參照(reset 不乾淨)  (high, 首見於 restaurant-game)
+    偵測器:對 state factory 每個陣列欄位問巢狀層是否新物件;寫回歸測試:改 state 巢狀值→斷言 data 模組常數不變+reset 後回初始值
+
+[36] 互動教材的教學設計本身教錯概念(過關邏輯把錯誤心智模型當目標)  (high, 首見於 junior-math-lab)
+    偵測器:教學關卡的過關目標=在斷言一個學科概念;必須驗該概念本身對不對,不只驗判定程式對不對——J9「把離群值歸零使不影響平均」數學上假(歸零讓平均更偏)且與同關另一目標互斥;檢查法=對每個 goal 問『達成它=學到的陳述是真的嗎』,兩 goal 並存問『能同時/先後成立嗎』
+
+[37] headless 邏輯測試對 UI 佈局全盲(全綠但畫面不存在)  (high, 首見於 verb-dungeon)
+    偵測器:Godot/遊戲類交付物:headless 測試全綠不算完成,必須瀏覽器實開截圖+斷言關鍵元素可見(按鈕數/尺寸>0);Control 掛在非 Control 父層下 FULL_RECT 錨點會垮成 0 尺寸;用 set_anchors_and_offsets_preset 不是 set_anchors_preset
+
+[38] 題型×資料子集交互產生退化題(題面==答案)  (high, 首見於 verb-dungeon)
+    偵測器:出題引擎上線前,窮舉每題型×每資料子集掃「題面==唯一答案」的組合(同形動詞的逆向題/come 類 vpp==原形):數量>0 即 FAIL;修法=該子集禁用該題型,不是加提示;寫成回歸測試鎖住
+
+[39] 場內重複盲區(聚合觸發率看不到單局連刷)  (high, 首見於 psi-field)
+    偵測器:遊戲/互動內容的統計驗證必加 per-run 序列指標:同事件最大連續次數與單局總次數分布;聚合觸發率/可達率全是 set-membership 指標,單局連刷 15 次同場景完全不可見;修法優先斷旗標迴圈(removesFlags/cycleRange),不是壓機率
+
+[40] 數值狀態無界(資源出值域仍餵結局判定)  (high, 首見於 psi-field)
+    偵測器:資源/計量型狀態機必驗值域不變量:模擬全程斷言每資源留在宣告值域內,出界=FAIL;無 zeroConsequence 的資源可沉到 -95 繼續玩且門檻結局(gte/lte)被汙染;引擎層 clamp+測試釘死,別靠內容自律
+
+[41] 規格釘死數值表未機器 diff(subagent 三度動閘門相關定值)  (high, 首見於 psi-field)
+    偵測器:規格明定的數值表(初始資源/門檻/機率)必寫確定性 diff 腳本逐欄比對 spec vs 實物,不得只靠 reviewer 讀;subagent 為過閘門動規格定值已三度發生(epoch 初始資源、confirmation 門檻、psi-field 初始資源),primed reviewer 只查被指到的表
+
+[42] 場景腳本 parse error 直達部署(測試與匯出皆不擋)  (high, 首見於 skewer-hunter)
+    偵測器:Godot 專案:單元測試只載被測模組、--export-release 打包不驗語法→場景腳本語法錯=上線黑屏;測試套件必含全腳本 load() 閘門(core/scenes/sim 每個 .gd assert load()!=null);「匯出成功+測試綠」不構成「場景能開」的證據
+
+[43] 效果事後套用+報告改寫(幻影副作用)  (high, 首見於 restaurant-game)
+    偵測器:任何「事件/修飾效果改變當日計算」必須在模擬開頭解析(pre-resolve),嚴禁模擬完再改寫報告數字;一致性不變量測試必須涵蓋效果啟用日,不能只測乾淨日
+
+[44] 跨層契約靠註解假設,功能整條死碼  (high, 首見於 restaurant-game)
+    偵測器:引擎註解裡的「UI 會先/已做 X」逐條驗證真的存在;每個玩家決策要有端到端測試(UI 動作→引擎→狀態變化),只測引擎內部抓不到接縫死碼
+
+[45] UI 元件外觀正常但未接線(e2e 只測了替代輸入路徑)  (high, 首見於 verb-dungeon)
+    偵測器:每個可互動元件都要有「從該元件本身觸發」的測試:e2e 用實體鍵盤把字打進去≠螢幕按鍵有接線;headless 可遍歷全部 Button 逐顆 pressed.emit() 驗回呼;建 UI 工廠函式時,收 Callable 參數卻沒 connect 是靜默死鍵
+
+[46] 交付物驗證驗到代理不驗實物(場景可達性)  (high, 首見於 blender-treehouse)
+    偵測器:GLB/匯出檔驗證不得只數 nodes/名字:必須從 scenes[].nodes 做圖遍歷驗可達 mesh 數;部署後 curl 下載線上實物重跑同一驗證
+
+[47] 共用單例資源被並行 session 污染  (high, 首見於 blender-treehouse)
+    偵測器:共用 socket/場景的服務在寫入前後驗 scene 指紋(物件數/名單);兩個 session 要各開實例;匯出改在乾淨 headless 實例做
+
+[48] S2 交付物未以最終使用方式實測(第2次:vercel 指錯 project 也複發)  (high, 首見於 blender-treehouse)
+    偵測器:網頁交付前 Playwright 開真頁面採樣狀態機數值(位置/碰撞數);vercel deploy 必在目標目錄且核對輸出 project 名;部署後驗線上 URL 的實物 bytes
+
+[49] 評估迴圈與 update() 重複套用同一狀態轉移(decay 雙重套用,名義0.10實際~0.19,burn-in/eval 不一致)  (high, 首見於 tennis-prediction)
+    偵測器:狀態轉移(decay/正規化)只准一個呼叫點;抽單一實體手算 rating 軌跡對照名義參數;burn-in 與 eval 共用同一 update 路徑
+
+[50] 修復 agent 誤報修後指標(0.6766 vs 重跑 0.6721),主線未重跑即入文件  (high, 首見於 tennis-prediction)
+    偵測器:agent 回報的修後指標,主線必以同一腳本重跑對照後才入文件(meta 欄位≠實數)
+
+[51] 負結果結論越界(受測=弱特徵集卻寫成 model family 全稱否定;內審與冷審皆未抓,熱審靠 feature importance 10.4% 證據限縮)  (high, 首見於 keiba-prediction)
+    偵測器:任何負結論先抽 feature importance/係數確認各成分實際貢獻;結論句必須釘住受測配置,附『不排除更豐富配置』邊界
+
+[52] model_judged 內容以「雙獨立判答一致」自背書,無離線權威源——兩個同代模型可共享系統性偏誤(KK 音標/文法解釋/翻譯參考句),如實標 model_judged 反而變免驗金牌  (high, 首見於 study-forge/quiz-review)
+    偵測器:內容審計先清點 model_judged 佔比與類別;每類找離線權威源做機器交叉(KK→詞典 IPA presence 絆線,66/72 吻合、髒條目人工裁),找不到權威源的類別強制列入 human_verified 抽查清單
+
+[53] 自評題參考答案殘缺:題面已給第5句型故 model 只列其餘4種,孩子對答案會把「4種」背成完整集合——過關基準教出殘缺心智模型  (high, 首見於 study-forge/quiz-review)
+    偵測器:selfcheck 參考答案必須自足(題面已給部分也回列並標明);對「N大/全部X」類 model 機器數 N 是否等於宣稱
+
+[54] 重現≠支持:內審逐位重現 baseline 數字判 H4 PASS,卻沒把條件報酬與基準並排比大小;SOX 三口徑全低於基準,宣稱其實被自己表格反駁  (high, 首見於 index_dip_recovery_check)
+    偵測器:「X 優於 Y」類宣稱不能只驗 X、Y 各自重現,必須機器並排比大小出裁決表(median/mean/勝率各口徑),任何口徑反向即降級
+
+[55] 單一全期 median 掩蓋 regime 斷裂:SOX 條件優勢全來自 2000 年前(pre-2000 rec median 81.5% vs 2000+ 1.3%),全期數字看似溫和正報酬  (high, 首見於 index_dip_recovery_check)
+    偵測器:跨 30+ 年的條件報酬宣稱必須按 regime/年代分段重算(至少對半切);任一段反向就在 headline 標注斷裂
+
+[56] commit metadata 掃描盲區(local config 覆蓋)  (high, 首見於 skills-series-launch)
+    偵測器:對外 repo 動 git 前查 git config --local user.email;push 前 git log --format=%ae 對 origin..HEAD 全掃;檔案內容去個資≠metadata 去個資
+
+[57] T+1 執行回測的再進場成交日吃到成交前市場報酬(出/進兩腿記帳不對稱);內審驗了成本無雙計與 T+1 位移仍判 PASS,跨家族冷審逐行抓到  (high, 首見於 index_dip_recovery_check)
+    偵測器:任何 T+1 執行回測交付前,用 5 天玩具序列分別驗 exit/enter 兩腿的當日報酬歸屬(enter 成交日必須只吃現金),手算對照 simulate 輸出
+
+[58] 繼承訊號重實作漂移:S1b 宣稱用 F4(breach後126td內首次20日新高)實作卻變成「20日新高與recovery誰先到用誰」,83/101 塌回 recovery,S1b≈S1a 測了假策略  (high, 首見於 index_dip_recovery_check)
+    偵測器:繼承既有研究的訊號必須呼叫原函式或做逐筆位元一致檢查;fallback 規則要先驗證其可交易因果性(不能事後回頭選)
+
+[59] 小樣本 overlay 正 ROI 誤判 edge(R2 身體狀況特徵 θ=1.3 得 +5.47% 過閘門,實為單一 82.5 倍冷門命中撐起,移除即轉負;bootstrap CI 跨零、逐年不一致、θ掃描是變異數斜坡)  (high, 首見於 keiba-prediction)
+    偵測器:overlay/子集正 ROI 宣稱前必跑三檢:①bootstrap CI 下界是否>0 ②逐年是否一致 ③移除 top-1/top-3 命中後是否仍正 ④θ 掃描是尖峰(門檻真)還是隨n縮小單調升(雜訊);n<2000 的方向翻正預設當雜訊
+
+[60] 校準器在 OOS 預測上 fit 再評估同批造成樂觀偏誤(builder 宣稱 Elo 校準後 acc 54.1%有真預測力,實為 isotonic fit on OOS 洩漏;raw Elo acc 反輸基準、log-loss 僅贏0.0009)  (high, 首見於 cpbl-prediction)
+    偵測器:校準指標必須用「校準器在更早資料 fit、評估在之後的 OOS」;絕不 fit 校準器再評估同批;宣稱模型有預測力先看未校準 raw 的 OOS 是否勝基準(校準不改 ranking/AUC,無法製造預測力)
+
+[61] 輸入清洗快樂路徑假設(錨定正則被前置散文穿透)  (high, 首見於 mirofish-study/persona_cast)
+    偵測器:LLM 輸出解析器必須測『格式正確但被散文包圍』的案例;錨定 ^ 的清洗正則=只處理快樂路徑;正解=層次解析(直接loads→抓區塊→抓最外層{})
+
+[62] index/sector proxy 建構偏移(價格權重+含息不一致)  (high, 首見於 ?)
+    偵測器:建 sector/index proxy 必驗兩件:①.mean(axis=1) 平均的是報酬還是價格?平均價格水平=高價股主導(低價股翻倍族群只顯示+3.8%);改對各股報酬 rebase 到起點=1 再平均。②分子分母含息一致性:TR基準(含息)vs price成分(不含息)=RS每年被壓~3-4%系統性下偏。快照象限分佈異常擠壓(36族群僅3個≥100)即偏移的煙。測試全綠不保證資料層乾淨。
+
+[63] 洗歷史只驗本地不驗遠端(push --force --all 推不到遠端獨有分支與 refs/pull)  (high, 首見於 github-launch)
+    偵測器:pre-public 終驗必須 fresh clone --mirror 遠端後掃四層(author/committer/訊息/blob);記住 refs/pull/* 是 GitHub 唯讀 ref,git 刪不掉,有髒 PR 的 repo 只能 support 清除或砍掉重建
+
+[64] 重疊視域訓練洩漏(多步直接預測)  (high, 首見於 rubber-forecast)
+    偵測器:direct h-step forecasting 的訓練集必須 embargo:訓練 origin s 需滿足 s+h<=t;只查特徵日期的 assert 抓不到標籤層洩漏,要另 assert max(train_origin)+h<=origin
+
+[65] 環境遺留錯誤被當現行bug寫進對外報告  (high, 首見於 impact-audited)
+    偵測器:對外 bug report 的每個症狀必須在『最新版+乾淨狀態(fresh clone/fresh index)』重現才准寫入;僅舊版本工件上出現的症狀標為升級路徑問題另查
+
+[66] 確定性地板與偵測層過濾清單不對稱→假陽性  (high, 首見於 impact-audited)
+    偵測器:審計工具的 floor 與其輔助偵測(語言偵測/剪枝/路徑正規化)必須共用同一份過濾常數;對 floor 加對抗輸入測試:vendored 目錄呼叫點、絕對路徑、../ 相對路徑,斷言不產生假 FAIL
+
+[67] 對外摘要三重超範圍宣稱(全稱句 in-every-sport 被單一子集反例+未測運動推翻;複現對象標籤錯 state-space vs hierarchical proxy;FAIL 特徵寫成 improved)——builder 撰稿時把彙整表壓縮成修辭,細節丟失  (high, 首見於 sports-efficiency-paper)
+    偵測器:對外文字投稿前逐句機械核對:全稱詞(every/all/uniformly)每個個體都要有對應證據;複現宣稱寫「測的實物」非「引用的目標」;每個數字標明子集/期間;冷審+機械審雙路
+
+[68] 同一宣稱分散多檔維護 → 主檔改了框架,衍生檔(投稿摘要/舊草稿)殘留已撤回宣稱  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:交付前對全 repo grep 一份『舊框架用語清單』(本案:state-space / failed replications / In every sport / +5.5%);任何衍生檔命中即為未同步。同一宣稱只准一個正本,舊草稿一律改成指標檔,不留內文。
+
+[69] 估計值被寫成『腳本重現的計算結果』(硬編碼常數冒充統計量)  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:任何宣稱『companion script reproduces these figures』的數字,實跑該腳本並逐個比對輸出;檢查腳本裡有沒有硬編碼常數帶著 # estimated 之類註解。本案 nba_mde=1.4 其實是 θ-scan 離散度不是抽樣誤差。
+
+[70] 二手轉引的外部數字被審計表標記為『已對原始來源核實』  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:審計表的每個外部數字要記『我讀的是哪一份檔案』而非只記『來源論文』。凡來源是他人摘要/自家舊報告轉述的,狀態一律標 secondhand,不得用與親讀原文同一個 ✓。本案 NUMBERS_AUDIT.md:64 把 0.1755/0.2222 標成 re-read ✓,實為 model_landscape 轉引;取得原文後 grep 這兩個字串在論文中根本不存在。
+
+[71] 預註冊閘門的門檻由未親驗的外部數字校準 → 門檻本身被汙染,但閘門形式看起來仍成立  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:寫預註冊時,每個數值門檻要標註它的校準來源與該來源的查證狀態;來源若是 secondhand,該門檻在事後必須連帶檢查。本案 G1(HBGM 須 ≤0.1993)是用誤讀的 0.004 RPS/場優勢反推的,真值約 0.001,門檻整整嚴了四倍。
+
+[72] 跨檔傳遞的存活偏誤:被改寫過的『數字』一路傳下去且被信任,同一段落裡的『定性發現』整條蒸發  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:從中間層報告(landscape/摘要/研究筆記)取材寫進正式產出時,把該來源段落整段重讀一次,而不是只取自己記得要用的那個數字;特別檢查有沒有一句定性結論比那個數字更重要。本案 model_landscape_2026-07.md:10 的數字(誤讀)被繼承到論文,:11 的『仍未打敗賭盤 odds』——正是本論文中心論點的獨立外部佐證——從七月起就躺在那裡,從未進入論文。
+
+[73] 產生宣稱的稽核腳本自身未被稽核(信任鏈斷在最後一環)  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:列出論文每個統計宣稱的產生者;凡宣稱由 audit/*.py 產生,該腳本必須跟主程式碼一樣被逐行複審(重採樣單位、seed、記憶體降級路徑)。『稽核腳本』不是自動可信的元層。
+
+[74] 自驗容差寬到同時涵蓋已撤回值與更正值(閘門恆過)  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:對每個 assert/tolerance 問:把『修正前的錯值』餵進去,它會不會過?會過就是恆真閘門。新設任何門檻先拿一個已知失敗版跑它。
+
+[75] 有利子集在產出 headline 的同一檔案裡算過卻未報告(選擇性報告)  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:開啟 headline 數字的來源檔,整段讀完並列出該檔算過但沒被引用的所有其他數字;逐個問『沒報它是因為不相關,還是因為它不利/有利?』
+
+[76] headline 統計量算在沒人據以決策的估計對象上(pooled AUC 跨組比較)  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:對每個排序/判別指標問:『這個統計量比較的是哪兩個東西?真實決策者會面對這個比較嗎?』pooled AUC 跨 race/game 配對即屬此類;重算在決策單位上看符號會不會翻。
+
+[77] 數字抄自進度日誌而非權威報告,日誌的轉述層錯誤被繼承  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:審計表要記『我實際讀的那份檔案』;凡來源是 PROGRESS/RESEARCH_LOG 一律標 via-LOG 並回溯到權威報告親驗,對不上就以權威報告為準。
+
+[78] 流程宣稱為假但周邊數字全對(『排除了一列』實際沒排除),數字對源稽核與冷審皆盲  (high, 首見於 sports-market-efficiency-paper)
+    偵測器:論文描述的每個資料清洗/排除步驟,都要能在程式碼裡指出執行它的那一行,或用計數反證(排除後 n 應為 N-1;n 若等於未排除的 N 就是沒做)。動詞型宣稱要獨立於數字型宣稱單獨列表驗證。
+
+[79] 效能係數用單一短樣本量測後寫死成 ETA 常數:57s 音檔量到 1.9x 就當通用倍率,六次重測全落在 2.47-3.14x 一次未重現,且 213s 真實素材是 4.85x(超線性)  (high, 首見於 video-watch)
+    偵測器:效能宣稱一律附「樣本長度 + loadavg + 重複次數」三欄;單一長度的量測不得外推成常數,要嘛給下界要嘛補 2-3 個長度擬合。ETA 常數要能指出產生它的那次量測記錄。
+
+[80] 新閘門對「產物不存在」寫成 pass...skipped,而上游失敗路徑正好會刪掉該產物:diarization 失敗 rm -f speakers.json → C6/C7 雙雙 skip → 整包 RESULT: PASS exit=0  (high, 首見於 video-watch)
+    偵測器:閘門每條 skip 分支都要問「上游有沒有一條失敗路徑會製造出這個 skip 條件」;產物缺席必須能區分『使用者明示不要』與『壞掉了』——前者由旗標證明,其餘一律 FAIL。source.txt 這類自述欄位不得用同一字串表示多種成因。
+
+[81] 閘門宣稱驗「標籤與時間軸對齊」,實作只數字面 [S?] 佔比,從不讀來源檔重算:寫一行 hello 進去得 0% 滿分,把 31 段說話人全部輪替貼錯人也照樣 PASS  (high, 首見於 video-watch)
+    偵測器:閘門若宣稱驗 A 與 B 的一致性,實作必須同時開啟 A 與 B 兩個檔案並現場重算;只讀單一衍生檔數符號的檢查一律視為未驗證。負向案例要含『檔案在但內容全錯』,不能只有『檔案缺/檔案空』。
+
+[82] 為了防恆真而寫的漏放測試自己是恆真的:T3 沿用 T2 算出的同一個 N2,T2 PASS 的定義就是 N2==1,而 1!=4 故 T3 的 else 分支必然成立,PASS (3/3) 實為 2 項  (high, 首見於 video-watch)
+    偵測器:漏放測試必須獨立取值,不得複用上一個測試的變數;寫完逐條問「這個斷言在前一項 PASS 的前提下還有可能 FAIL 嗎」。測試計數 N/N 要能指出 N 個各自獨立的取值來源。
+
+[83] 閘門的檔名格式假設沒跑誤殺測試:printf %02d 在 100 分鐘變 3 位數,C2 的 @(\d{2})(\d{2})$ 匹配不到 → 所有 >=100 分鐘的影片必定整包 FAIL,而該工具主推的正是長影片;附帶 fname_to_sec 匹配失敗 return 0 是本專案已修過一次的舊病復發  (high, 首見於 video-watch)
+    偵測器:R5 附錄二的四項測試(漏放/誤殺/偽造/覆蓋)缺一不可,誤殺測試要拿「合法但在參數空間邊緣」的輸入跑(最長/最短/最多/空)。所有格式解析失敗一律 raise,永不 return 預設值——這條要對 repo 全域 grep 巡一次。
+
+[84] 新寫的狀態矩陣測試只斷言最終 exit code,對「其中一道檢查退回舊漏放寫法」完全失明——C6 從 FAIL 退回 ok,但同一格的 C7 仍 FAIL 撐住 exit,整份測試照樣 RESULT: PASS (22/22)。讀起來合理、22 格全綠、涵蓋所有狀態組合,卻抓不到它唯一要防的那個回歸  (high, 首見於 video-watch)
+    偵測器:閘門的斷言粒度必須跟被測對象的粒度一致:被測對象有 N 道獨立檢查,測試就要逐檢查斷言(解析出每個 [Cn] 段各自的判決),不得只看聚合結果——否則兩道檢查會互相掩護。負向對照要能指出「是哪一道檢查退化」,只回報整體 PASS/FAIL 的負向對照不算跑過偽陰性測試。
+
+[85] 修 fail-open 時把閘門判準從「檔案系統事實」(speakers.json 在不在)搬到「產生器自我宣告的純文字欄位」(source.txt 的 speakers: 那一行)。擋住了意外的靜默失敗,但可稽核性淨損失:一行 sed 就能把 exit 1 的包變成 exit 0。本工作區「門檻可被一支後處理直接偽造」第 4 次  (high, 首見於 video-watch)
+    偵測器:任何把判準從可觀測事實改成自我宣告欄位的修法,提交前先問「有沒有一支 sed/一次改寫能直接製造這個判準要的值」。有的話,該修法只能宣稱擋意外不擋蓄意,且必須在 README/SKILL 的侷限段逐字寫明,不得只寫在程式碼註解裡。
+
+[86] producer(video_watch.sh 寫進 speakers: 的字串全集)與 consumer(check_bundle.sh C6/C7 的分類分支)兩張狀態表靠人工同步,已漂移出四個靜默 PASS:未宣告的哨兵值 not run 被歸進「宣告沒跑」而跳過、欄位存在但值為空與欄位不存在共用同一個 -z 判斷、未知 status 兩半都放過、含單引號路徑讓閘門崩潰而崩潰與 FAIL 在呼叫端不可分辨  (high, 首見於 video-watch)
+    偵測器:凡是「一支腳本寫字串、另一支腳本按該字串分流」的介面,必須有確定性腳本做笛卡兒積掃描(每個字面 status × 每種檔案存在狀態),外加覆蓋檢查 grep producer 端的字面賦值、發現沒有對應期望列就 FAIL。人工同步的狀態表一律視為已漂移。另:set -euo pipefail 下 VAR="$(...)" 失敗會整支中止,守門腳本的崩潰必須與判 FAIL 可分辨(缺 RESULT 行 = 崩潰)。
+
+[87] 評估窗含策略不可交易的暖機段,基準卻從窗起點起算(策略白拿躲過熊市的功勞)  (high, 首見於 rrg-taiwan)
+    偵測器:回測起點必須=第一個可執行訊號日,策略與基準兩條曲線同日起算;檢查法=NAV 前段恰為初始值的連續天數,>0 即窗未對齊;相對指標(excess/IR/相對MDD)在對齊前全部不可信
+
+[88] 跨模型比較跑在不同且較小的樣本池,報告卻宣稱同池;headline 比較對象(GBT)根本不在 backtest harness 裡  (high, 首見於 worldcup-2026)
+    偵測器:「A 勝過 B」的宣稱先驗兩件事:同一 harness 能同時跑出 A 與 B(grep harness 有無 B),以及兩邊 n/樣本清單逐一相等(實跑各自數 editions);任一不成立就降級為不可比
+
+[89] 顯著性/對照組檢定算在修正前的舊版訊號上,headline 卻把 pctile 與修正後數字並列宣稱  (high, 首見於 tw_equity_alpha)
+    偵測器:任何「beats N 次隨機對照 pctile=X」的宣稱,先在程式碼裡找 pctile 那一行用的收益序列變數,確認它 == headline 數字用的那條(修正後)序列;不同就整組重算
+
+[90] lockbox「只看一次」紀律被資料快取靜默延長打破——重跑 lockbox 數字漂移,方法沒錯但凍結被破壞  (high, 首見於 tw_equity_alpha)
+    偵測器:審 lockbox 宣稱時比對資料快取 mtime vs 報告日期,晚於報告即紅旗;診斷法=新舊中間輸出的重疊列 diff(重疊 byte-identical + 多出尾列 = 快取長大非程式錯);修法=data/CACHE_MANIFEST 釘死每個 parquet 的列數/日期範圍
+
+[91] 測試 runner 的 quit(1) 在平台層被吞——Godot 4.2 -s 模式 SceneTree.quit(exit_code) 不傳遞,FAIL 時 shell 仍收到 0,任何靠 exit code 的 CI/腳本恆判 PASS  (high, 首見於 skewer-hunter)
+    偵測器:驗收含 exit code 的 runner,必注入一個已知 FAIL 案例實跑並讀 $?(平台層驗證);讀 runner 原始碼看到 quit(1) 不算數,程式碼正確不代表平台傳遞
+
+[92] parse gate 用 load()!=null 判編譯失敗——Godot compile error 時 load() 回 placeholder 非 null,閘門對編譯失敗全盲  (high, 首見於 skewer-hunter)
+    偵測器:parse/compile gate 上線前注入一個已知語法錯誤檔實跑看它 FAIL;load()!=null 這類「有回傳就算過」的檢查對每種失敗模式各驗一次會不會誤放
+
+[93] 重疊 forward-return 視窗用 IID t 檢定——headline t=-4.6 經 moving-block bootstrap 修正後只剩 -1.4,全部代表性 bucket 掉到 |t|<2;「p 值樂觀」一句帶過不算揭露  (high, 首見於 breadth_predictability)
+    偵測器:重疊視窗研究一律先跑 moving-block bootstrap 或 Newey-West 再談顯著性,修正前後兩組 t 並列;修正後 |t|<2 的結論降級為「方向性觀察」;12 個月視窗要查觸發間隔<1年的比例(ZBT 21/35),有效 n 另行估計
+
+[94] 事件研究的 n 是同日多指標重複計數——「169 個 bearish divergence 事件」實為 3 個 metric 掃同一批日子,distinct dates 只有 89  (high, 首見於 breadth_predictability)
+    偵測器:事件數宣稱先 groupby 日期數 nunique,同日多指標觸發只算一次或改 clustered SE;n 與 distinct dates 差超過 1.5 倍就是偽複製紅旗
+
+[95] M1 用真影片端到端跑,素材包拿到 RESULT: PASS exit 0,但只有 2 張畫格、逐字稿 5 bytes。五道閘門全部量的是「產物形式上有沒有壞掉」(時間戳單調、無 dangling 引用、幀數不超上限、逐字稿非空),沒有任何一道量「這包對讀它的人有沒有用」。VA1+VA2 兩輪審計都沒發現,因為兩輪審的都是閘門自己的邏輯,不是閘門與使用目的之間的落差  (high, 首見於 video-watch)
+    偵測器:閘門全綠不等於產出有用。設閘門時逐道問「這道量的是形式正確性還是使用價值」,若整組都落在形式那一側,就缺一道對準使用目的的檢查(此處=幀密度下界 + 音軌/逐字稿一致性)。最便宜的偵測法是拿一份真實素材端到端跑一次並親眼看產物——合成冒煙測試永遠測不出這一類
+
+[96] C5「transcript 非空」對一段 mean=max=-91.0 dB 的數位靜音音軌判 PASS——whisper 對全靜音吐出 " you" 5 bytes,非空檢查照收。存在性檢查天生無法分辨「真的有內容」與「模型幻覺出來的內容」  (high, 首見於 video-watch)
+    偵測器:對 ML 產物做「非空/存在」檢查等於沒檢查,因為 ML 元件在無效輸入下的預設行為就是產生看似合法的輸出。修法是回到資料來源那一層量輸入的有效性(此處=先跑 volumedetect,靜音就根本不跑 whisper),並在閘門加一條定義性交叉檢查(靜音則不得有逐字稿,有逐字稿則不得靜音),而不是對輸出內容做啟發式判斷
+
+[97] check_bundle.sh 的 header 第 19 行明寫「本腳本永不加 2>/dev/null 或 || true」,而同一支檔案裡有兩處 || true(C1 空白幀計數、C3 manifest 引用擷取),把 grep 的錯誤 rc>=2 與「沒找到」rc=1 混為一談。實測:manifest chmod 000 讓 grep 回 rc=2,舊碼 RESULT: PASS exit 0(C3 空過),新碼 exit 1。兩處都存在於 VA2 定案 commit,熬過兩輪審計  (high, 首見於 video-watch)
+    偵測器:檔案自己宣告的紀律要當成一條可機器檢查的斷言,而不是註解——寫下「永不加 X」的同時就要有一支 grep 掃自己(或 CI lint)。兩輪對抗審查都沒抓到,是因為 reviewer 讀的是被指到的邏輯段落,沒有人把 header 的宣告拿去對檔案本體比對。另:`cmd || true` 吸收的是全部非零 exit,只想吸收「沒找到」就必須寫 `|| RC=$?` 再判 RC
+
+[98] determinism 閘門的「兩次獨立跑」共用同一組 seed——base_seed 參數傳了但沒用,G1/G2 是同一段程式跑兩遍,hash 必等,只有 CPU 壞掉才會 FAIL  (high, 首見於 wigner-evec-study)
+    偵測器:審 determinism/reproducibility 閘門時查「兩次跑」的隨機源是否真的獨立導出:參數傳入的 seed 要 grep 它在函式體內被讀過;正解=一次對 cache 既有值比對(驗可重現)+ 一次改 seed 應得不同值(驗 seed 真的接上)
+
+[99] 閘門只觀測測試專用路徑,正常遊玩路徑從未受檢  (high, 首見於 abyss-42)
+    偵測器:閘門讀取的取樣/儀表化程式碼,逐條看它的寫入條件:條件若是測試鉤子(如 `if (stride > 1) push(...)`,而 stride 只在 smoke 被設 >1),則該閘門對正常路徑失明;修法=取樣無條件化 + ring buffer 控記憶體,並補一道 stride1 vs strideN 的**逐步序列**比對(僅比樣本數會被保數量的注入騙過:實測 600/600 相等而序列不同)
+
+[100] 存在檢查不是內容檢查:閘門斷言「事件/物件存在」對「它帶著錯的值」完全失明  (high, 首見於 abyss-42)
+    偵測器:凡驗收條件寫成 size>0 / exists / not-null / length>=1,問一次「呼叫點有跑但傳了錯的值,這道會紅嗎」,並實際注入一個錯值(不是移除呼叫)驗證;修法=讓閘門透過真正的生產查詢路徑把產出讀回來,逐欄位斷言數值(本案 loudestWithin 回讀後斷言 category/radius/emitterDepth/effectiveRadius 四欄),一次同時證明模組會動+呼叫點接好+值是對的,且不需新增測試鉤子
+
+[101] citation-integrity  (high, 首見於 rimworld-study)
+    偵測器:cold-reviewer-enumeration
+
+[102] summary-vs-detail  (high, 首見於 rimworld-study)
+    偵測器:row-recount
+
+[103] audit-process  (high, 首見於 vt-hka-pilot)
+    偵測器:operator-grep-whole-project
+
+[104] grep-scope false negative (absence-of-evidence)  (high, 首見於 ?)
+    偵測器:當一個宣稱被自我標記為未找到/未驗證,那正是最該反向查證的點,不是點頭放過;grep 的搜尋範圍本身是一個宣稱;斷言 X 未被 enforce 前 grep 必須掃全 src/ 不能只掃你以為它該在的目錄(本案 enforcement 在 src/api/server.ts:245,首遍只掃 src/ 核心目錄漏掉)
+
+[105] 同家族三視角共同盲點(hit 記錄)  (high, 首見於 ?)
+    偵測器:外部 repo 安全審至少一隻異質模型;Claude 家族多視角仍漏掉:env-var 注入安裝器、doctor 寫入探針、extension 無沙箱繼承環境、SSRF——這四類列入下次安全掃描清單
+
+[106] 介入效果全落在介入自己點名的那一類(單指令混淆偽裝成一般協定效果)  (high, 首見於 auditor-fail-open)
+    偵測器:A/B 的效果集中在某一子類時,逐字 diff 兩臂 prompt 找有沒有一行只出現在勝出臂且正好命中那一類;對照臂 grep 該類關鍵字零命中即成立=這不是協定效果是那一行的效果,比較須撤回改寫成 prompt ablation
+
+[107] paired 檢定的有效樣本被 concordant pair 吃光(n=14 實為 n=4)  (high, 首見於 auditor-fail-open)
+    偵測器:報 McNemar/paired 檢定時同時報 discordant pair 數與其子類分布;discordant 全落在同一子類=有效樣本等於該子類,標題與摘要不得引用總 n
+
+[108] p 值貼近 alpha 卻未測自身量測顆粒度下的脆弱性  (high, 首見於 auditor-fail-open)
+    偵測器:任何 0.03<p<0.08 的結論,對每個受測單位 ±1(或該量測實際觀察到的評分者歧異幅度)重算;若任一位置都能越過 alpha,措辭只能寫『與 alpha 邊界不可區分』,不得寫 null 也不得寫 significant
+
+[109] 預先登記 outcome 被靜默漏報(審計只查有沒有多加,沒查有沒有少報)  (high, 首見於 auditor-fail-open)
+    偵測器:prereg 對照必須雙向:①報告裡有沒有 outcome 清單以外的東西 ②清單每一條都在報告裡 grep 得到嗎;漏報的處理是寫『此項無結果』,不是刪掉那一條
+
+[110] 以「無法驗證」為由免除的數字,實際是「未嘗試驗證」——原始資料一直在 repo 裡  (high, 首見於 auditor-fail-open)
+    偵測器:看到「操作者未複驗/無法複驗」這類 caveat 時,先問產生該數字的原始檔在不在手上;在就當場重算。免責聲明本身是一個宣稱,要受測而不是被接受。unverifiability caveat 讀起來像謹慎,作用上是掩護,讀者無法分辨兩者。
+
+[111] 下游更正不會回傳到它所引用的上游紀錄——而驗證方式(重讀被改的檔)按建構就偵測不到  (high, 首見於 auditor-fail-open)
+    偵測器:撤回或更正一個數字後,對整個 repo grep 該舊值,不要只重讀剛改的那個檔案。特別檢查「本文引用的那份上游紀錄」(deviation log、prereg、附錄)是否仍帶舊值。本案 A10 混估計量更正只做在論文,從未回填到論文所引的 D13,連過兩輪稽核。
+
+[112] 驗證閘門量的正是正規化所瞄準的那個維度,於是只能確認自己剛做的工作  (high, 首見於 auditor-fail-open)
+    偵測器:任何「消除差異」的工作,其驗收閘門必須量到未被瞄準的維度。做法:列出正規化明確命名的目標(本案 wordcount 314-387),再問「達成它的手段會把哪些沒被命名的量推開」(壓縮散文而改寫程式碼 → 總字元、code 字元、字元/詞三者全部完美分離 14 vs 6)。閘門只驗被瞄準的維度=建構必然的 PASS。
+
+[113] 授權文件齊全≠合規(attribution 未達使用者可見層)  (high, 首見於 cyberpunk-room)
+    偵測器:發布審計時對每條 CC-BY/SA 條目問:署名在產品裡使用者看得到嗎?grep 前端 credit/attribution 字樣+檢查 credits UI 存在;文件表格再完整,產品內零署名即 P1
+
+[114] 用會自行變動的場景狀態當 before/after 指紋(偵測器恆報 fired)  (high, 首見於 cyberpunk-room)
+    偵測器:任何 before/after 指紋在當偵測器用之前,先做一次 no-op 等待重讀:讀兩次不相等的量(逐幀動畫的燈光強度總和、時間戳、隨機種子)一律不合格,改用離散且非動畫的狀態(此案改讀 getWeather() 的離散檔位)
+
+[115] 偵測器只驗過「有東西觸發」,沒驗過「該不觸發時讀得到不觸發」  (high, 首見於 cyberpunk-room)
+    偵測器:每個偵測器的有效性條件要同時含正負兩向:正向=已知會觸發的操作讀 true,負向=已知不可能觸發的 no-op(未綁定的按鍵、空白輸入)在**每一個受測狀態**下都讀 false;只有正向的 CONTROL_VALID 視為未驗證
+
+[116] 抽樣支撐全稱(單一 code path 推及整個函式庫)  (high, 首見於 ?)
+    偵測器:看到「經 N 步實驗確認某缺陷不發生」這種全稱否定,先問『這個實驗跑在哪一條 code path 上』並枚舉同功能的其他入口;本案 200k 步實驗只跑 positional update(),同函式庫的 velocity 入口 src/FixedPID.cpp:109,147 每步截斷,結論當場反轉
+
+[117] 引文捏造但行號為真(lint 掃不到)  (high, 首見於 ?)
+    偵測器:引文與行號分開驗兩次:先 grep 引號內字串是否逐字存在於該檔,再驗行號;source_lint.py 按設計只驗行存在不驗行內容,對這型完全無效
+
+[118] 閘門排序:為問句設計的優先序會搶走同主題的指令  (high, 首見於 ?)
+    偵測器:新增 contains 式路由規則時,必須用**含該主題詞的動作指令**測(記一下X天氣/打開X新聞),不能只測問句。動作詞的存在就是消歧義訊號,閘門應排在所有動作規則之後
+
+[119] 正規化把不同語意壓成同一格(佔位符共用)  (high, 首見於 ?)
+    偵測器:任何把輸入正規化成骨架/指紋的機制,對每一類被收斂的詞問:兩個不同語意的輸入會不會產出同一個鍵?寫 assertNotEquals 釘住。特別危險的是該鍵被用來永久綁定行為時
+
+[120] 統計量在不同子集上計算(選擇偏差)  (med, 首見於 dramaturge)
+    偵測器:兩個要比較/合併的統計量,確認在『同一批 rows』上計算;檢查 NaN/丟棄過濾是否被不對稱套用
+
+[121] 測試防護在最佳化模式失效(裸 assert)  (med, 首見於 fishbowl)
+    偵測器:煙霧測試不用裸 assert 做不變量(python -O 靜默跳過);改累計違規數進 check;驗收加跑一次 -O
+
+[122] 現在式引用已修復的 bug(文件時態誤導)  (med, 首見於 dramaturge)
+    偵測器:文件引 bug 當反例時核對 git log 判定是否已修;已修的標「已修復的歷史 bug」並註明證據模式/條件(mock vs llm)
+
+[123] 恆真句 PASS(同源自算當獨立錨點)  (med, 首見於 tw-valuation)
+    偵測器:每個 anchor/自查逐一問:比較的兩邊是否同一來源算出?同源=一致性檢查,不得列入『驗證通過』宣稱;pass 欄位寫死 True 直接紅旗
+
+[124] 驗證證據不在交付物內(宣稱無法重現)  (med, 首見於 study-forge/pattern_dig)
+    偵測器:宣稱「N 項測試全過」時,測試腳本必須進 repo 且可重跑;寫在 /tmp 的測試=沒有測試;審計時 find repo 內對應測試檔,找不到即宣稱不可信
+
+[125] 狀態機降階事件未清理依賴舊狀態的佇列項  (med, 首見於 study-forge/evolution)
+    偵測器:佇列在建立時依狀態 X 排入的待辦,狀態在同節內跌破 X 的門檻後要主動撤掉;測法=同節先觸發降階再檢查佇列不含依賴舊狀態的項目
+
+[126] 宣稱技術棧與實裝版本不符(scaffold 預設≠規格)  (med, 首見於 restaurant-game)
+    偵測器:scaffold 完成後逐項 diff package.json 主要套件 major 版本 vs 規格書技術棧行,不符就降版或報告偏差
+
+[127] 防線只在 UI,引擎無守門(透支/越界照單全收)  (med, 首見於 restaurant-game)
+    偵測器:對每個玩家輸入問「繞過 UI 直接餵引擎會怎樣」;主動決策的資金/範圍約束必須在引擎側再擋一次,UI disabled 只是勸阻
+
+[128] 獨立審查 prompt 夾帶引導性提示(破壞判答獨立性)  (med, 首見於 study-forge/sentence_patterns)
+    偵測器:雙判/多判宣稱成立前,重讀派審 prompt:凡指名特定題目/暗示陷阱位置(如「#12和#15用法不同」)即獨立性受損;補救=無提示重判並混入誘餌題,不告知重點題
+
+[129] 互動教材判分器漏目標使用者輸入變體(全形/Unicode符號)  (med, 首見於 study-forge/math_practice)
+    偵測器:判分/輸入驗證函式必測:全形數字(１７)、全形與Unicode減號(－ −)、全形斜線／;中文輸入法環境的孩子高機率打出全形;e2e 用 pg.evaluate 直測判分函式
+
+[130] 防捏造 ground truth 本身是抽取產物(txt 生成環節無稽核)  (med, 首見於 study-forge/summer-materials)
+    偵測器:substring 閘門的來源 txt 若由 pdftotext/OCR 生成,「與 txt 一致」≠「與原講義一致」;高風險段(數學式/音標)須抽頁視覺比對 txt vs PDF 留存記錄,或在 coverage 檔標注 txt 保真未驗區
+
+[131] 部署證據只在對話不在 repo  (med, 首見於 human-among-npcs)
+    偵測器:butler/雲端部署後立刻把 build 編號+版本寫進 PROGRESS,並讓打包產物(zip)與正式通路同步重生——否則獨立審查者只能看到過期 artifact,把「已部署」誤判為「無證據」,接手者甚至可能上傳舊檔覆蓋新版
+
+[132] 審計更正中途新增效應量閘門未先鎖定即改判(移動球門,本次偏保守僥倖無害)  (med, 首見於 tennis-prediction)
+    偵測器:重跑/改判前先把判準寫死留痕;過閘餘裕<10%閘值強制標邊際採用
+
+[133] 評估窗名不副實(lockbox 名為 2019-2021 實止 2021-07-31 缺秋季賽季;源自資料檔名,內審未抓,冷審抓到)  (med, 首見於 keiba-prediction)
+    偵測器:任何以年份命名的評估窗,先對每年實際列數/日期範圍重數(min/max date per year),截斷即入揭露
+
+[134] 恆真測試(資料檔答案自驅 e2e 全對)寫進宣稱表未加限定,讀者會誤當答案正確性背書;審計正文自認恆真但宣稱表沒改  (med, 首見於 study-forge/quiz-review)
+    偵測器:宣稱表逐條問「這句會被誤讀成什麼」;自驅/一致性檢查在宣稱表原句就要帶「不證X」括注,不能只在正文備註
+
+[135] 驗證 agent 的 FAIL 判定本身是誤報(文字抽取假影/計數範圍錯)  (med, 首見於 sports-market-efficiency-paper)
+    偵測器:驗證 agent 回報 FAIL 時,先用第二種方法重現該 FAIL 再行動。本案兩例:(1) 冷審稱摘要 640 字實為 481(它把 front matter 一起數);(2) read-back 稱 PDF 掉連字號,實為 pdftotext 把跨行的 Pre-/Registered 接起來,raw content stream 有 Pre-Regist。
+
+[136] 付費牆被當成不可查證的終點,未查綠色 OA 機構典藏  (med, 首見於 sports-market-efficiency-paper)
+    偵測器:任何被標記為『paywalled / 無法核實』的引用,結案前必須再試三條路:(1) 作者所屬機構的 EPrints/institutional repository;(2) Google Scholar 的 all-versions;(3) 作者個人頁/arXiv。本案 JRSS-C 正本在 eprints.lancs.ac.uk 以 CC BY 全文公開,從被記為『待核實』到取得只花數分鐘。
+
+[137] 「七個負向案例全 FAIL」與「0.8/0.9 與強制四人同一分割」兩項驗證只存在於 session 對話,commit 裡沒有任何腳本能重跑;且沒記錄是哪一道閘門抓到哪一案,拆開才發現 C6 抓 5、C7 只抓 2  (med, 首見於 video-watch)
+    偵測器:結案時對每條驗證宣稱問「git show <commit> 裡有沒有一個檔案能重跑它」,沒有就當未驗證。多道閘門的負向案例要逐案記錄命中的閘門編號,不得只記總數全綠。
+
+[138] 主線口頭與報告初稿反覆寫「15 個現存素材包」,獨立驗證者回報 14;實測 ls -d media/watch/*/ | wc -l = 14,是主線把 ls -la 的目錄列數錯。抽驗一份「全數 PASS」的 subagent 回報,推翻的是主線自己的數字而不是 subagent 的  (med, 首見於 video-watch)
+    偵測器:主線自己產生的數字與 subagent 回報同級,都是待驗證輸入。報告裡每個計數落筆前跑一次可重現的計數指令並把輸出貼進報告;抽驗 PASS 回報時,凡驗證者與主線數字不一致,預設先假設主線錯(驗證者是為此而生的),用第三方指令裁決,不得靠印象覆蓋。
+
+[139] 報告數字是快照,重跑管線讀的是持續增長的活資料——headline 數字必然漂移且無揭露  (med, 首見於 worldcup-2026)
+    偵測器:審「凍結於日期 D」的數字時先問:重跑指令今天還能逐位重現嗎?repo 有沒有釘死的 data 快照或 --as-of 旗標?沒有就要求報告標注每個對外數字的產生腳本+資料版本
+
+[140] 資料修復做在讀取時而非落檔時,「每次載入都套用」是逐呼叫者慣例不是結構——旁路讀取器(探索性腳本直接 read_parquet)全部吃到未修復資料  (med, 首見於 cross_market_alpha)
+    偵測器:「修復已套用於所有 X」的宣稱要 grep 出全部載入點逐一對照;修法升層=收斂成單一 panel_load() chokepoint 或把修復落檔成新 vintage,慣例改結構
+
+[141] scene detection 失敗時的均勻取樣 fallback 條件寫 N_RAW -eq 0,所以「低到荒謬但非零」(30 秒片 2 幀)永遠走不到 fallback。根因是 select=gt(scene,0.12) 對平滑動畫本來就是錯的儀器(幾乎沒有硬切),而防呆只防了它完全失效、沒防它退化  (med, 首見於 video-watch)
+    偵測器:防呆的觸發條件寫成「== 0」「is None」「完全失敗」時,問一次「部分失敗長什麼樣」——連續量的防呆條件要用門檻不用等號。門檻要有量綱(此處=幀/秒的密度下界),不是絕對數量
+
+[142] 驗證套件裡的恆真句測試被兩段式 VA 全 PASS 放行——put 由 put-call parity 定義,再拿 parity 當第 5 條驗證測試,代數必過  (med, 首見於 stochastic-vol-engine)
+    偵測器:審「N 測試全過」時逐條問:被測量與參考值是否同源推導?(heston_put 的定義行就在被測公式旁邊,測試檔看不出來,要追到實作);同源的降級標「一致性檢查」;複審舊 PASS 專案的最高價值動作=empty-gate 否證(餵故意弄壞的引擎看測試會不會 FAIL)
+
+[143] KS 距離收斂序列的單調下降可能來自 null floor 隨樣本數漂移,不是真收斂——每個 M 配對的 KS 統計量自己有非零底線(0.027/0.042/0.039),端點 0.047 其實坐在底線上  (med, 首見於 wigner-evec-study)
+    偵測器:任何「距離隨 N 下降」的收斂裁決,先算每個規模配對的 null floor(同分佈重抽 KS 的期望值)並從軌跡扣除;端點落在 floor 上=已收斂到不可分辨,軌跡單調但 floor 也在動=不可裁決
+
+[144] 共用工作佇列無認領協議,兩 session 對撞重複審計  (med, 首見於 va-sweep)
+    偵測器:多 session 消化同一張佇列表時,「開審前把狀態改 in-progress 並 commit」是唯一防撞機制;開場讀到的 pending 是快照,派 agent 前要重讀一次確認仍 pending
+
+[145] 建造者的註解論證被當成證據;只比對被點名的統計量會誤判為論證成立  (med, 首見於 abyss-42)
+    偵測器:程式碼註解裡「這不會讓閘門空洞」這類論證一律視為未驗證宣稱,把它轉成機器檢查:兩種模式各跑一次,**整列並排比對所有欄位**而非只看註解點名的那一個(實案:maxStepJump 兩邊完全相同=註解對的部分,但 samples 1240 vs 581 且 stride=1 在 budget 內根本跑不完=註解錯的部分,只看 maxStepJump 會判「論證正確」)
+
+[146] 驗證訊號 fail-open:exit code 0 只代表「跑完」不代表「通過」  (med, 首見於 abyss-42)
+    偵測器:任何被當成通過證據的 exit code,回頭讀產生它的那一行:`process.exit(done ? 0 : 2)` 形式是 fail-open——全部閘門紅字仍 exit 0;修法=三態(0=all_pass / 1=有 FAIL / 2=never DONE),並在引用 EXIT=0 前確認承載驗證的到底是 exit code 還是輸出裡的 all_pass 那一行
+
+[147] framing-error  (med, 首見於 va-ia-launch)
+    偵測器:任何「A 對 B 之爭」的敘事,下筆前先驗兩個原始貼文的時間戳與是否同串;敘事順序照時序寫,非同串就明說「兩個獨立貼文被當成對立面」——宣稱表逐條驗數字全過也擋不住框架層的因果倒置
+
+[148] reviewer-blindspot  (med, 首見於 va-ia-launch)
+    偵測器:對外文稿的技術論證段,異質模型複審專查:意圖歸因(作弊/悄悄/騙過)、過度二分(不會失敗只會通過)、絕對句(物理上無法/只能靠);同家族 reviewer 與作者共享這批修辭盲點
+
+[149] 機械檢查 FAIL 後改換工具直到通過,並把換工具寫成美德  (med, 首見於 auditor-fail-open)
+    偵測器:改判準或改工具時由非改動者重跑;新工具若對受測集合『不可能失敗』(五項小清單比對 164 項超集)一律標建構必然,不得記為 could-have-failed
+
+[150] 審計宣告的重算基礎本身就是它的盲點地圖(carried vs computed)  (med, 首見於 auditor-fail-open)
+    偵測器:審計聲稱『全部數字由 X 重算』時先問 X 裡哪些欄位是自上游原樣搬運而非在 X 內導出;搬運欄位對此審計不可證,須另派上游檢查(此案=scorer 標籤與 adjudication 結果)
+
+[151] 同一個量有兩種估計法時,只在對自己不利的那一組揭露另一種算法  (med, 首見於 auditor-fail-open)
+    偵測器:發現一個指標有兩種算法(本案 clean-artifact 誤報:看 verdict 欄位 vs 看有沒有提出 finding)時,強制對所有 arm 用兩種算法各報一次,寫成同一張表。只在控制組揭露替代估計、在處置組沿用有利那個,是選擇性揭露而非謹慎。落地:runs/audit_checks_20260806.py F7 段對 A/B/C/A_prime 全報兩欄。
+
+[152] 「涵蓋 D1-D15 全部」型的計數宣稱,在同一次稽核裡就因為新增 D16 而過期  (med, 首見於 auditor-fail-open)
+    偵測器:文件裡任何「N 個 X,X1 到 XN」的閉區間計數,在該次工作結束前重新 grep 一次實際最大編號並比對;新增條目的那一刻同時 grep 全 repo 找所有引用該區間的句子(本案兩處:DRAFT.md 概述段與末尾 deviations log 段)。計數宣稱的特性是加東西時它靜默變假,不會報錯。
+
+[153] 狀態探針在兩個狀態下讀值相同(元素從不移除,presence 恆為 true),斷言看似成立實為空話  (med, 首見於 cyberpunk-room)
+    偵測器:任何用來斷言「系統處於狀態 X」的探針,先在 X 與 not-X 各讀一次並要求兩值不同;讀不出差異就換探針(此案 getElementById 恆真,改讀 HUD 首行的 [EDITOR ON]/[EDITOR OFF] 文字)
+
+[154] 用 UI 自由文字當狀態 oracle,正則子字串誤命中(/sit/ 命中 inten-sit-y)  (med, 首見於 cyberpunk-room)
+    偵測器:狀態判定不吃自由文字;必須用數值/結構信號(此案改比對 camera.position 對 seatBase)。不得已要比對文字時加詞界並把實際命中的字串印出來人工核對,不可只印布林結果
+
+[155] 工具呼叫間 cwd 殘留,後續 git 指令跑進另一個 repo 產生假結論  (med, 首見於 cyberpunk-room)
+    偵測器:每一條倚賴 repo 位置的指令自帶 cd <絕對路徑> &&,不倚賴前一次呼叫留下的 cwd;看到 fatal: ambiguous argument 或「某檔不在任何 commit」這類反直覺結果時,第一個動作是 pwd
+
+[156] 同類修復未枚舉全部同類節點  (low, 首見於 human-among-npcs)
+    偵測器:修 callback 寫入的動態文字不重翻這類 bug 時,先機器枚舉所有事件 callback 寫入可見文字的 DOM 節點,逐一對照重翻函式是否涵蓋,再動手;只修被回報欄位=必留同類殘留(#copied/boardList 由熱審抓到)
+
+[157] 文件狀態憑記憶寫(測試數/檔案存在性漂移)  (low, 首見於 mirofish-study/persona_cast)
+    偵測器:README/INSIGHT 中任何『N 個測試』『檔案已X』類狀態句,結案前機器重數/ls 重驗;文件寫狀態=寫下即開始過期
+
+[158] reviewer 把無消費者的死設定旗標當成生效開關(誤報)  (low, 首見於 cyberpunk-room)
+    偵測器:發現引用某設定旗標前,先 grep 該旗標的讀取端(runtime consumer)存不存在;只在 preset 表出現、無讀取端的旗標=死配置,不構成行為宣稱
+
+[159] 檢查項的示範案例自身犯了該檢查要抓的錯:極值量詞(every method→every data-path method)修一次仍殘留自相矛盾,兩輪才乾淨  (low, 首見於 validity-audit-public)
+    偵測器:寫進公開文件的每個量詞(every/all/唯一)先機器枚舉受指對象;修正極值句時不准只縮小量詞範圍(會殘留新的隱含全稱),一律改成直述計數(如 5 of 7)。
+
+[160] 驗證器範圍被過度解讀(transcription≠reproduction)  (low, 首見於 sports-market-efficiency-paper)
+    偵測器:對每個「machine-verified/機器重算」宣稱問:驗證器的輸入是原始資料還是已評分輸出?只驗轉錄與方向的要在論文措辭寫明,不得讓審稿人讀成端到端重製
+
+[161] gate-self-inflicted  (low, 首見於 ?)
+    偵測器:反向檢查 base SHA 必須在發出交辦的那一刻用 git rev-parse HEAD 實跑取得;主線自己在舊 base 與派工之間的 commit 是最常見的污染源,會讓合法變更被算進違規範圍
+
+[162] 跨模型比較用不同比賽子集(選擇偏差)  (medium, 首見於 worldcup-2026)
+    偵測器:比較A/B兩模型時確認在同一批rows;隱藏的過濾守衛(如 len(train)<1000: continue)會讓某模型少算幾屆,導致headline把675場的A和579場的B並列;對齊到交集再比,並在表格標n
+
+[163] 偽控制組/宣稱vs計算  (medium, 首見於 linear-algebra-lab)
+    偵測器:示範/動畫字幕宣稱某量在補間過程『變大/變小/歸零』時,對該量沿補間軌跡取樣(t=0..1)確認單調性真的成立;起訖兩點剛好落在等值線(如內積 u·w 在特定方向補間恆定)會讓宣稱為假。
+
+[164] 確定性文字轉換的符號歧義  (medium, 首見於 linear-algebra-lab)
+    偵測器:把數學符號確定性轉成口語/朗讀時,同符號多義要分脈絡:『/』在 sin x/x 是除法、在 68/95/99.7 是並列分隔;『%』語序(中文為百分之X非X百分之)。轉換後逐句回讀,對含歧義符號的句子檢查語意未反轉(除法順序 a除以b、不等號方向、下標)。
+
+[165] 教材單元對到正確年級但用了超綱的框架/術語  (medium, 首見於 junior-math-lab)
+    偵測器:教材關卡除了驗「單元在對的年級」還要驗「用的方法/術語在該年級教不教」——一元二次方程式是八上沒錯,但判別式Δ與>0/=0/<0分類是九年級/高中框架;八上該用配方法/公式解。查法=每個新關的 formal/術語對照該年級課本教法深度,超前的降階。同源鏡像檔(main.js vs data/levels.json)要同步改否則留超綱殘留
+
+[166] 報告產生器硬編碼統計句:88/100(實為88/99)、8105 rows、abnormal-jump=0 皆為手填文字,程式沒算;資料品質宣稱超出程式實際檢查範圍  (medium, 首見於 index_dip_recovery_check)
+    偵測器:grep 報告產生器的字面數字,每個統計句必須追溯到計算函式;宣稱做過的檢查要在碼裡指得出對應行
+
+[167] 宣稱開源授權但 LICENSE 檔不存在  (medium, 首見於 skills-series-launch)
+    偵測器:任何 MIT/開源宣稱先驗 LICENSE 檔在庫(gh api repos/<r>/license 或 ls)
+
+[168] 時間/規模量詞誇大(敘事慣性)  (medium, 首見於 skills-series-launch)
+    偵測器:稿內每個時間量詞(months/weeks/dozens)對一手記錄日期跨度做算術驗證,且全文互相一致
+
+[169] 等待時間統計混入評估視窗結束後才出現的訊號(右設限未處理),GSPC 3y 表出現等待中位數>視窗長度的自相矛盾  (medium, 首見於 index_dip_recovery_check)
+    偵測器:任何 duration/等待統計必須拆「視窗內解決者的條件分佈」與「右設限比例」兩個數,合計須等於總數;檢查有無 duration>horizon 的矛盾列
+
+[170] 效益宣稱無對照(跨run比較當實測)  (medium, 首見於 mirofish-study/persona_cast)
+    偵測器:對『功能X提升了指標Y』的宣稱,要求同日同模型同輸入的 on/off 對照(至少 n=1);LLM 非確定性下跨日跨 run 比較不得寫『實測證明』,措辭按證據等級
+
+[171] 批次修補的清單來源本身未驗(grep 反解析漏項)  (medium, 首見於 github-launch)
+    偵測器:批次操作後必以權威 API 全量重掃驗收(licenseInfo/topics 統計),不得只信輸入清單處理完=覆蓋完;佔位符樣板([Your Name])要 grep 全帳號
+
+[172] 範圍量詞過強(code-scope 宣稱溢出到 repo-scope)  (medium, 首見於 ?)
+    偵測器:「X 不存在/未被處理」類宣稱要寫明搜尋範圍(--include=*.py ≠ 全 repo);發表前對同一關鍵字跑無過濾 grep,文件/註解命中就把措辭降到實際範圍
+
+[173] 月均價戳記使 lag-1 特徵含當期不可觀測資訊  (medium, 首見於 rubber-forecast)
+    偵測器:用月均/期均價建特徵時,lag-1 的『上月均值』在當月起點其實部分不可觀測?WB Pink Sheet 類月均序列做正向宣稱前必須改月底價或再加一期 lag
+
+[174] 成本慣例不一致/雙重計費(|Δpos|再乘2)  (medium, 首見於 rubber-forecast)
+    偵測器:|Δpos| 本身已含兩腿(0→1=1、+1→-1=2),再乘 2=每邊費率翻倍;多腳本並存時 grep 所有成本行確認同一慣例,跨階段比較前先對齊費率定義
+
+[175] 極值級形容詞未經機器斷言(唯一/最佳/全部)  (medium, 首見於 rubber-forecast)
+    偵測器:任何『唯一/最佳/全部/沒有任何』宣稱必須有一行可重跑的斷言腳本輸出佐證,不能從單次表格目測;主對話轉述 subagent 結論時同樣要先重算極值宣稱
+
+[176] 「已全修」宣稱未做確定性終掃(同型 bug 殘留 3、4 處)  (medium, 首見於 rubber-forecast)
+    偵測器:修跨檔案同型 bug 後,必以同一 grep 樣式對全 src/ 終掃並把輸出貼進審計檔;審計員宣稱閉環也要附終掃原文,否則第 N 處會漏
+
+[177] 重現腳本自身缺陷誤讀結果(exit code 穿過 pipe 被吃掉)  (medium, 首見於 impact-audited)
+    偵測器:驗收腳本讀 exit code 時禁止 cmd | tail; echo $? 形式——$? 是 pipe 末端的;先存檔再讀,或用 PIPESTATUS;此為帳本[22]重現腳本缺陷同型第2次
+
+[178] 渲染層遷移的靜默 UI 能力流失  (medium, 首見於 roman-city-iso)
+    偵測器:渲染層/前端框架遷移宣稱『零改動』時,邏輯檔 diff 為空不夠:遷移前枚舉舊層全部 UI 能力(hover/tooltip/標籤/選中/高亮),逐項確認新層有等價物;grep 舊 CSS class 清單當機器檢查
+
+[179] 評分記錄只記有利數字,漏網項身分未入檔(摘要偏誤)  (medium, 首見於 validity-audit)
+    偵測器:任何 recall/命中率記錄必須同時記載:漏了哪些項+其嚴重度類別;只有比率沒有身分的記錄視為不完整,審計時要求補全
+
+[180] 承重的計數(N 個運動/M 個組合/K 條檢定)憑印象寫,未實際列舉  (medium, 首見於 sports-market-efficiency-paper)
+    偵測器:論文裡每個計數詞都要能對出一張明列清單;寫『三個』就列出那三個的名字與所在行,對不上就是錯。
+
+[181] 自我批評段落本身的算術錯誤(檢定力/多重比較段連錯兩次)  (medium, 首見於 sports-market-efficiency-paper)
+    偵測器:揭露與限制段的數字跟結果段用同一把尺驗;『我們承認 X 不足』這種話同樣是可否證宣稱,不因為謙虛就免驗。
+
+[182] 新閘門的覆蓋漏洞:對無自有章節的檔案靜默跳過檢查,讀碼看不出來  (medium, 首見於 sports-market-efficiency-paper)
+    偵測器:每個新閘門上線前注入一個『一定該被抓』的假瑕疵到每一類受檢輸入(含邊緣類型:空檔案、無章節檔、companion 檔);沒報出來就是覆蓋漏洞,不是輸入乾淨。
+
+[183] 功能宣稱混雜未交付 skeleton:README 列 LAN 同步為功能,程式碼實為 isImplemented=false 全 preconditionFailure;第一版核對只看目錄存在就標已核,讀碼才改正  (medium, 首見於 openminis-study)
+    偵測器:功能型宣稱要驗『交付狀態』不只『存在性』:讀交付旗標(isImplemented/TODO/stub/preconditionFailure/NotImplementedError/raise 未實作)或實跑一次;宣稱核對表強制分『已交付/規劃中』兩欄,存在≠交付。
+
+[184] 冷審 reviewer 自己犯了受審清單第[14]類——「panel-matched baseline」把 SPX 先 reindex 到有斷檔的 panel 日期再 shift(-252),252 個 panel 日≈303 個交易日,四個 horizon 的 baseline 一致灌水 ~1.2×(11.31% 實為 9.36%),且該錯值被 va-fix 沿用進 FINDINGS 散文  (medium, 首見於 breadth_predictability)
+    偵測器:reviewer 引用的每個「自算對照值」與 builder 數字同級,落檔前主線用獨立方法重算一次;shift/rolling 類數字專查「先 reindex/過濾再 shift」——四 horizon 等比例偏高 ~(全日曆日/樣本日) 倍即此病;修正動作要同時掃 va-fix 是否已把錯值帶進正文
+
+[185] 抽樣通過支撐全稱  (medium, 首見於 ?)
+    偵測器:reviewer 對清單/註冊表型宣稱下 CONFIRMED 時,要求列出「驗過哪幾個 entry」對照「清單全集」;有缺項即降 PARTIAL
+
+[186] example fixture 當真實運行數據  (medium, 首見於 ?)
+    偵測器:凡引用 examples/ fixtures/ *.example.* 路徑下的數字佐證「系統真的在跑」,一律降級為不可稽核;runtime 佐證只能來自 runtime 產物路徑
+
+[187] 唯讀審查者與主線共用工作樹  (medium, 首見於 ?)
+    偵測器:派唯讀審查 agent 時,若主線會繼續改同一個工作樹,必須給釘死 commit 的 git worktree。判準:審查者讀到的與要審的會靜默分岔,而分岔處長得完全正常
+
+========================================================================================

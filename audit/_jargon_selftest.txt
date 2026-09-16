@@ -1,0 +1,4 @@
+  ✓ 原始資料: exit 0(預期 0)
+  ✓ 負向:小朋友層塞 BAN 詞: exit 1(預期非 0)
+  ✓ 負向:移除 glossed 宣告: exit 1(預期非 0)
+SELF-TEST PASS

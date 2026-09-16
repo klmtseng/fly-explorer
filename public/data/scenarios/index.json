@@ -1,0 +1,13 @@
+{
+ "scenarios": [
+  {
+   "name": "escape",
+   "frames": 250,
+   "dt_ms": 1.0,
+   "tau_ms": 7.0,
+   "peak_active": 720,
+   "bytes": 89749,
+   "dropped_pct": 2.4
+  }
+ ]
+}

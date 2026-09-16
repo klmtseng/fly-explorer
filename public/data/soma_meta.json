@@ -1,0 +1,38 @@
+{
+  "n": 140024,
+  "origin_voxel": [
+    48068.0,
+    36877.0,
+    72342.5
+  ],
+  "scale_voxel_per_unit": 3.88678125,
+  "voxel_nm_assumed": 8,
+  "voxel_nm_verified": false,
+  "bbox_voxel": {
+    "min": [
+      2468.0,
+      4758.0,
+      10154.0
+    ],
+    "max": [
+      93668.0,
+      68996.0,
+      134531.0
+    ]
+  },
+  "extent_um_assumed": [
+    729.6,
+    513.904,
+    995.016
+  ],
+  "missing_note": "感覺神經元細胞本體在周邊器官,不在本體積內,故點雲不含它們",
+  "groups": {
+    "中間神經元": 45095,
+    "感覺(輸入)": 30,
+    "運動(輸出)": 1002,
+    "下行(指令)": 1308,
+    "上行(回饋)": 1812,
+    "視葉內在": 90777
+  },
+  "source": "MaleCNS v1.0 somaLocation, status=Traced. CC-BY 4.0, Berg et al. Cell 2026."
+}

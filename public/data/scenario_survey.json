@@ -1,0 +1,221 @@
+{
+ "max_hops": 6,
+ "rows": [
+  {
+   "class": "visual",
+   "total": 4107,
+   "in_graph": 4107,
+   "first_hop": 2,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "olfactory",
+   "total": 2639,
+   "in_graph": 2639,
+   "first_hop": 2,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "mechanosensory_tactile",
+   "total": 2558,
+   "in_graph": 2558,
+   "first_hop": 1,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "mechanosensory",
+   "total": 1733,
+   "in_graph": 1733,
+   "first_hop": 1,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "unknown_sensory",
+   "total": 1707,
+   "in_graph": 1707,
+   "first_hop": 1,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "mechanosensory_proprioceptive",
+   "total": 1454,
+   "in_graph": 1454,
+   "first_hop": 1,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "gustatory",
+   "total": 1428,
+   "in_graph": 1428,
+   "first_hop": 1,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "(未標)",
+   "total": 126,
+   "in_graph": 126,
+   "first_hop": 1,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "hygrosensory",
+   "total": 66,
+   "in_graph": 66,
+   "first_hop": 2,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "chemosensory",
+   "total": 58,
+   "in_graph": 58,
+   "first_hop": 1,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "thermosensory",
+   "total": 25,
+   "in_graph": 25,
+   "first_hop": 2,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  },
+  {
+   "class": "mechanosensory_tbc",
+   "total": 11,
+   "in_graph": 11,
+   "first_hop": 1,
+   "motor_reached": 815,
+   "parts": [
+    "中腳",
+    "其他",
+    "前腳",
+    "口器",
+    "平衡棒",
+    "後腳",
+    "翅膀",
+    "脖子",
+    "腹部"
+   ]
+  }
+ ]
+}

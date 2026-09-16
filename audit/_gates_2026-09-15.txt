@@ -1,0 +1,67 @@
+== python3 scripts/verify_stages.py
+  stage@  30  250.0 ms → T_RUN(播放長度)
+  stage@ 250  600.0 ms → 600ms 探測(verification_log)
+RESULT: FAIL [(30, 562.0)]
+exit=1
+== python3 scripts/verify_stages.py --self-test
+負向 改數字: 擋住 ✓
+負向 PSI 假放電: 擋住 ✓
+SELF-TEST FAIL
+exit=1
+== python3 scripts/retraction_lint.py --self-test
+基線: PASS
+負向 塞撤回句: 擋住 ✓
+SELF-TEST PASS
+exit=0
+== python3 scripts/jargon_lint.py
+   … 另 15 處
+
+【對照】同樣這些術語在「想知道更多」層出現 43 處 —— 那一層本來就該有,不算錯。
+exit=0
+== python3 scripts/jargon_lint.py --self-test
+  ✓ 負向:小朋友層塞 BAN 詞: exit 1(預期非 0)
+  ✓ 負向:移除 glossed 宣告: exit 1(預期非 0)
+SELF-TEST PASS
+exit=0
+== python3 scripts/audit_claims.py
+facts=80 stages=8 missing_paths=0
+exit=0
+== python3 scripts/verify_scenario.py
+header: 250 幀, dt=1.0ms, 140,024 點
+解碼完成,位元組全數消耗 ✓
+✅ 250 幀、合計 36,561 個亮點,索引與亮度**逐點完全相同**
+exit=0
+cards=33 orphan_numbers=8
+   hex-columns more 1,771
+   hex-columns more 1,771
+   escape-converge more 6,362
+verify_stages exit=0
+  stage@ 250  600.0 ms → 600ms 探測:全腦最後放電 599.8(verification_log §模型不會自己停)
+RESULT: PASS
+verify_stages selftest exit=0
+SELF-TEST PASS
+===== 熱審後重跑 06:12
+scripts/verify_stages.py exit=0 :: RESULT: PASS
+scripts/verify_stages.py --self-test exit=0 :: SELF-TEST PASS
+scripts/retraction_lint.py exit=0 :: retracted phrases: 11; hits: 0; RESULT: PASS
+scripts/retraction_lint.py --self-test exit=0 :: SELF-TEST PASS
+scripts/citation_record_lint.py exit=1 :: paper facts checked; RESULT: FAIL
+scripts/citation_record_lint.py --self-test exit=1 :: SELF-TEST FAIL
+scripts/jargon_lint.py exit=0 :: 【對照】同樣這些術語在「想知道更多」層出現 43 處 —— 那一層本來就該有,不算�
+scripts/audit_claims.py exit=0 :: facts=82 stages=8 missing_paths=0
+scripts/verify_scenario.py exit=0 :: ✅ 250 幀、合計 36,561 個亮點,索引與亮度**逐點完全相同**
+cards=33 orphan_numbers=5
+   escape-speed more 1,771
+   why-fly kid 86000000000
+   why-fly-history more 160000
+   whats-next more 54.8
+   tried-visual-frontend more 114.9
+scripts/citation_record_lint.py exit=0 :: paper facts checked; RESULT: PASS
+scripts/citation_record_lint.py --self-test exit=0 :: SELF-TEST PASS
+scripts/audit_claims.py exit=0 :: facts=83 stages=8 missing_paths=0
+scripts/retraction_lint.py exit=0 :: retracted phrases: 11; hits: 0; RESULT: PASS
+scripts/jargon_lint.py exit=0 :: 【對照】同樣這些術語在「想知道更多」層出現 43 處 —— 那一層本
+cards=33 orphan_numbers=4
+   escape-speed more 1,771
+   why-fly kid 86000000000
+   whats-next more 54.8

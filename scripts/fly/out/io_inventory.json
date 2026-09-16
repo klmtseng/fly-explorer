@@ -1,0 +1,130 @@
+{
+  "traced_total": 165122,
+  "superclass": {
+    "ol_intrinsic": 89390,
+    "cb_intrinsic": 32160,
+    "vnc_intrinsic": 13151,
+    "visual_projection": 9201,
+    "vnc_sensory": 6365,
+    "cb_sensory": 4868,
+    "ol_sensory": 4114,
+    "ascending_neuron": 1846,
+    "descending_neuron": 1314,
+    "vnc_motor": 708,
+    "visual_centrifugal": 563,
+    "sensory_ascending": 537,
+    "(空)": 516,
+    "cb_motor": 107,
+    "vnc_efferent": 94,
+    "cb_endocrine": 72,
+    "ENS": 47,
+    "vnc_endocrine": 22,
+    "sensory_descending": 12,
+    "vnc_sensory_tbc": 9,
+    "efferent_ascending": 8,
+    "cb_sensory_tbc": 5,
+    "efferent_descending": 4,
+    "cb_efferent": 4,
+    "visual_projection_tbc": 2,
+    "sensory_ascending_tbc": 2,
+    "vnc_tbc": 1
+  },
+  "sensory": {
+    "total": 15912,
+    "by_class": {
+      "visual": 4107,
+      "olfactory": 2639,
+      "mechanosensory_tactile": 2558,
+      "mechanosensory": 1733,
+      "unknown_sensory": 1707,
+      "mechanosensory_proprioceptive": 1454,
+      "gustatory": 1428,
+      "(未標)": 126,
+      "hygrosensory": 66,
+      "chemosensory": 58,
+      "thermosensory": 25,
+      "mechanosensory_tbc": 11
+    }
+  },
+  "motor": {
+    "total": 815,
+    "by_target": [
+      {
+        "code": "ad",
+        "label": "腹部",
+        "evidence": "A1-A10 腹節 · AbN 腹神經",
+        "n": 214
+      },
+      {
+        "code": "fl",
+        "label": "前腳",
+        "evidence": "T1 前胸節 · ProLN 前足神經 · 脛骨屈肌/股骨縮肌",
+        "n": 135
+      },
+      {
+        "code": "hl",
+        "label": "後腳",
+        "evidence": "T3 後胸節 · MetaLN 後足神經",
+        "n": 130
+      },
+      {
+        "code": "ml",
+        "label": "中腳",
+        "evidence": "T2 中胸節 · MesoLN 中足神經",
+        "n": 116
+      },
+      {
+        "code": "pm",
+        "label": "口器/咽",
+        "evidence": "PhN 咽神經 · MxLbN 上顎唇神經 · MN1-MN12(MN9 在此)",
+        "n": 67
+      },
+      {
+        "code": "wm",
+        "label": "翅膀",
+        "evidence": "T2 · ADMN · DLMn/DVMn 飛行肌",
+        "n": 67
+      },
+      {
+        "code": "nm",
+        "label": "脖子",
+        "evidence": "T1/LB · CvN 頸神經",
+        "n": 44
+      },
+      {
+        "code": "hm",
+        "label": "平衡棒",
+        "evidence": "T3 · AbN1 · hDVM/hi1/hi2",
+        "n": 16
+      },
+      {
+        "code": "am",
+        "label": "附屬肌",
+        "evidence": "AN · GNG 系",
+        "n": 13
+      },
+      {
+        "code": "rm",
+        "label": "其他 rm",
+        "evidence": "ON/AN",
+        "n": 7
+      },
+      {
+        "code": "xm",
+        "label": "其他 xm",
+        "evidence": "DMetaN/PDMNa",
+        "n": 6
+      }
+    ]
+  },
+  "relay": {
+    "descending_neuron": {
+      "label": "下行(腦→神經索,送指令)",
+      "total": 1314
+    },
+    "ascending_neuron": {
+      "label": "上行(神經索→腦,送回饋)",
+      "total": 1846
+    }
+  }
+}

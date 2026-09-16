@@ -1,0 +1,6 @@
+  ✓ 原始檔: exit 0(預期 0)
+  ✓ 負向:翻一個 byte: exit 1(預期非 0)
+  ✓ 負向:刪一個 byte: exit 1(預期非 0)
+  ✓ 負向:截掉最後一個 byte: exit 1(預期非 0)
+  ✓ 負向:多補一個 byte: exit 1(預期非 0)
+SELF-TEST PASS
