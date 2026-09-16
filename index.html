@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fly brain — 140,024 neurons</title>
+<title>Fly Explorer — a real fly connectome</title>
 <style>
   /* DESIGN.md 定案字型(Google Fonts;artifact CSP 允許 fonts.googleapis.com)。用 @import 是因為 build_artifact 只搬 <style>,不搬 <link>。 */
   @import url("https://fonts.googleapis.com/css2?family=Huninn&family=Bricolage+Grotesque:wght@600;800&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
@@ -32,6 +32,7 @@
   #top > *{pointer-events:auto}
   #hud{font-size:12px;line-height:1.6;text-shadow:0 1px 3px rgba(0,0,0,.9);pointer-events:none}
   #hud b{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:500;display:block}
+  #hud #drawn{display:block;font-size:11px;opacity:.7}   /* 抽樣時說明「這台裝置畫出幾顆」;手機不隱藏,#sub 才隱藏 */
   #legend{font-size:11.5px;line-height:1.9;
     font-family:"IBM Plex Mono",monospace;text-shadow:0 1px 3px rgba(0,0,0,.9)}
   #legend i{display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%}
@@ -280,7 +281,7 @@
 <!-- 頂部改成單一 flex 直欄:HUD → 模式鈕 → 電壓計 → 圖例 依序堆疊。
      使用者實機回報電壓計壓住 HUD 副標,絕對定位互疊的老毛病,跟底部同一種修法。 -->
 <div id="top">
-  <div id="hud"><b id="count">載入中…</b><span id="sub"></span></div>
+  <div id="hud"><b id="count">載入中…</b><span id="sub"></span><span id="drawn" hidden></span></div>
   <div id="modes"><button id="mCal" aria-pressed="true" data-en="Calcium">鈣成像</button><button id="mGrp" aria-pressed="false" data-en="Groups">功能分色</button><button id="mShell" aria-pressed="true" class="sep" data-en="Body">身體</button><button id="mCap" aria-pressed="true" title="顯示/隱藏舞台字幕" data-en="Text">字幕</button><button id="mHome" class="sep" title="回到預設視角,果蠅置中"><span class="ic">⌖ </span><span data-en="Fit">歸位</span></button><button id="mSpin" class="sep" aria-pressed="false" title="自動慢慢轉,看各個角度"><span class="ic">⟳ </span><span data-en="Spin">自轉</span></button><button id="mZoomIn" class="sep" title="放大" aria-label="放大">＋</button><button id="mZoomOut" title="縮小" aria-label="縮小">－</button><button id="mCards" class="sep" title="說明卡片索引">📖<span class="ic" data-en=" Cards"> 卡片</span></button></div>
   <!-- 巨纖維膜電壓計:資料層(引擎 --trace-out 原樣輸出),讓人看到閾值以下的爬升 -->
   <!-- 桌機:電壓計與 PiP 上下堆疊(display:contents);手機:並排一列,把直式螢幕的高度還給主畫面 -->

@@ -34,6 +34,13 @@ const UI = {
 // 英文版的出處欄:source 是機器用的指標(路徑/§段名),裡面幾句固定的中文註記在英文版換成英文;
 // 沒對到的中文由 scripts/lang_residue.py 抓出來(§ 後的段名例外:那是中文文件裡的錨點)。
 export const SRC_EN: [RegExp, string][] = [
+  // VA 2026-09-16 新增的出處註記(英文版也要讀得懂;長句在前,避免被短句先吃掉)
+  [/摘要親讀,原句/g, 'abstract read first-hand, verbatim: '],
+  [/\(親讀\)——但該值是它引用 Chen & Sun 的量測,屬二手轉引;且該文是數值模擬研究,169 Hz 是它的輸入參數,不是本文的觀測/g,
+   ' (read first-hand) — but that value is cited from Chen & Sun, so it is secondhand here; that paper is a numerical simulation study and 169 Hz is one of its inputs, not something it measured'],
+  [/無任一顆同時連兩顆巨纖維/g, 'none connects to both giant fibers'],
+  [/貢獻 6,362 個突觸、LPLC2 183\/185 貢獻 4,860/g, 'contributing 6,362 synapses; LPLC2 183\/185 contributing 4,860'],
+  [/個突觸/g, ' synapses'], [/貢獻/g, 'contributing '],
   [/\(外部\)/g, '(external)'], [/ 的 /g, ' → '], [/模型沒有自發活動/g, 'the model has no spontaneous activity'],
   [/原頁被擋,數字為二手轉引/g, 'page blocked; figure is secondhand'], [/官方頁被重導向,為二手轉引/g, 'official page redirected; secondhand'],
   [/官方專案頁親讀/g, 'official project page read first-hand'], [/前導版親讀/g, 'preprint read first-hand'], [/全文親讀/g, 'full text read first-hand'],

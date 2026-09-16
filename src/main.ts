@@ -61,7 +61,7 @@ composer.addPass(new EffectPass(camera, bloom, new ToneMappingEffect({ mode: Ton
 
 const $ = (id: string) => document.getElementById(id)!;
 
-const TITLE = { zh: '果蠅腦 — 140,024 顆神經元', en: 'Fly brain — 140,024 neurons' };
+const TITLE = { zh: '透視果蠅 — 真的那一顆腦', en: 'Fly Explorer — a real fly connectome' };
 /** 只換靜態文字(data-en/data-zh)、標題與 html lang。不碰 pip/gauge/圖例,所以可以在載入任何資料之前呼叫,
  *  首屏就是對的語言,不會先閃一秒另一種語言。完整的 applyLang() 在資料就緒後再跑一次。 */
 function applyStaticLang(l: 'zh' | 'en') {
@@ -217,11 +217,12 @@ applyStaticLang(storedLang());
   const cards = createCards();
   // ---- 介面雙語:靜態文字用 data-en(原中文存進 data-zh),動態字串走 T 表;語言切換時整頁重套 ----
   const T = {
-    zh: { neurons: ' 顆神經元', sub: (ms: number) => `MaleCNS v1.0 · 真實細胞體座標 · 載入 ${ms} ms`, sampled: (n: string, k: number) => ` · 手機模式:從 ${n} 顆等間隔抽樣 1/${k}`,
+    // 大字的分母是 MaleCNS 連接組的神經元總數 166,691;分子是有三維座標、畫得出來的 140,024(docs/data_facts.md)
+    zh: { neurons: ' / 166,691 顆神經元', sub: (ms: number) => `MaleCNS v1.0 · 有三維座標的 / 連接組全部 · 載入 ${ms} ms`, sampled: (n: string, k: number) => ` · 手機模式:從 ${n} 顆等間隔抽樣 1/${k}`,
           inj: '注入', end: '結局', ours: '我們加的結局', lit: (n: string) => `畫出 ${n} 顆神經細胞(示意)`, dim: (k: string) => `亮度 ×${k}(我們調的,不是模擬)`,
           fSampled: (a: string, k: number, b: string) => `本幀畫出 ${a} 顆(手機抽樣 1/${k},實際放電約 ${b} 顆)`, fLive: (a: string) => `本幀 ${a} 顆神經元在放電`,
           next: '下一步 ', toFree: '去自由探索 ', replay: '重播', play: '播放', fail: '載入失敗' },
-    en: { neurons: ' neurons', sub: (ms: number) => `MaleCNS v1.0 · real soma coordinates · loaded in ${ms} ms`, sampled: (n: string, k: number) => ` · phone mode: every ${k}th of ${n}`,
+    en: { neurons: ' / 166,691 neurons', sub: (ms: number) => `MaleCNS v1.0 · with 3D coordinates / whole connectome · loaded in ${ms} ms`, sampled: (n: string, k: number) => ` · phone mode: every ${k}th of ${n}`,
           inj: 'injected', end: 'ending', ours: 'our added ending', lit: (n: string) => `${n} nerve cells drawn (illustrative)`, dim: (k: string) => `brightness ×${k} (set by us, not simulated)`,
           fSampled: (a: string, k: number, b: string) => `${a} drawn this frame (phone sampling 1/${k}; about ${b} actually firing)`, fLive: (a: string) => `${a} neurons firing this frame`,
           next: 'Next ', toFree: 'Explore freely ', replay: 'Replay', play: 'Play', fail: 'Failed to load' },
@@ -247,9 +248,15 @@ applyStaticLang(storedLang());
   (cloud.points.material as THREE.ShaderMaterial).uniforms.uScale.value = S.pointScale;
 
   hudRefresh = () => {
-    $('count').textContent = cloud.n.toLocaleString() + tx().neurons;
+    // 大字固定是資料集的口徑(有座標的 140,024 / 連接組全部 166,691),不放抽樣後的數——
+    // 手機抽樣 1/2 時原本大字直接變成 70,012,而解釋那行在手機是關掉的(VA 2026-09-16 冷審)
+    $('count').textContent = cloud.nAll.toLocaleString() + tx().neurons;
     const sampled = cloud.stride > 1;
     $('sub').textContent = tx().sub(Number(loadMs.toFixed(0))) + (sampled ? tx().sampled(cloud.nAll.toLocaleString(), cloud.stride) : '');
+    const dn = document.getElementById('drawn')!;
+    dn.textContent = sampled ? (lg() === 'en' ? `drawing ${cloud.n.toLocaleString()} of them on this device`
+                                              : `這台裝置畫出其中 ${cloud.n.toLocaleString()} 顆`) : '';
+    dn.hidden = !sampled;
   };
   hudRefresh();
   // 兩種著色模式。鈣成像=全部同一種淡綠(真實活體成像的樣子,預設);

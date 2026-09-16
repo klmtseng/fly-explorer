@@ -325,8 +325,8 @@
         "en": "At takeoff a fruit fly beats its wings about 170 times a second, each stroke sweeping through 134 degrees. At rest the wings lie flat over its back. The fly in the small window is drawn to real proportions: the wings are about as long as the body."
       },
       "more": {
-        "zh": "數字來自起飛空氣動力學研究所引用的量測:翅長 2.83 mm、平均翅弦 0.85 mm、拍翅 169 Hz、拍幅 134°;體長約 2.5 mm、靜止時翅膀平貼背上、身體黃褐、複眼磚紅、腹部橫向黑環。拍動的方向我們畫成以上下為主(拍翅面相對身體傾斜 55°),這個角度沒有出處——真果蠅懸停時拍翅面接近水平,起飛與前飛時傾斜。",
-        "en": "The numbers come from measurements cited in a takeoff aerodynamics study: wing length 2.83 mm, mean chord 0.85 mm, wingbeat 169 Hz, stroke amplitude 134°; body length about 2.5 mm, wings held flat over the back at rest, yellow-brown body, brick-red eyes, black abdominal rings. We draw the stroke mostly up-and-down (stroke plane tilted 55° to the body), and that angle has no source — a hovering fly's stroke plane is near horizontal, tilting during takeoff and forward flight."
+        "zh": "數字來自一篇起飛空氣動力學**數值模擬**論文所引用的量測(二手轉引,標 ○):翅長 2.83 mm、平均翅弦 0.85 mm、拍翅 169 Hz、拍幅 134°;體長約 2.5 mm、靜止時翅膀平貼背上、身體黃褐、複眼磚紅、腹部橫向黑環。拍動的方向我們畫成以上下為主(拍翅面相對身體傾斜 55°),這個角度沒有出處——真果蠅懸停時拍翅面接近水平,起飛與前飛時傾斜。",
+        "en": "The numbers come from measurements cited by a takeoff aerodynamics simulation study (secondhand, marked ○): wing length 2.83 mm, mean chord 0.85 mm, wingbeat 169 Hz, stroke amplitude 134°; body length about 2.5 mm, wings held flat over the back at rest, yellow-brown body, brick-red eyes, black abdominal rings. We draw the stroke mostly up-and-down (stroke plane tilted 55° to the body), and that angle has no source — a hovering fly's stroke plane is near horizontal, tilting during takeoff and forward flight."
       },
       "facts": [
         {
@@ -335,8 +335,8 @@
             "zh": "起飛拍翅頻率",
             "en": "takeoff wingbeat"
           },
-          "provenance": "paper",
-          "source": "arXiv:1504.04484(親讀;該文引 Chen & Sun 的量測)"
+          "provenance": "todo",
+          "source": "arXiv:1504.04484(親讀)——但該值是它引用 Chen & Sun 的量測,屬二手轉引;且該文是數值模擬研究,169 Hz 是它的輸入參數,不是本文的觀測"
         },
         {
           "value": "134°",
@@ -652,22 +652,23 @@
         "answer": 2
       },
       "kid": {
-        "zh": "兩顆,左右各一。311 個偵測器全部接到牠們身上。這兩顆叫巨纖維,是全腦最粗的神經——粗才傳得快。",
-        "en": "Two — one per side. All 311 detectors plug into them. They're called giant fibers: the thickest nerve cells in the brain, because thick means fast."
+        "zh": "兩顆,左右各一。311 個偵測器裡有 309 個直接接到牠們身上,每個偵測器接同一側的那一顆。這兩顆叫巨纖維,是全腦最粗的神經——粗才傳得快。",
+        "en": "Two of them, one per side. Of the 311 detectors, 309 plug straight into them, each one into the giant fiber on its own side. These two are called giant fibers: the thickest nerve cells in the brain, because thick means fast."
       },
       "more": {
-        "zh": "LC4(126 顆)與 LPLC2(185 顆)全數連到 DNp01,分別貢獻 6,362 與 4,860 個突觸。文獻上 LC4 編碼逼近速度、LPLC2 編碼視角大小,巨纖維把兩者線性整合後決定要不要發放。",
-        "en": "All 126 LC4 and all 185 LPLC2 neurons connect to DNp01, contributing 6,362 and 4,860 synapses respectively. In the literature LC4 encodes approach speed and LPLC2 encodes angular size; the giant fiber integrates the two linearly before deciding whether to fire."
+        "zh": "在本站出貨的邊檔門檻(權重 ≥2)下,LC4 126 顆全部、LPLC2 185 顆裡的 183 顆連到 DNp01,合計 309/311,分別貢獻 6,362 與 4,860 個突觸;每顆偵測器只連同側那一顆巨纖維,沒有任何一顆同時連兩顆。文獻上 LC4 編碼逼近速度、LPLC2 編碼視角大小,巨纖維把兩者線性整合後決定要不要發放。",
+        "en": "At the edge threshold this site ships (weight >= 2), all 126 LC4 and 183 of the 185 LPLC2 neurons connect to DNp01, 309 of 311 in total, contributing 6,362 and 4,860 synapses respectively. Each detector connects only to the giant fiber on its own side; none connects to both. In the literature LC4 encodes approach speed and LPLC2 encodes angular size; the giant fiber integrates the two linearly before deciding whether to fire."
       },
       "facts": [
         {
-          "value": "311 → 2",
+          "value": "309 / 311 → 2",
           "label": {
-            "zh": "收斂比",
-            "en": "convergence"
+            "zh": "直接連到巨纖維的偵測器(權重 ≥2)",
+            "en": "detectors wired straight to a giant fiber (weight >= 2)"
           },
           "provenance": "measured",
-          "source": "public/data/escape_edges.json(出貨連線檔)重算:LC4→DNp01 6,362、LPLC2→DNp01 4,860;scripts/fly/escape_path.py"
+          "source": "public/data/escape_edges.json(出貨連線檔)重算:LC4 126/126 貢獻 6,362 個突觸、LPLC2 183/185 貢獻 4,860;無任一顆同時連兩顆巨纖維;scripts/fly/escape_path.py",
+          "value_en": "309 / 311 → 2"
         },
         {
           "value": "LC4=速度, LPLC2=大小",
@@ -945,12 +946,12 @@
         "en": "The one place the brain can change"
       },
       "kid": {
-        "zh": "果蠅大部分的腦是「出生就接好、一輩子不變」的。只有一個小地方可以改,叫蘑菇體——牠靠那裡記住「這個味道上次讓我不舒服」。",
-        "en": "Most of a fly's brain is wired at birth and never rewired. Just one small area can change: the mushroom body. That's where it remembers that a particular smell went badly last time."
+        "zh": "果蠅大部分的腦是「出生就接好、一輩子不太變」的。負責記住氣味的主要地方叫蘑菇體——牠靠那裡記住「這個味道上次讓我不舒服」。",
+        "en": "Most of a fly's brain is wired at birth and changes little after that. The main place for remembering smells is the mushroom body, where it learns that a particular smell went badly last time."
       },
       "more": {
-        "zh": "可改變的是 KC→MBON 的 61,210 條連線(合計 463,640 個突觸),佔全腦 2,560 萬條連線的 0.24%。學習規則反直覺:KC 與該區室的多巴胺神經元同時活躍時,那條連線被壓抑而非增強——學習是雕刻不是堆疊。另外兩顆 APL 神經元對全部 4,064 顆 KC 做回饋抑制,權重高達 42-45(全腦平均 2.05),強制只有約 5% 同時活躍。",
-        "en": "The plastic part is the 61,210 connections from Kenyon cells to mushroom body output neurons (463,640 synapses in total), 0.24% of the brain's 25.6 million connections. The learning rule is counterintuitive: when a Kenyon cell and its compartment's dopamine neuron fire together, that connection is depressed, not strengthened. Learning here is carving, not building. Two APL neurons also feed inhibition back onto all 4,064 Kenyon cells, at weights of 42-45 against a brain-wide average of 2.05, forcing only about 5% to be active at once."
+        "zh": "果蠅腦的可塑位置不只一處,研究最透徹的是 KC→MBON 的 61,210 條連線(合計 463,640 個突觸),佔全腦 2,560 萬條連線的 0.24%。學習規則反直覺:KC 與該區室的多巴胺神經元同時活躍時,那條連線被壓抑而非增強——學習是雕刻不是堆疊。另外兩顆 APL 神經元對全部 4,064 顆 KC 做回饋抑制,權重高達 42-45(全腦平均 2.05),強制只有約 5% 同時活躍。",
+        "en": "Plasticity is not confined to one place; the best-characterised site is the 61,210 connections from Kenyon cells to mushroom body output neurons (463,640 synapses in total), 0.24% of the brain's 25.6 million connections. The learning rule is counterintuitive: when a Kenyon cell and its compartment's dopamine neuron fire together, that connection is depressed, not strengthened. Learning here is carving, not building. Two APL neurons also feed inhibition back onto all 4,064 Kenyon cells, at weights of 42-45 against a brain-wide average of 2.05, forcing only about 5% to be active at once."
       },
       "facts": [
         {
@@ -1379,22 +1380,33 @@
         "en": "Tried: weaken every junction by 13%, response drops 70×"
       },
       "kid": {
-        "zh": "論文給的「每個接點推多大力」是在另一隻(雌的)果蠅腦上調出來的。我們把它套到這隻雄果蠅腦上,再把力道調小 13% 試試:同樣隨機戳 25 顆細胞,原本會有 12 萬次放電,調小後只剩 1,700 次。這顆腦剛好站在「一點就著」的邊緣上,論文的數值正好落在邊緣的上面。",
-        "en": "The paper's 'push strength per junction' was tuned on a different (female) fly brain. We applied it to this male brain, then weakened it by 13%: poking the same 25 random cells gave 120,000 spikes before and only 1,700 after. This brain sits right on the edge of 'one spark and it goes', and the paper's value lands just above that edge."
+        "zh": "論文的「每個接點推多用力」是在另一隻(雌性)果蠅腦上調出來的。我們套到這隻雄性腦上,再調小 13%,結果同樣戳 25 顆隨機細胞,兩次跑出來的數字差了 67 倍。所以我們學到的不是「調小一點就會安靜」,而是「在這個設定附近,只跑一次的數字不能信」。",
+        "en": "The paper's 'push strength per junction' was tuned on a different (female) fly brain. We applied it to this male brain and weakened it by 13%. Poking the same 25 random cells twice gave answers 67 times apart. So what we learned is not 'weaker means quieter', it is 'near this setting a single run tells you nothing'."
       },
       "more": {
-        "zh": "掃 w_syn:0.275(論文值)對 25 顆隨機刺激給 121,592 次放電,0.240 給 1,747,兩者之間有相變;0.179(第三方專案用的 0.65 增益)在另一組隨機刺激下六個種子都穩定引爆(均值約 60,000、CV 0.08)——引爆與否取決於刺激集合,不是單一增益值。侷限:刺激是隨機神經元非真實感覺族群,只測 100 Hz × 300 ms,k 取樣粗(5/25/200/2000)。後果:單次數字不能當生理量,情境盤點全部改成多 trial 重跑。",
-        "en": "Sweeping w_syn: 0.275 (the paper's value) gives 121,592 spikes for 25 random stimulated neurons, 0.240 gives 1,747 — a phase transition in between; 0.179 (the 0.65 gain a third-party project uses) ignites reliably under a different random stimulus set (six seeds, mean ~60,000, CV 0.08) — whether the brain ignites depends on the stimulus set, not on a single gain value. Limits: random neurons rather than a real sensory population, a single 100 Hz × 300 ms protocol, coarse k sampling (5/25/200/2000). Consequence: no single-run figure counts as physiology; every scenario survey was redone with multiple trials."
+        "zh": "**這張卡是撤回後重寫的(2026-09-16)。** 原本寫「0.275 給 121,592 次放電、0.240 給 1,747,兩者之間有相變」,依據是單次跑(trials=1)。本站出貨的 `public/data/phase_sweep.json` 同一格(w_syn 0.275→0.240、k=25、同樣 trials=1)是 146,647→117,208,只差 1.25 倍。同一格兩次單跑差 67 倍(1,747 vs 117,208),而我們自己的雙穩態測試(固定參數只換亂數種子跑六次,變異係數最高 1.26)早就說明這個區間單次數字不可採信。**所以「有相變」這個宣稱撤回**,留下的是可重複的部分:0.179 在另一組隨機刺激下六個種子都引爆(均值約 60,000、CV 0.08),引爆與否取決於刺激集合而不是單一增益值。侷限:刺激是隨機神經元非真實感覺族群,只測 100 Hz × 300 ms,k 取樣粗。後果:情境盤點全部改成多 trial 重跑。",
+        "en": "**This card was rewritten after a retraction (2026-09-16).** It used to say 0.275 gives 121,592 spikes and 0.240 gives 1,747, a phase transition in between, based on single runs (trials=1). This site's own shipped `public/data/phase_sweep.json` has the same cell (w_syn 0.275 to 0.240, k=25, also trials=1) at 146,647 to 117,208, a factor of 1.25. Two single runs of the same cell differ by 67 times (1,747 vs 117,208), and our own bistability test (same parameters, six random seeds, coefficient of variation up to 1.26) already said single runs in this regime are worthless. **The phase-transition claim is therefore withdrawn.** What survives is reproducible: at 0.179 all six seeds ignite under a different random stimulus set (mean about 60,000, CV 0.08), so ignition depends on which cells you stimulate rather than on one gain value. Limits: the stimulus is random neurons rather than real sensory populations, only 100 Hz for 300 ms, and k is sampled coarsely. Consequence: every scenario survey was rerun with multiple trials."
       },
       "facts": [
         {
-          "value": "121,592 → 1,747",
+          "value": "1,747 vs 117,208",
+          "value_en": "1,747 vs 117,208",
           "label": {
-            "zh": "放電數,w_syn 0.275 → 0.240(k=25)",
-            "en": "spikes, w_syn 0.275 → 0.240 (k=25)"
+            "zh": "同一格(w_syn 0.24, k=25)兩次單跑的放電數",
+            "en": "same cell (w_syn 0.24, k=25), two single runs"
           },
           "provenance": "measured",
-          "source": "scripts/phase_sweep.py;docs/verification_log.md §臨界點"
+          "source": "scripts/phase_sweep.py;public/data/phase_sweep.json table[1].counts[1];docs/verification_log.md §臨界點"
+        },
+        {
+          "value": "1.26",
+          "value_en": "1.26",
+          "label": {
+            "zh": "雙穩態測試的變異係數(同參數換種子跑六次)",
+            "en": "coefficient of variation, six seeds at fixed parameters"
+          },
+          "provenance": "measured",
+          "source": "docs/verification_log.md §雙穩態:臨界點附近單次試驗無意義"
         },
         {
           "value": "0.275 mV",

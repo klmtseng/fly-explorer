@@ -1,6 +1,6 @@
 # 宣稱清單(機器產生,validity-audit 第 1 步)
 
-卡片 33 張,事實 84 條,階段字幕 8 段。
+卡片 33 張,事實 85 條,階段字幕 8 段。
 
 | 卡/階段 | 數值 | 標籤 | 標記 | 來源欄 | 路徑檢查 |
 |---|---|---|---|---|---|
@@ -16,7 +16,7 @@
 | neck-gap | 132 µm | 沒有細胞本體的長度 | measured | scripts/export_soma.py | 路徑OK |
 | motor-map | 815 | 運動神經元 | measured | scripts/fly/io_inventory.py | 路徑OK |
 | motor-map | 381 | 控制腳的 | measured | scripts/fly/io_inventory.py | 路徑OK |
-| wing-beat | 169 Hz | 起飛拍翅頻率 | paper | arXiv:1504.04484(親讀;該文引 Chen & Sun 的量測) | 非路徑(論文/標註) |
+| wing-beat | 169 Hz | 起飛拍翅頻率 | todo | arXiv:1504.04484(親讀)——但該值是它引用 Chen & Sun 的量測,屬二手轉引;且該文是數值模擬研究,169 Hz 是它的輸入參數,不是本文的觀測 | 非路徑(論文/標註) |
 | wing-beat | 134° | 拍幅 | paper | arXiv:1504.04484 | 非路徑(論文/標註) |
 | wing-beat | 2.83 mm | 翅長 | paper | arXiv:1504.04484 | 非路徑(論文/標註) |
 | wing-beat | 55° | 我們畫的拍翅面傾角 | todo | src/shell.ts STROKE_TILT(示意,無出處) | 路徑OK |
@@ -33,7 +33,7 @@
 | no-spontaneous | — | 真果蠅腦有持續自發活動(常識,未引文獻) | todo | 未引文獻 | 非路徑(論文/標註) |
 | never-stops | 599.8 ms | 最後一次放電(模擬盡頭) | measured | docs/verification_log.md §模型不會自己停(600 ms 探測) | 路徑OK |
 | never-stops | 562 ms | 翅膀肌最後放電 | measured | docs/verification_log.md §模型不會自己停 | 路徑OK |
-| escape-converge | 311 → 2 | 收斂比 | measured | public/data/escape_edges.json(出貨連線檔)重算:LC4→DNp01 6,362、LPLC2→DNp01 4,860;scripts/fly/escape_path.py | 路徑OK |
+| escape-converge | 309 / 311 → 2 | 直接連到巨纖維的偵測器(權重 ≥2) | measured | public/data/escape_edges.json(出貨連線檔)重算:LC4 126/126 貢獻 6,362 個突觸、LPLC2 183/185 貢獻 4,860;無任一顆同時連兩顆巨纖維;scripts/fly/escape_path.py | 路徑OK |
 | escape-converge | LC4=速度, LPLC2=大小 | 各自編碼什麼 | paper | Ache et al. Curr Biol (2019) | 非路徑(論文/標註) |
 | escape-two-muscles | 90 | 巨纖維→跳躍肌運動神經元 突觸 | measured | scripts/fly/escape_path.py | 路徑OK |
 | escape-two-muscles | 0 | 巨纖維→翅膀肌運動神經元 直連 | measured | scripts/fly/escape_path.py | 路徑OK |
@@ -76,7 +76,8 @@
 | why-sudden | 1.8 ms | 突觸延遲 | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
 | why-sudden | −52 → −45 mV | 靜息電位 → 閾值(模型參數) | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
 | why-sudden | 11,222 / 36 | 偵測器→巨纖維突觸總數 / 每顆平均 | measured | public/data/escape_edges.json 重算(6,362 + 4,860) | 路徑OK |
-| tried-critical-point | 121,592 → 1,747 | 放電數,w_syn 0.275 → 0.240(k=25) | measured | scripts/phase_sweep.py;docs/verification_log.md §臨界點 | 路徑OK |
+| tried-critical-point | 1,747 vs 117,208 | 同一格(w_syn 0.24, k=25)兩次單跑的放電數 | measured | scripts/phase_sweep.py;public/data/phase_sweep.json table[1].counts[1];docs/verification_log.md §臨界點 | 路徑OK |
+| tried-critical-point | 1.26 | 雙穩態測試的變異係數(同參數換種子跑六次) | measured | docs/verification_log.md §雙穩態:臨界點附近單次試驗無意義 | 路徑OK |
 | tried-critical-point | 0.275 mV | 論文的唯一自由參數 | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
 | tried-bistable | CV 1.26 | 六次結果的變異係數(w 0.120, k=50) | measured | docs/verification_log.md §雙穩態 | 路徑OK |
 | tried-bistable | 22× | 最大/最小 | measured | docs/verification_log.md §雙穩態 | 路徑OK |
@@ -91,7 +92,7 @@
 | stage@-24ms | (無數字) | 眼睛看到有東西撲過來 | injected | scripts/export_hexmap.py;github.com/reiserlab/male-drosophila-visual-system-connectome-code 的 docs/coordinate-systems.md(外部);docs/verification_log.md §六角座標慣例 | 路徑OK |
 | stage@0ms | 6 ms | 有東西朝果蠅撲過來 | injected | docs/verification_log.md §視覺路徑 go/no-go;build_scenario.py T_STIM | 路徑OK |
 | stage@1ms | 3.3 ms; 1.8 ms | 訊號在突觸上,還沒到巨纖維 | measured | 引擎 --trace-out(runs/build/escape.trace.csv);scripts/fly/escape_path.py | 路徑OK |
-| stage@3ms | 311 顆; 3.3 ms | 巨纖維放電了 | measured | scripts/build_scenario.py → runs/build/escape.csv | 路徑OK |
+| stage@3ms | 311 顆; 309 顆; 3.3 ms | 巨纖維放電了 | measured | scripts/build_scenario.py → runs/build/escape.csv | 路徑OK |
 | stage@8ms | 6 ms; 12 ms | 偵測器開始暗下去,命令往下走 | measured | scripts/trace_drivers.py;runs/build/escape.csv | 路徑OK |
 | stage@14ms | 14.4 ms; 15.7 ms | 跳躍肌與翅膀肌動了 | measured | runs/build/escape.csv | 路徑OK |
 | stage@30ms | 600 ms; 562 ms; 250 ms | 視葉已經安靜,肌肉還在動——而且不會自己停 | measured | docs/verification_log.md §模型不會自己停;runs/build/escape.csv | 路徑OK |

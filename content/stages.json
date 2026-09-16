@@ -34,10 +34,10 @@
     {
       "t": 3,
       "zh": "巨纖維放電了",
-      "sub": "311 顆逼近偵測器全部接到左右各一顆巨纖維上;首次放電 3.3 ms",
+      "sub": "311 顆逼近偵測器裡有 309 顆直接接到同側的巨纖維(本站的連線檔只留權重 2 以上的邊);首次放電 3.3 ms",
       "src": "scripts/build_scenario.py → runs/build/escape.csv",
       "en": "The giant fiber fires",
-      "sub_en": "All 311 looming detectors connect to one giant fiber on each side; first spike at 3.3 ms"
+      "sub_en": "309 of the 311 looming detectors wire straight into the giant fiber on their own side (this site's edge file keeps links of weight 2 and above); first spike at 3.3 ms"
     },
     {
       "t": 8,

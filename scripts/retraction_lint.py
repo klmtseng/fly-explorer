@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""撤回回流閘門:content/retracted.json 列的說法,不得出現在 content/cards.json(任何層、兩語)與 content/stages.json。
+"""撤回回流閘門:content/retracted.json 列的說法,不得出現在 content/cards.json(任何層、兩語)、content/stages.json,
+以及**讀者讀得到的文件**:docs/*.md、README.md、index.html(2026-09-16 VA 冷審抓到——原本只掃 content/,
+於是 docs/verification_log.md 裡還活著一句已撤回的「安全區」,而 README 正是指讀者去看那個檔)。
+文件層的豁免:同一行若帶「撤回 / retracted / ~~」即視為在說明這條已被撤回,不算命中。
 動機(validity-audit 2026-09-15 冷審):verification_log 正確撤回了三個宣稱,卡片卻還在講撤回前的版本——缺的不是查證,是回流。
 exit 0 = 乾淨;1 = 命中。--self-test:塞一條撤回句進暫存副本,必須被擋。"""
 import json, sys, pathlib, copy
@@ -16,19 +19,54 @@ def scan(cards, stages):
                 for k in ("zh", "en"):
                     if r[k] and r[k] in text: hits.append((c["id"], where, r[k], r["ref"]))
     for s in stages:
-        text = s["zh"] + s.get("sub", "")
+        text = s["zh"] + s.get("sub", "") + " " + s.get("en", "") + " " + s.get("sub_en", "")
         for r in R:
             for k in ("zh", "en"):
                 if r[k] and r[k] in text: hits.append((f"stage@{s['t']}", "sub", r[k], r["ref"]))
+    return hits
+
+EXEMPT = ("撤回", "retracted", "Retracted", "~~")   # 同一行在講「這條已撤回」不算命中
+# 歸檔的審查報告按性質就是在**引用**它要攻擊的宣稱,整份豁免;豁免清單會印在輸出裡,不靜默跳過
+EXEMPT_FILES = ("docs/review_", "audit/")
+def scan_docs():
+    """讀者讀得到的文件:README 指過去的 docs/、首頁本身。逐行掃,帶豁免字樣的行跳過。"""
+    hits = []
+    files = sorted((ROOT / "docs").glob("*.md")) + [ROOT / "README.md", ROOT / "index.html", ROOT / "DESIGN.md"]
+    skipped = []
+    for f in files:
+        if not f.exists(): continue
+        rel = str(f.relative_to(ROOT))
+        if any(rel.startswith(x) for x in EXEMPT_FILES):
+            skipped.append(rel); continue
+        for i, line in enumerate(f.read_text(encoding="utf-8", errors="ignore").splitlines(), 1):
+            if any(x in line for x in EXEMPT): continue
+            for r in R:
+                for k in ("zh", "en"):
+                    if r[k] and r[k] in line:
+                        hits.append((f"{f.relative_to(ROOT)}:{i}", "doc", r[k], r["ref"]))
+    scan_docs.skipped = skipped
     return hits
 if __name__ == "__main__":
     cards = json.loads((ROOT / "content/cards.json").read_text())["cards"]
     stages = json.loads((ROOT / "content/stages.json").read_text())["stages"]
     if "--self-test" in sys.argv:
-        base = scan(cards, stages); c2 = copy.deepcopy(cards); c2[0]["kid"]["zh"] += R[0]["zh"]
+        base = scan(cards, stages) + scan_docs()
+        c2 = copy.deepcopy(cards); c2[0]["kid"]["zh"] += R[0]["zh"]
         neg = scan(c2, stages)
-        print("基線:", "PASS" if not base else base); print("負向 塞撤回句:", "擋住 ✓" if neg else "沒擋住 ✗")
-        ok = (not base) and bool(neg); print("SELF-TEST", "PASS" if ok else "FAIL"); sys.exit(0 if ok else 1)
-    hits = scan(cards, stages)
+        import tempfile, os
+        # 負向二:在 docs 放一行撤回句(不帶豁免字樣)必須被擋;帶「撤回」字樣的同一句必須放行
+        tmpdoc = ROOT / "docs" / "_retraction_selftest_tmp.md"
+        try:
+            tmpdoc.write_text(f"這一行含 {R[0]['zh']} 且沒有豁免字樣\n本行說明 {R[0]['zh']} 已撤回,應放行\n", encoding="utf-8")
+            d = scan_docs(); neg_doc = [h for h in d if str(h[0]).startswith("docs/_retraction_selftest_tmp")]
+        finally:
+            tmpdoc.unlink(missing_ok=True)
+        print("基線:", "PASS" if not base else base)
+        print("負向 卡片塞撤回句:", "擋住 ✓" if neg else "沒擋住 ✗")
+        print(f"負向 docs 塞撤回句:", f"擋住 {len(neg_doc)} 行 ✓(豁免行放行)" if len(neg_doc) == 1 else f"✗ 命中 {len(neg_doc)} 行(應為 1)")
+        ok = (not base) and bool(neg) and len(neg_doc) == 1
+        print("SELF-TEST", "PASS" if ok else "FAIL"); sys.exit(0 if ok else 1)
+    hits = scan(cards, stages) + scan_docs()
     for h in hits: print("❌", *h)
+    print(f"掃過的文件:docs/*.md + README.md + index.html + DESIGN.md;整份豁免(歸檔審查報告):{len(getattr(scan_docs, 'skipped', []))} 個 → {', '.join(getattr(scan_docs, 'skipped', []))}")
     print(f"retracted phrases: {len(R)}; hits: {len(hits)}; RESULT:", "PASS" if not hits else "FAIL"); sys.exit(1 if hits else 0)
