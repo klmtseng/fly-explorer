@@ -2,6 +2,8 @@
 
 **你看到亮起來的,是一顆真的腦在算。**
 
+**線上版:https://fly-brain-explorer.vercel.app**(手機直式最佳;另一個網址 https://fly-explorer-sage.vercel.app 指向同一份)
+
 把 MaleCNS 雄性果蠅中樞神經系統連接組(140,024 顆有真實三維座標的神經元)做成給國小到國中生看的 3D 網站,
 重播我們自己跑出來的逃跑反射模擬:眼睛看到東西撲過來 → 巨纖維放電 → 跳躍肌與翅膀肌的神經細胞動起來。
 三條路:**小朋友版**(一步一步捲、有問答)、**專業版**(同一條路,完整數字、出處與模型限制)、**自由探索**(3D 舞台與 33 張說明卡)。中英雙語。
@@ -80,5 +82,7 @@ An educational 3D site for kids and teens built on the real MaleCNS male fruit-f
 **What glows is real data; line art is ours.** Green glow = real neuron positions and simulated spikes. Magenta = injected by us (the model cannot compute looming) or added by us (the ending). Grey line art = the body we drew. Amber = nerve-to-muscle, absent from the connectome. Every number on a card carries a mark: ● measured by our scripts, ◆ from a paper we read first-hand, ○ secondhand or illustrative.
 
 Known limits: leaky integrate-and-fire only (Shiu et al. 2024 parameters), chemical synapses only; the visual front end cannot compute looming; the textbook GF→PSI→wing relay never fires in this scenario; the model is slower than a real fly and never stops on its own. The eye's "which way is forward" convention is unverified. The English translation has not been reviewed by a native speaker.
+
+Live: **https://fly-brain-explorer.vercel.app**
 
 Data: MaleCNS v1.0 (Berg et al. 2026, CC BY 4.0). Code MIT, content CC BY 4.0.

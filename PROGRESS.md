@@ -88,4 +88,5 @@
 - [x] 2026-09-16 引導版改 scrollytelling:舞台釘背後、文字往上捲、捲動進度=鏡頭過渡+播放時間軸、文字塊隨距離淡縮、兩段滿版只留一句
 - [x] 2026-09-16 英文版補齊:首頁/圖例/模式鈕/PiP/電壓計/字幕(stages.json en+sub_en)/出處註記/含中文單位的數值(value_en);新閘門 scripts/lang_residue.py(英文版四畫面殘留中文=0,--self-test 負向案例);jargon_lint 掃英文字幕、audit_numbers 掃英文層、verify_stages 兩語數字對帳
 - [x] 2026-09-16 自由探索加「字幕」開關(localStorage、?cap=0;關掉只留洋紅角標);手機藏 ＋／－
+- [x] 2026-09-16 **M3 發表**:公開倉 https://github.com/klmtseng/fly-explorer(單一 commit,pre_public_gate 本地 5/5 + --remote 8/8 PASS)→ Vercel **https://fly-brain-explorer.vercel.app**(專案改名並加網域;fly-explorer-sage.vercel.app 同一份;fly-explorer.vercel.app 早被別人用);GitHub 已 connect,之後 push 自動部署。公開樹在 ../fly-explorer-public,由本倉 `git ls-files` 匯出;改動流程=本倉開發→匯出→在公開樹 commit/push
 - [ ] 首頁美術;引導版過場句;手機紙限高後長卡片的可讀性;英文翻譯品質尚未經母語/異質複審(只驗了「無殘留、數字一致、術語有解釋」)
