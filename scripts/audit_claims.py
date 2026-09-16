@@ -1,10 +1,29 @@
 #!/usr/bin/env python3
 """釘住宣稱(validity-audit 第 1 步,確定性):把 content/cards.json 每個事實欄與 content/stages.json 的數字
 列成表,並機器檢查 source 欄裡「像路徑的東西」是否真的存在。
-輸出 audit/claims.md。exit 0 = 全部路徑存在;1 = 有缺。不驗內容是否支持宣稱(那是第 3 步人審)。"""
-import json, re, pathlib, sys
+輸出 audit/claims.md。exit 0 = 全部路徑存在;1 = 有缺。不驗內容是否支持宣稱(那是第 3 步人審)。
+--self-test(2026-09-16 VA 補):三個負向案例——來源指向不存在的檔、來源指向未公開的研究倉、content/ 之外多一份卡片副本,
+三者都必須 exit 非 0。之前這支與 audit_numbers 是唯二沒有負向案例的閘門,而 README 宣稱「每支都有」。"""
+import json, re, pathlib, sys, os, copy, tempfile, subprocess
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-cards = json.loads((ROOT/"content/cards.json").read_text())["cards"]
+CARDS_PATH = pathlib.Path(os.environ.get("AUDIT_CLAIMS_CARDS", ROOT/"content/cards.json"))
+if "--self-test" in sys.argv:
+    base = json.loads((ROOT/"content/cards.json").read_text()); me = pathlib.Path(__file__).resolve()
+    def run(mutate, label):
+        v = copy.deepcopy(base); mutate(v)
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as fh:
+            json.dump(v, fh, ensure_ascii=False); tmp = fh.name
+        r = subprocess.run([sys.executable, str(me)], env=dict(os.environ, AUDIT_CLAIMS_CARDS=tmp), capture_output=True, text=True)
+        ok = r.returncode != 0
+        print(f"  {'✓' if ok else '✗'} {label}: exit {r.returncode}(預期非 0)")
+        return ok
+    def m_missing(v): v["cards"][0]["facts"][0]["source"] = "scripts/這支不存在.py"
+    def m_private(v): v["cards"][0]["facts"][0]["source"] = "../fly/scripts/io_inventory.py"   # 未公開的研究倉路徑
+    r0 = subprocess.run([sys.executable, str(me)], capture_output=True, text=True)
+    print(f"  {'✓' if r0.returncode == 0 else '✗'} 正向:未改動的內容 exit {r0.returncode}(預期 0)")
+    res = [r0.returncode == 0, run(m_missing, "負向:來源指向不存在的檔"), run(m_private, "負向:來源指向未公開的研究倉")]
+    print("SELF-TEST", "PASS" if all(res) else "FAIL"); sys.exit(0 if all(res) else 1)
+cards = json.loads(CARDS_PATH.read_text())["cards"]
 stages = json.loads((ROOT/"content/stages.json").read_text())["stages"]
 rows, missing = [], []
 PATH_RE = re.compile(r"(?<![\w/])(?:\.\./fly/)?(?:scripts|docs|runs|content|src|public)/[\w./-]+")

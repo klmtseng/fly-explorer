@@ -987,8 +987,8 @@
         "en": "Why a fruit fly"
       },
       "kid": {
-        "zh": "因為牠剛剛好。夠簡單,所以科學家能把每一條線都畫出來;又夠複雜,牠會看、會聞、會飛、會記住事情。人腦有八百六十億個神經細胞,現在還畫不完。",
-        "en": "Because it's the sweet spot. Simple enough that scientists can draw every single wire; complex enough that it sees, smells, flies and remembers. A human brain has 86 billion nerve cells — nobody can map that yet."
+        "zh": "因為牠剛剛好。夠簡單,所以科學家能把每一條線都畫出來;又夠複雜,牠會看、會聞、會飛、會記住事情。人腦有大約八百六十億個神經細胞,現在還畫不完。",
+        "en": "Because it's the sweet spot. Simple enough that scientists can draw every single wire; complex enough that it sees, smells, flies and remembers. A human brain has about 86 billion nerve cells — nobody can map that yet."
       },
       "more": {
         "zh": "果蠅是第一個被完整重建的成年動物腦。MaleCNS 包含腦與腹神經索,166,691 顆神經元全部經過人工校對與標註,而且免費公開(CC-BY 4.0)。它的價值不只在果蠅本身:它是第一次有機會檢驗「知道全部接線,能不能解釋行為」這個問題。",
@@ -1030,8 +1030,8 @@
         "en": "Scientists have kept fruit flies in the lab since 1910 — over a hundred years. They're easy to raise, grow fast (egg to adult in as little as 7 days), and their brain is small enough to slice up completely under a microscope. And of every 100 human disease genes, 77 have a matching gene in the fly. Studying the fly is often studying ourselves."
       },
       "more": {
-        "zh": "1910 年 Morgan 發表果蠅白眼突變的性連鎖遺傳(Science 32:120-122),果蠅從此成為遺傳學的主力。世代時間在 25°C 約 9 天、28-29°C 最快 7 天。1993 年 Brand 與 Perrimon 的 GAL4/UAS 系統讓人能在任何一群指定細胞裡開關基因。腦約 10 萬到 16.7 萬顆神經元,小到能用電子顯微鏡逐片切完再重建整顆腦。Reiter 等人 2001 年比對 929 個人類疾病基因,714 個(77%)在果蠅基因組找得到同源序列。",
-        "en": "In 1910 Morgan reported sex-linked inheritance of the white-eye mutant (Science 32:120-122), and the fly became genetics' workhorse. Generation time is about 9 days at 25°C and as short as 7 days at 28-29°C. Brand and Perrimon's GAL4/UAS system (1993) lets researchers switch genes on in any chosen set of cells. With roughly 100,000-167,000 neurons the brain is small enough to section completely under an electron microscope and rebuild. Reiter et al. (2001) matched 929 human disease genes against the fly genome: 714 (77%) have a fly homologue."
+        "zh": "1910 年 Morgan 發表果蠅白眼突變的性連鎖遺傳(Science 32:120-122),果蠅從此成為遺傳學的主力。世代時間在 25°C 約 9 天、28-29°C 最快 7 天。1993 年 Brand 與 Perrimon 的 GAL4/UAS 系統讓人能在任何一群指定細胞裡開關基因。整個中樞神經系統約 16.7 萬顆神經元,小到能用電子顯微鏡逐片切完再重建整顆腦。Reiter 等人 2001 年比對 929 個人類疾病基因,714 個(77%)在果蠅基因組找得到同源序列。",
+        "en": "In 1910 Morgan reported sex-linked inheritance of the white-eye mutant (Science 32:120-122), and the fly became genetics' workhorse. Generation time is about 9 days at 25°C and as short as 7 days at 28-29°C. Brand and Perrimon's GAL4/UAS system (1993) lets researchers switch genes on in any chosen set of cells. With roughly 167,000 neurons in the whole central nervous system it is small enough to section completely under an electron microscope and rebuild. Reiter et al. (2001) matched 929 human disease genes against the fly genome: 714 (77%) have a fly homologue."
       },
       "facts": [
         {
@@ -1232,6 +1232,16 @@
           },
           "provenance": "todo",
           "source": "White et al. Phil Trans R Soc B (1986);原頁被擋,數字為二手轉引"
+        },
+        {
+          "value": "3,016 / 548,000",
+          "value_en": "3,016 / 548,000",
+          "label": {
+            "zh": "果蠅幼蟲連接組 神經元 / 突觸",
+            "en": "fly larva connectome neurons / synapses"
+          },
+          "provenance": "paper",
+          "source": "Winding et al. Science 379(6636):eadd9330 (2023);PMC7614541 摘要親讀,原句「comprising 3016 neurons and 548,000 synapses」"
         },
         {
           "value": "166,691",

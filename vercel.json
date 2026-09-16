@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "//": "assets/ 的檔名帶內容雜湊,改內容一定換檔名,所以可以永久快取。原本是 max-age=0 must-revalidate,每次重新整理都要往返一趟。",
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "//": "資料檔內容穩定(換情境才會變),給一天強快取 + 一週 stale-while-revalidate;soma.bin 壓縮後 945 KB 是單次載入最大宗。",
+      "source": "/data/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }]
+    }
+  ]
+}

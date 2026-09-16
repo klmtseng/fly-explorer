@@ -1,0 +1,8 @@
+# audit_numbers.py 的凍結清單:這些數字檢查器在同卡事實欄/docs 裡比對不到,但人工逐條追過,出處存在。
+# 新增一筆未登記的孤兒數字 → 閘門 FAIL;清單上的某筆消失(內容改了)→ 也 FAIL,逼人回來更新這張表。
+# 格式:卡片ID <TAB> 層 <TAB> 數字 <TAB> 實際出處與為何比對不到(2026-09-16 VA 逐條查證)
+escape-speed	more	1,771	optic-lobe 卡事實欄的 1,771(892+879);檢查器只在同一張卡的事實欄裡比對,跨卡引用抓不到
+why-fly	kid	86000000000	同卡事實欄「861 ± 81 億」(Azevedo 2009);中文數字「八百六十億」轉成 86000000000 後與 861 億差 0.1%,內文已寫「大約」
+why-fly-history	more	167,000	16.7 萬 = 166,691(docs/data_facts.md);四捨五入到三位有效數字,字面不同
+whats-next	more	54.8	54.8 萬 = 548,000,同卡事實欄 Winding et al. 2023(PMC7614541 摘要親讀);單位換算後字面不同
+tried-visual-frontend	more	114.9	docs/verification_log.md 的翅膀下壓肌 114.88 ± 1.37;四捨五入到一位小數

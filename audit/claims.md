@@ -1,10 +1,10 @@
 # 宣稱清單(機器產生,validity-audit 第 1 步)
 
-卡片 33 張,事實 83 條,階段字幕 8 段。
+卡片 33 張,事實 84 條,階段字幕 8 段。
 
 | 卡/階段 | 數值 | 標籤 | 標記 | 來源欄 | 路徑檢查 |
 |---|---|---|---|---|---|
-| body-overview | 165,122 | 神經元 | measured | scripts/fly/io_inventory.py | 路徑OK |
+| body-overview | 165,122 | 神經元 | measured | ../fly/scripts/io_inventory.py | 缺:../fly/scripts/io_inventory.py(研究倉路徑:公開版必須自足,腳本請複製到 scripts/fly/) |
 | body-overview | 140,024 | 畫得進點雲(有細胞本體座標) | measured | scripts/export_soma.py;CLAUDE.md §我們有、別人沒有的東西 | 路徑OK |
 | body-overview | 995 µm | 神經系統全長 | measured | scripts/export_soma.py | 路徑OK |
 | body-overview | 36% | 佔體長比例 | measured | scripts/export_soma.py | 路徑OK |
@@ -66,6 +66,7 @@
 | fly-vs-human-vision | 861 ± 81 億 | 人腦神經元總數 | paper | Azevedo et al. J Comp Neurol 513:532-541 (2009),摘要經 Europe PMC 親讀 | 非路徑(論文/標註) |
 | vs-llm | 0.24% | 可塑連線比例(對照 LoRA 數量級) | measured | 61,210 / 25.6M;scripts/fly/mb_circuit_stats.py | 路徑OK |
 | whats-next | 302 | 線蟲神經元(第一個完整連接組,1986) | todo | White et al. Phil Trans R Soc B (1986);原頁被擋,數字為二手轉引 | 非路徑(論文/標註) |
+| whats-next | 3,016 / 548,000 | 果蠅幼蟲連接組 神經元 / 突觸 | paper | Winding et al. Science 379(6636):eadd9330 (2023);PMC7614541 摘要親讀,原句「comprising 3016 neurons and 548,000 synapses」 | 非路徑(論文/標註) |
 | whats-next | 166,691 | 雄果蠅中樞神經系統(本站) | paper | Berg et al. Cell 189(18) (2026);bioRxiv 前導版親讀 | 非路徑(論文/標註) |
 | whats-next | 120,000 / 5.23 億 | 小鼠 1 mm³ 神經元 / 突觸 | paper | microns-explorer.org/cortical-mm3(官方專案頁親讀) | 非路徑(論文/標註) |
 | whats-next | 57,000 / 1.5 億 | 人類 1 mm³ 細胞 / 突觸 | paper | Shapson-Coe et al. Science 384:eadk4858 (2024),Research Article Summary 親讀 | 非路徑(論文/標註) |
@@ -96,4 +97,5 @@
 | stage@30ms | 600 ms; 562 ms; 250 ms | 視葉已經安靜,肌肉還在動——而且不會自己停 | measured | docs/verification_log.md §模型不會自己停;runs/build/escape.csv | 路徑OK |
 | stage@250ms | 600 ms | 我們加的結局:讓牠停下來 | injected | docs/verification_log.md §模型不會自己停、§我們加的結局;src/main.ts EPILOGUE | 路徑OK |
 
-路徑缺失:0
+路徑缺失:1
+- body-overview: ../fly/scripts/io_inventory.py(研究倉路徑:公開版必須自足,腳本請複製到 scripts/fly/)
