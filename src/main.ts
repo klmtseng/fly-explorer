@@ -563,7 +563,17 @@ applyStaticLang(storedLang());
     if (qs && track && track !== 'free') setTimeout(() => { scrolly.scrollTop = Number(qs) * (scrolly.scrollHeight - scrolly.clientHeight); onScroll(); }, 900); }   // 測試用深連結
   { const qc = new URLSearchParams(location.search); const cid = qc.get('card'); const lv = qc.get('level'); const lg = qc.get('lang');
     if (lv === 'kid' || lv === 'more') cards.setLevel(lv); if (lg === 'zh' || lg === 'en') cards.setLang(lg);
-    if (cid) cards.open(cid); }   // 測試/分享用深連結
+    if (cid) cards.open(cid); 
+    // ?t=<毫秒>:跳到情境的某一刻(分享「3.3 毫秒巨纖維放電」那種瞬間,也讓截圖可重現)。
+    // 允許負值:負的是前奏(注入那段)。超出範圍就夾住,不報錯。
+    const tq = qc.get('t');
+    if (tq !== null && scn) {
+      const ms = Number(tq);
+      if (Number.isFinite(ms)) {
+        const f = Math.round(ms / scn.dtMs);
+        showFrame(Math.max(-PRELUDE, Math.min(scn.nFrames - 1 + EPILOGUE, f)));
+      }
+    } }   // 測試/分享用深連結
   if (scn && new URLSearchParams(location.search).get('play') === '1') setTimeout(() => document.getElementById('play')!.click(), 600);   // 測試用:自動播放(延後,等載入時的重新取景先跑完)
 
   let frames = 0, acc = 0, fps = 0;
