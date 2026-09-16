@@ -61,11 +61,23 @@ export interface Cards {
   wireQuiz(el: HTMLElement, id: string): void;
 }
 
+/** 開場語言:?lang= > 上次選的 > 預設英文(2026-09-16 使用者決定:網站對外以英文為預設)。
+ *  抽出來是因為主程式要在 await 任何資料之前就把靜態文字換好,不能等 createCards()。*/
+export function storedLang(): Lang {
+  const q = new URLSearchParams(location.search).get('lang');
+  if (q === 'zh' || q === 'en') return q;
+  try {
+    const v = localStorage.getItem('fly.cards');
+    if (v) { const p = JSON.parse(v); if (p.lang === 'zh' || p.lang === 'en') return p.lang; }
+  } catch { /* 無儲存也要能跑 */ }
+  return 'en';
+}
+
 export function createCards(): Cards {
   const sheet = document.getElementById('sheet')!, body = document.getElementById('sheetBody')!;
   const chips = document.getElementById('chips')!, pos = document.getElementById('cPos')!;
-  let lang: Lang = 'zh', level: Level = 'kid';
-  try { const v = localStorage.getItem('fly.cards'); if (v) ({ lang = 'zh', level = 'kid' } = JSON.parse(v)); } catch { /* 無儲存也要能跑 */ }
+  let lang: Lang = storedLang(), level: Level = 'kid';
+  try { const v = localStorage.getItem('fly.cards'); if (v) ({ level = 'kid' } = JSON.parse(v)); } catch { /* 無儲存也要能跑 */ }
   let cur: string | null = null, list: string[] = [];
   let answered: Record<string, number> = {};   // 問答卡:這次開啟時選了哪個
   let view: 'card' | 'index' = 'index';

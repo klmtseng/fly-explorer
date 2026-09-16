@@ -8,7 +8,8 @@ import re, pathlib, shutil, json, base64
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 src = (ROOT/"dist/index.html").read_text(encoding="utf-8")
 
-title = re.search(r"<title>(.*?)</title>", src, re.S).group(1)
+# artifact 的名字固定用中文那個:網站預設語言 2026-09-16 改英文,但 artifact 在藝廊裡的名稱要穩定(改了等於變成另一個頁面)
+title = "果蠅腦 — 140,024 顆神經元"
 style = re.search(r"<style>(.*?)</style>", src, re.S).group(1)
 body  = re.search(r"<body>(.*?)</body>", src, re.S).group(1)
 

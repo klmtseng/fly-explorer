@@ -7,7 +7,7 @@ import { loadScenario, applyFrame, type Scenario } from './scenario';
 import { loadEdges, type EdgeLayer } from './edges';
 import { buildMuscles, type Muscles } from './muscles';
 import stagesJson from '../content/stages.json';
-import { createCards, srcText } from './cards';
+import { createCards, srcText, storedLang } from './cards';
 import tracksJson from '../content/tracks.json';
 import { loadGauge, type Gauge } from './gauge';
 import { buildShell } from './shell';
@@ -60,6 +60,19 @@ bloom.blendMode.opacity.value = S.enableBloom ? 1 : 0;
 composer.addPass(new EffectPass(camera, bloom, new ToneMappingEffect({ mode: ToneMappingMode.AGX })));
 
 const $ = (id: string) => document.getElementById(id)!;
+
+const TITLE = { zh: '果蠅腦 — 140,024 顆神經元', en: 'Fly brain — 140,024 neurons' };
+/** 只換靜態文字(data-en/data-zh)、標題與 html lang。不碰 pip/gauge/圖例,所以可以在載入任何資料之前呼叫,
+ *  首屏就是對的語言,不會先閃一秒另一種語言。完整的 applyLang() 在資料就緒後再跑一次。 */
+function applyStaticLang(l: 'zh' | 'en') {
+  document.documentElement.lang = l === 'en' ? 'en' : 'zh-Hant';
+  document.title = TITLE[l];
+  document.querySelectorAll<HTMLElement>('[data-en]').forEach(el => {
+    if (el.dataset.zh === undefined) el.dataset.zh = el.textContent ?? '';
+    el.textContent = l === 'en' ? el.dataset.en! : el.dataset.zh;
+  });
+}
+applyStaticLang(storedLang());
 
 (async () => {
   const t0 = performance.now();
@@ -217,15 +230,10 @@ const $ = (id: string) => document.getElementById(id)!;
   const stZh = (st: { zh: string; en?: string }) => lg() === 'en' && st.en ? st.en : st.zh;
   const stSub = (st: { sub: string; sub_en?: string }) => lg() === 'en' && st.sub_en ? st.sub_en : st.sub;
   function applyLang() {
-    document.documentElement.lang = lg() === 'en' ? 'en' : 'zh-Hant';
-    document.querySelectorAll<HTMLElement>('[data-en]').forEach(el => {
-      if (el.dataset.zh === undefined) el.dataset.zh = el.textContent ?? '';
-      el.textContent = lg() === 'en' ? el.dataset.en! : el.dataset.zh;
-    });
+    applyStaticLang(lg());
     $('legend').innerHTML = GROUPS.map(g =>
       `<div><i style="background:#${g.color.toString(16).padStart(6,'0')}"></i>${g[lg()]}</div>`).join('');
     pip.setLang(lg()); gauge?.setLang(lg()); hudRefresh?.();
-    document.title = lg() === 'en' ? 'Fly brain — 140,024 neurons' : '果蠅腦 — 140,024 顆神經元';
   }
   { const orig = cards.setLang; cards.setLang = (l) => { orig(l); applyLang(); if (track === 'kid' || track === 'more') { const y = scrolly.scrollTop; buildScrolly(); scrolly.scrollTop = y; onScroll(); } else if (scn) showFrame(Number($p('scrub').value)); }; }
   const dolly = (f: number) => {                         // 沿視線把相機拉近/推遠,受 min/maxDistance 夾住
@@ -286,6 +294,7 @@ const $ = (id: string) => document.getElementById(id)!;
   let gauge: Gauge | null = null;
   try { gauge = await loadGauge('data/scenarios/escape_trace.json', document.getElementById('gaugeHost')!); document.getElementById('gaugeHost')!.hidden = false; }
   catch (err) { console.warn('電壓計未載入:', err); }
+  applyLang();   // pip/gauge 到齊後跑一次:圖例、PiP 讀數、電壓計標籤都照當前語言(2026-09-16 補:圖例原本只在切語言時才填,開場是空的)
   // ③注入前奏:t<0 的「眼睛看到東西」示意。模型視覺前端算不出逼近,這段是我們畫的,
   // 用洋紅渲染並在時鐘與標籤標示。逼近物體 = 從兩眼中心往外擴的環。
   const PRELUDE = 24;                       // 前奏幀數(以 dtMs 計的虛擬毫秒)
