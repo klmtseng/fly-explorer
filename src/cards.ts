@@ -11,7 +11,7 @@ import cardsJson from '../content/cards.json';
 export type Lang = 'zh' | 'en';
 export type Level = 'kid' | 'more';
 type T = { zh: string; en: string };
-interface Fact { value: string; value_en?: string; label: T; provenance: 'measured' | 'paper' | 'todo'; source: string }
+interface Fact { value: string; value_en?: string; source_en?: string; label: T; provenance: 'measured' | 'paper' | 'todo'; source: string }
 interface Card {
   id: string; module: string; anchor: string; trigger: string; title: T; kid: T; more: T; facts: Fact[];
   question?: { zh: string; en: string; options: { zh: string[]; en: string[] }; answer: number };
@@ -27,32 +27,16 @@ export const STAGE_ANCHORS: Record<number, string[]> = {
 };
 
 const UI = {
-  zh: { kid: '小朋友', more: '想知道更多', index: '所有卡片', close: '關閉', src: '出處', check: '看答案', right: '答對了!', wrong: '再想想,正解是:', marks: '● 我們量的 ◆ 論文 ○ 待查證/示意', cards: '卡片', of: '/', facts: '數字', value: '數值', what: '這是什麼', mark: '標記', source: '出處' },
-  en: { kid: 'Kids', more: 'Learn more', index: 'All cards', close: 'Close', src: 'Source', check: 'Show answer', right: 'Correct!', wrong: 'Not quite. The answer is:', marks: '● we measured ◆ paper ○ unverified/illustrative', cards: 'Cards', of: '/', facts: 'Numbers', value: 'Value', what: 'What it is', mark: 'Mark', source: 'Source' },
+  zh: { kid: '小朋友', more: '想知道更多', index: '所有卡片', close: '關閉', src: '出處', check: '看答案', right: '答對了!', wrong: '再想想,正解是:', marks: '● 我們量的 ◆ 論文 ○ 待查證/示意', reproduce: '● 怎麼自己驗:算連線結構的那些是純 Python,下載 MaleCNS 原始資料(CC-BY 4.0)就能重跑;算模擬的那些,統計可以用本倉的每次執行原始輸出重算,但重跑模擬本身需要不公開的引擎。', cards: '卡片', of: '/', facts: '數字', value: '數值', what: '這是什麼', mark: '標記', source: '出處' },
+  en: { kid: 'Kids', more: 'Learn more', index: 'All cards', close: 'Close', src: 'Source', check: 'Show answer', right: 'Correct!', wrong: 'Not quite. The answer is:', marks: '● we measured ◆ paper ○ unverified/illustrative', reproduce: '● how to check it yourself: the wiring counts are plain Python, so downloading the MaleCNS data (CC BY 4.0) lets you re-run them. For the simulation numbers you can recompute the statistics from the per-run outputs shipped in this repo, but re-running the simulation itself needs an engine that is not public.', cards: 'Cards', of: '/', facts: 'Numbers', value: 'Value', what: 'What it is', mark: 'Mark', source: 'Source' },
 };
 
 // 英文版的出處欄:source 是機器用的指標(路徑/§段名),裡面幾句固定的中文註記在英文版換成英文;
 // 沒對到的中文由 scripts/lang_residue.py 抓出來(§ 後的段名例外:那是中文文件裡的錨點)。
-export const SRC_EN: [RegExp, string][] = [
-  [/probe_600\((\d+) 次 600 ms 探測\)/g, 'probe_600 ($1 runs of 600 ms)'],
-  [/同一組刺激,(\d+) 個亂數種子/g, 'same stimulus set, $1 random seeds'],   // 次數會改,別把數字寫死進對照表
-  [/亂數種子/g, 'random seeds'],
-  // VA 2026-09-16 新增的出處註記(英文版也要讀得懂;長句在前,避免被短句先吃掉)
-  [/摘要親讀,原句/g, 'abstract read first-hand, verbatim: '],
-  [/\(親讀\)——但該值是它引用 Chen & Sun 的量測,屬二手轉引;且該文是數值模擬研究,169 Hz 是它的輸入參數,不是本文的觀測/g,
-   ' (read first-hand) — but that value is cited from Chen & Sun, so it is secondhand here; that paper is a numerical simulation study and 169 Hz is one of its inputs, not something it measured'],
-  [/無任一顆同時連兩顆巨纖維/g, 'none connects to both giant fibers'],
-  [/貢獻 6,362 個突觸、LPLC2 183\/185 貢獻 4,860/g, 'contributing 6,362 synapses; LPLC2 183\/185 contributing 4,860'],
-  [/個突觸/g, ' synapses'], [/貢獻/g, 'contributing '],
-  [/\(外部\)/g, '(external)'], [/ 的 /g, ' → '], [/模型沒有自發活動/g, 'the model has no spontaneous activity'],
-  [/原頁被擋,數字為二手轉引/g, 'page blocked; figure is secondhand'], [/官方頁被重導向,為二手轉引/g, 'official page redirected; secondhand'],
-  [/官方專案頁親讀/g, 'official project page read first-hand'], [/前導版親讀/g, 'preprint read first-hand'], [/全文親讀/g, 'full text read first-hand'],
-  [/摘要經/g, 'abstract via'], [/該文引/g, 'which cites'], [/示意,無出處/g, 'illustrative, no source'], [/未引文獻/g, 'no citation'],
-  [/逐柱重數,腳本內嵌於該檔/g, 'recounted per column; script embedded in that file'], [/出貨連線檔\)重算:/g, 'shipped edge file) recomputed:'],
-  [/兩眼相加\)/g, 'both eyes summed)'], [/探測\)/g, 'probe)'], [/的量測\)/g, ' measurement)'], [/清單\(/g, 'list ('], [/首波/g, 'first wave'],
-  [/親讀/g, 'read first-hand'], [/我們有、別人沒有的東西/g, 'What we have that others do not'],
-];
-export const srcText = (src: string, lang: Lang) => lang === 'en' ? SRC_EN.reduce((t, [re, en]) => t.replace(re, en), src) : src;
+// 出處欄的英文版直接存在資料裡(content/cards.json 的 source_en)。
+// 2026-09-17 閘門稽核:先前用執行期正則逐詞翻譯,漏掉的詞原樣留著,而且會黏字
+// (實際印出過「摘要read first-hand」)。改成資料欄之後,缺漏由 audit_claims 的 P5 擋。
+export const srcText = (src: string, lang: Lang, en?: string) => lang === 'en' && en ? en : src;
 const factValue = (f: { value: string; value_en?: string }, lang: Lang) => lang === 'en' && f.value_en ? f.value_en : f.value;
 
 const esc = (s: string) => s.replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]!));
@@ -101,6 +85,7 @@ export function createCards(): Cards {
     document.getElementById('sheetIndexBtn')!.textContent = UI[lang].index;
     document.getElementById('sheetClose')!.setAttribute('aria-label', UI[lang].close);
     document.getElementById('sheetMarks')!.textContent = UI[lang].marks;
+    document.getElementById('sheetMarks')!.title = UI[lang].reproduce;   // 標記列的 tooltip:● 各自能重現到什麼程度
     sheet.classList.toggle('kid', level === 'kid'); sheet.classList.toggle('more', level === 'more');
   }
 
@@ -110,17 +95,17 @@ export function createCards(): Cards {
       // 小朋友:數字大、標籤短;出處收起來,點才展開(符號一定給,不藏標記)
       return `<div class="facts">` + c.facts.map(f =>
         `<div class="fact m-${f.provenance}"><b>${MARK[f.provenance]} ${esc(factValue(f, lang))}</b><span>${esc(f.label[lang])}</span>` +
-        `<details><summary>${UI[lang].src}</summary><code>${esc(srcText(f.source, lang))}</code></details></div>`).join('') + `</div>`;
+        `<details><summary>${UI[lang].src}</summary><code>${esc(srcText(f.source, lang, f.source_en))}</code></details></div>`).join('') + `</div>`;
     }
     return `<table class="ftab"><thead><tr><th>${UI[lang].value}</th><th>${UI[lang].what}</th><th>${UI[lang].mark}</th><th>${UI[lang].source}</th></tr></thead><tbody>` +
-      c.facts.map(f => `<tr class="m-${f.provenance}"><td><b>${esc(factValue(f, lang))}</b></td><td>${esc(f.label[lang])}</td><td>${MARK[f.provenance]}</td><td><code>${esc(srcText(f.source, lang))}</code></td></tr>`).join('') + `</tbody></table>`;
+      c.facts.map(f => `<tr class="m-${f.provenance}"><td><b>${esc(factValue(f, lang))}</b></td><td>${esc(f.label[lang])}</td><td>${MARK[f.provenance]}</td><td><code>${esc(srcText(f.source, lang, f.source_en))}</code></td></tr>`).join('') + `</tbody></table>`;
   }
 
   /** 教科書:參考文獻清單(事實欄 source 去重、編號、懸掛縮排) */
   function refsHtml(c: Card): string {
-    const srcs = [...new Set(c.facts.map(f => f.source))];
+    const seen = new Set<string>(); const srcs = c.facts.filter(f => !seen.has(f.source) && seen.add(f.source)).map(f => ({ s: f.source, e: f.source_en }));
     if (!srcs.length) return '';
-    return `<ul class="refs">` + srcs.map((x, i) => `<li>[${i + 1}] ${esc(srcText(x, lang))}</li>`).join('') + `</ul>`;
+    return `<ul class="refs">` + srcs.map((x, i) => `<li>[${i + 1}] ${esc(srcText(x.s, lang, x.e))}</li>`).join('') + `</ul>`;
   }
 
   function questionHtml(c: Card): string {
@@ -179,6 +164,7 @@ export function createCards(): Cards {
       h += `<h3>${esc(mid)} · ${esc(mod[lang])}</h3><ul class="idx">` + cs.map(c =>
         `<li><button data-id="${c.id}">${c.question ? '❓ ' : ''}${esc(c.title[lang])}</button></li>`).join('') + `</ul>`;
     }
+    h += `<p class="repro">${esc(UI[lang].reproduce)}</p>`;   // 索引底部:● 各自能重現到什麼程度(tooltip 手機按不到)
     body.innerHTML = h;
     body.querySelectorAll<HTMLButtonElement>('[data-id]').forEach(b => b.addEventListener('click', () => { list = CARDS.map(c => c.id); renderCard(b.dataset.id!); }));
     body.scrollTop = 0;

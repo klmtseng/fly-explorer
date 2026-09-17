@@ -1,16 +1,89 @@
 {
   "note": "verification_log 撤回/禁止的說法,卡片與字幕不得再出現(retraction_lint.py 掃;冷審 2026-09-15 指出:查證有做、撤回沒回流)。每條附撤回出處。",
   "phrases": [
-    {"zh": "安全區", "en": "safe zone", "why": "0.179 配 25 顆隨機刺激穩定引爆,『臨界點下方/安全區』已撤回", "ref": "docs/verification_log.md §撤回「臨界點下方」"},
-    {"zh": "臨界點下方", "en": "below the critical point", "why": "同上", "ref": "docs/verification_log.md §撤回「臨界點下方」"},
-    {"zh": "看到東西到飛走", "en": "from seeing to airborne", "why": "Fotowat 2009 的 18 ms 是燈熄→巨纖維放電,起飛 25 ms", "ref": "audit/content_audit.md F1"},
-    {"zh": "所以腿先動", "en": "so the legs go first", "why": "跳躍(14.4)與翅膀(15.7)幾乎同時,『跳躍肌先動』已撤除", "ref": "docs/verification_log.md §一個與教科書不同的實測"},
-    {"zh": "所以翅膀慢一點點", "en": "so the wings follow a beat later", "why": "『翅膀肌經 PSI 轉一手所以慢一拍』在模型裡不成立", "ref": "docs/verification_log.md §一個與教科書不同的實測"},
-    {"zh": "0.04%", "en": "0.04%", "why": "61,210/25.6M = 0.24%;0.04% 是分母混用 152M 原始列", "ref": "audit/content_audit.md F8"},
-    {"zh": "可塑突觸", "en": "plastic synapses", "why": "61,210 是連線(邊)數,突觸是 463,640", "ref": "audit/_mb_stats.txt"},
-    {"zh": "每個數字都是跑很多次", "en": "every number on this site was run many times", "why": "出貨動畫是單次 trial", "ref": "docs/verification_log.md §脈衝長度"},
-    {"zh": "約上限一半", "en": "about half that ceiling", "why": "207 Hz 是引爆區模型值,不可當生理量", "ref": "docs/verification_log.md §對既有結論的影響 第 2 點"},
-    {"zh": "600 ms 它還在", "en": "still going at 600 ms it", "why": "翅膀肌神經最後放電 562 ms;600 ms 是全腦", "ref": "docs/verification_log.md §模型不會自己停"},
-    {"zh": "恰好一顆(各型總數 1,732-1,773)", "en": "exactly once per column (type counts run 1,732-1,773", "why": "L3/C2 只有一半的柱子有座標", "ref": "audit/_hex_per_column.txt"}
+    {
+      "zh": "安全區",
+      "en": "safe zone",
+      "why": "0.179 配 25 顆隨機刺激穩定引爆,『臨界點下方/安全區』已撤回",
+      "ref": "docs/verification_log.md §撤回「臨界點下方」"
+    },
+    {
+      "zh": "臨界點下方",
+      "en": "below the critical point",
+      "why": "同上",
+      "ref": "docs/verification_log.md §撤回「臨界點下方」"
+    },
+    {
+      "zh": "看到東西到飛走",
+      "en": "from seeing to airborne",
+      "why": "Fotowat 2009 的 18 ms 是燈熄→巨纖維放電,起飛 25 ms",
+      "ref": "audit/content_audit.md F1"
+    },
+    {
+      "zh": "所以腿先動",
+      "en": "so the legs go first",
+      "why": "跳躍(14.4)與翅膀(15.7)幾乎同時,『跳躍肌先動』已撤除",
+      "ref": "docs/verification_log.md §一個與教科書不同的實測"
+    },
+    {
+      "zh": "所以翅膀慢一點點",
+      "en": "so the wings follow a beat later",
+      "why": "『翅膀肌經 PSI 轉一手所以慢一拍』在模型裡不成立",
+      "ref": "docs/verification_log.md §一個與教科書不同的實測"
+    },
+    {
+      "zh": "0.04%",
+      "en": "0.04%",
+      "why": "61,210/25.6M = 0.24%;0.04% 是分母混用 152M 原始列",
+      "ref": "audit/content_audit.md F8"
+    },
+    {
+      "zh": "可塑突觸",
+      "en": "plastic synapses",
+      "why": "61,210 是連線(邊)數,突觸是 463,640",
+      "ref": "audit/_mb_stats.txt"
+    },
+    {
+      "zh": "每個數字都是跑很多次",
+      "en": "every number on this site was run many times",
+      "why": "出貨動畫是單次 trial",
+      "ref": "docs/verification_log.md §脈衝長度"
+    },
+    {
+      "zh": "約上限一半",
+      "en": "about half that ceiling",
+      "why": "207 Hz 是引爆區模型值,不可當生理量",
+      "ref": "docs/verification_log.md §對既有結論的影響 第 2 點"
+    },
+    {
+      "zh": "600 ms 它還在",
+      "en": "still going at 600 ms it",
+      "why": "翅膀肌神經最後放電 562 ms;600 ms 是全腦",
+      "ref": "docs/verification_log.md §模型不會自己停"
+    },
+    {
+      "zh": "恰好一顆(各型總數 1,732-1,773)",
+      "en": "exactly once per column (type counts run 1,732-1,773",
+      "why": "L3/C2 只有一半的柱子有座標",
+      "ref": "audit/_hex_per_column.txt"
+    },
+    {
+      "zh": "反應差 70 倍",
+      "en": "response drops 70",
+      "why": "依據是單次跑;出貨的 phase_sweep.json 同一格只差 1.25 倍",
+      "ref": "docs/verification_log.md §頭條毫秒數的跑次離散"
+    },
+    {
+      "zh": "之間有相變",
+      "en": "a phase transition in between",
+      "why": "同上,單次跑撐不起相變",
+      "ref": "audit/va_20260916.md"
+    },
+    {
+      "zh": "5 次都沒放電",
+      "en": "never fired in 5 runs",
+      "why": "0/5 只把單次發生率壓到 95% 上界 45%,已全部改跑 20 次",
+      "ref": "audit/va_20260917.md"
+    }
   ]
 }

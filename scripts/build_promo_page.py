@@ -14,18 +14,22 @@ MD = ROOT / "docs/promo_drafts.md"
 OUT = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/promo.html")
 
 # 每個平台配哪些圖(published path → 說明)。圖片本身由 Artifact 的 files 參數上傳。
+# 每個平台配哪些圖。英文貼文配英文圖、中文貼文配中文圖(使用者 2026-09-17)。
+# 圖由 scripts/build_promo_images.py 產生,分 docs/promo/en 與 docs/promo/zh 兩套。
 SHOTS = {
-    "X": [("img/hero.png", "第 1 則 · 圖 1", "16 毫秒,翅膀肌與跳躍肌的神經正在放電"),
-          ("img/phone.png", "第 1 則 · 圖 2", "手機實機畫面"),
-          ("img/gf.png", "第 3 則", "巨纖維放電那一刻(圖上 4 毫秒,標題寫資料值 3.3)"),
-          ("img/lab.png", "第 6 則", "實驗台:隨機 311 顆,巨纖維 20 次都沒放電")],
-    "Reddit": [("img/hero.png", "主圖", "貼文本體"),
-               ("img/lab.png", "留言補充", "實驗台"),
-               ("img/phone.png", "留言補充", "手機實機")],
-    "LinkedIn": [("img/hero.png", "第一張", "1600 × 900"),
-                 ("img/lab.png", "第二張", "實驗台,那個被修正的數字就在上面")],
-    "Facebook": [("img/zh.png", "中文版主圖", "亮起來的,是一顆真的腦在算"),
-                 ("img/feed.png", "直式", "動態消息用")],
+    "X": [("img/en/hero.png", "第 1 則 · 圖 1", "16 毫秒,翅膀肌與跳躍肌的神經正在放電"),
+          ("img/en/phone.png", "第 1 則 · 圖 2", "手機實機畫面(英文介面)"),
+          ("img/en/gf.png", "第 3 則", "巨纖維放電那一刻"),
+          ("img/en/lab.png", "第 6 則", "實驗台:隨機 311 顆,巨纖維 20 次都沒放電")],
+    "Reddit": [("img/en/hero.png", "主圖", "貼文本體"),
+               ("img/en/lab.png", "留言補充", "實驗台"),
+               ("img/en/phone.png", "留言補充", "手機實機")],
+    "LinkedIn": [("img/en/hero.png", "第一張", "1600 × 900"),
+                 ("img/en/lab.png", "第二張", "實驗台,那個被修正的數字就在上面")],
+    "Facebook": [("img/zh/hero.png", "主圖", "中文標題與中文圖例"),
+                 ("img/zh/feed.png", "直式", "動態消息用"),
+                 ("img/zh/lab.png", "實驗台", "中文介面"),
+                 ("img/zh/phone.png", "手機", "中文介面實機畫面")],
 }
 LANG = {"X": "EN", "Reddit": "EN", "LinkedIn": "EN", "Facebook": "ZH"}
 

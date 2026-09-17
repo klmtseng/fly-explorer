@@ -18,13 +18,15 @@ GROUPS = {"detect": lambda t: t in ("LC4", "LPLC2"), "gf": lambda t: t == "DNp01
           "DNp03": lambda t: t == "DNp03"}
 
 ENGINE_CONST = {1.8: "突觸延遲 t_dly(Shiu 2024;研究倉引擎預設)"}   # 字幕會提到的模型常數,逐一列明出處
-PROBE_CONST = {600.0: "600ms 探測:全腦最後放電 599.8(verification_log §模型不會自己停)",
+PROBE_CONST = {599.9: "600ms 探測 20 次:全腦最後放電上端 599.9(verification_log §頭條毫秒數的跑次離散)",
+               562.1: "600ms 探測 20 次:翅膀肌最後放電下端 562.1(同上)",
+               600.0: "600ms 探測 20 次:每一次都跑到我們切斷為止,全腦最後放電 599.2–599.9(verification_log §模型不會自己停)",
                562.0: "600ms 探測:翅膀肌神經最後放電 562.2(同上)"}          # 不在 escape.csv 裡的另一次跑,出處同一節
 
 LOG = (ROOT / "docs/verification_log.md").read_text()
 def _const_recorded(v, label):
     """允許常數不是白名單:每個常數的數字字串必須真的出現在 verification_log(熱審 2026-09-15:純字面量字典可無限加)"""
-    needles = {1.8: ["1.8 ms", "1.8ms"], 600.0: ["599.8", "600 ms", "600ms"], 562.0: ["562.2"]}.get(v, [str(v)])
+    needles = {1.8: ["1.8 ms", "1.8ms"], 600.0: ["599.8", "600 ms", "600ms"], 562.0: ["562.2"], 599.9: ["599.9"], 562.1: ["562.1"]}.get(v, [str(v)])
     return any(n in LOG for n in needles)
 for _v, _l in list(ENGINE_CONST.items()) + list(PROBE_CONST.items()):
     assert _const_recorded(_v, _l), f"常數 {_v}({_l})在 verification_log 找不到記錄,不准進允許表"

@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Fly Explorer 透視果蠅">
 <meta property="og:title" content="透視果蠅 · Fly Explorer">
-<meta property="og:description" content="一隻真的果蠅腦,140,024 顆神經元照實際三維座標畫在瀏覽器裡,重播一次逃跑反射。發光的是真資料。A real fly connectome in your browser: 140,024 neurons at their measured positions, replaying a simulated escape reflex. What glows is real data.">
+<meta property="og:description" content="一隻真的果蠅腦,140,024 顆神經元照實際三維座標畫在瀏覽器裡,重播一次我們跑的逃跑反射模擬。神經元與位置是真的,活動是算出來的。A real fly connectome in your browser: 140,024 neurons at their measured positions, replaying a simulated escape reflex. What glows is real data.">
 <meta property="og:url" content="https://fly-brain-explorer.vercel.app/">
 <meta property="og:image" content="https://fly-brain-explorer.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -134,6 +134,8 @@
   }
 
 
+  #sheet .repro{margin:18px 0 4px;padding:10px 12px;background:rgba(0,0,0,.05);border-left:3px solid var(--act);
+    font-size:12px;line-height:1.6;color:var(--muted)}
   /* ===== 實驗台:換刺激條件,看真的跑出來的結果 ===== */
   #lab[hidden]{display:none}
   #lab{position:fixed;z-index:6;right:12px;top:12px;bottom:12px;width:min(420px,calc(100vw - 24px));
@@ -384,7 +386,7 @@
     </select>
   </div>
   <div id="prov">
-    <span><i class="dot"></i><span data-en="Glow = real neurons, real activity">發光 ＝ 真實神經元位置與活動</span></span>
+    <span><i class="dot"></i><span data-en="Glow = real neurons, simulated activity">發光 ＝ 真實神經元位置,模擬出來的活動</span></span>
     <span><i class="inj"></i><span data-en="Magenta = injected by us (model can't compute it)">洋紅 ＝ 模型算不出,我們注入的</span></span>
     <span><i class="drw"></i><span data-en="Line art = body we drew">線稿 ＝ 我們畫的身體</span><em data-en="(scaled to the nervous system; abdomen illustrative)">（比例對位神經系統,腹部為示意）</em></span>
     <span><i class="mus"></i><span data-en="Amber = nerve→muscle, drawn by us (not in the connectome)">琥珀 ＝ 神經→肌肉,連接組沒有,我們畫的</span><em data-en="(timing from real motor neurons)">（時機來自真實運動神經元）</em></span>
@@ -396,7 +398,7 @@
 <!-- 首頁三扇門:選了才進舞台。示意版,結構先對,美術後補。 -->
 <div id="home">
   <h1 data-en="A real fly brain">果蠅腦,真的那一顆</h1>
-  <p class="north" data-en="What lights up is a real brain computing.">你看到亮起來的,是一顆真的腦在算。</p>
+  <p class="north" data-en="The neurons are real. The activity is a simulation running on their real wiring.">神經元是真的,位置是真的。讓它們亮起來的,是照真接線跑出來的模擬。</p>
   <div class="doors">
     <button class="door kid" data-track="kid"><b data-en="Kids">小朋友版</b><span data-en="Step by step: the eye sees something, the signal races through, legs and wings move. With quizzes.">一頁一頁帶你看:眼睛看到東西、訊號怎麼跑、腳和翅膀怎麼動。有問答。</span><small data-en="13 steps · about 10 min">13 步 · 約 10 分鐘</small></button>
     <button class="door more" data-track="more"><b data-en="In depth">專業版</b><span data-en="The same path with full numbers, sources and model limits. Like a field guide.">同一條路,換成完整的數字、出處與模型限制。像翻一本圖鑑。</span><small data-en="13 steps · references on every step">13 步 · 每步附參考文獻</small></button>

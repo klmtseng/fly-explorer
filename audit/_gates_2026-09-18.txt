@@ -1,0 +1,53 @@
+# 八支閘門 2026-09-18 實跑(exit code 直接取自該支,不穿 pipe)
+=== jargon_lint  exit=0
+   … 另 52 處
+
+【對照】同樣這些術語在「想知道更多」層出現 49 處 —— 那一層本來就該有,不算錯。
+--- jargon_lint --self-test exit=0
+  ✓ 負向:移除 glossed 宣告: exit 1(預期非 0)
+SELF-TEST PASS
+=== audit_numbers  exit=0
+   tried-visual-frontend more 114.9
+   tried-visual-frontend more 114.9
+RESULT: PASS
+--- audit_numbers --self-test exit=0
+  ✓ 負向:拿掉一筆已登記的孤兒: exit 1(預期非 0)
+SELF-TEST PASS
+=== audit_claims  exit=0
+卡數比對掃過 25 檔,豁免 1 檔:docs/review_2026-09-13_opus.md
+facts=92 stages=8 missing_paths=0
+--- audit_claims --self-test exit=0
+  ✓ 負向:source_en 沒翻完,仍含中文: exit 1(預期非 0)
+SELF-TEST PASS
+=== verify_stages  exit=0
+  stage@ 250  600.0 ms → 600ms 探測 20 次:每一次都跑到我們切斷為止,全腦最後放電 599.2–599.9(verification_log §模型不會自己停)
+  stage@ 250  600.0 ms → 600ms 探測 20 次:每一次都跑到我們切斷為止,全腦最後放電 599.2–599.9(verification_log §模型不會自己停)
+RESULT: PASS
+--- verify_stages --self-test exit=0
+負向 PSI 假放電: 擋住 ✓
+SELF-TEST PASS
+=== retraction_lint  exit=0
+內容層豁免(撤回字樣在前後 120 字內):3 處 → tried-critical-point/kid.zh, tried-critical-point/more.zh, tried-critical-point/more.en
+掃過的文件:58 個(docs/*.md|html + README/index/DESIGN/CLAUDE + src/*.ts,css + public 與 dist 的 json/js/html);整份豁免(歸檔審查報告):1 個 → docs/review_2026-09-13_opus.md
+retracted phrases: 14; hits: 0; RESULT: PASS
+--- retraction_lint --self-test exit=0
+負向 docs 塞撤回句: 擋住 1 行 ✓(豁免行放行)
+SELF-TEST PASS
+=== citation_record_lint  exit=0
+paper facts checked; RESULT: PASS
+--- citation_record_lint --self-test exit=0
+負向 鍵在紀錄裡但那行不是引用登記: 擋住 ✓
+SELF-TEST PASS
+=== lang_residue  exit=0
+掃了 74 個畫面(含 34 張卡 × 2 層)
+RESULT: PASS
+--- lang_residue --self-test exit=0
+  ✓ 負向 word.html: ['中文'](預期 ['中文'])
+SELF-TEST PASS
+=== verify_playground  exit=0
+條件 9 格 × 20 次;summary 由 runs 重算比對;種子 1 對出貨情境;可播檔案存在性
+RESULT: PASS
+--- verify_playground --self-test exit=0
+  ✓ 負向:protocol.seeds 與實際次數不符: exit 1(預期非 0)
+SELF-TEST PASS
+完成 2026-09-17T19:48:56+08:00

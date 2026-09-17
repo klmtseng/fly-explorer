@@ -224,7 +224,7 @@ applyStaticLang(storedLang());
           inj: '注入', end: '結局', ours: '我們加的結局', lit: (n: string) => `畫出 ${n} 顆神經細胞(示意)`, dim: (k: string) => `亮度 ×${k}(我們調的,不是模擬)`,
           fSampled: (a: string, k: number, b: string) => `本幀畫出 ${a} 顆(手機抽樣 1/${k},實際放電約 ${b} 顆)`, fLive: (a: string) => `本幀 ${a} 顆神經元在放電`,
           next: '下一步 ', toFree: '去自由探索 ', replay: '重播', play: '播放', fail: '載入失敗' },
-    en: { neurons: ' / 166,691 neurons', sub: (ms: number) => `MaleCNS v1.0 · with 3D coordinates / whole connectome · loaded in ${ms} ms`, sampled: (n: string, k: number) => ` · phone mode: every ${k}th of ${n}`,
+    en: { neurons: ' / 166,691 neurons', sub: (ms: number) => `MaleCNS v1.0 · with 3D coordinates / whole connectome · loaded in ${ms} ms`, sampled: (n: string, k: number) => ` · phone mode: 1 in every ${k} of ${n}`,
           inj: 'injected', end: 'ending', ours: 'our added ending', lit: (n: string) => `${n} nerve cells drawn (illustrative)`, dim: (k: string) => `brightness ×${k} (set by us, not simulated)`,
           fSampled: (a: string, k: number, b: string) => `${a} drawn this frame (phone sampling 1/${k}; about ${b} actually firing)`, fLive: (a: string) => `${a} neurons firing this frame`,
           next: 'Next ', toFree: 'Explore freely ', replay: 'Replay', play: 'Play', fail: 'Failed to load' },
@@ -283,7 +283,7 @@ applyStaticLang(storedLang());
   // 階段時間點**取自實測**,不是猜的。來源:scripts/build_scenario.py 產生的
   // runs/build/escape.csv,各族群首次/末次放電時刻(見 docs/verification_log.md)。
   // 第一段標為注入:模型視覺前端實測傳不過去(LC4 只收到 1.23Hz、LPLC2 為 0)。
-  type Stage = { t: number; zh: string; sub: string; injected?: boolean; src: string; en?: string; sub_en?: string };
+  type Stage = { t: number; zh: string; sub: string; injected?: boolean; src: string; src_en?: string; en?: string; sub_en?: string };
   // 階段標籤來自 content/stages.json(單一來源,受 jargon_lint 檢查),不在程式碼裡硬寫。
   // 直接打包 content/stages.json:先前是手動複製一份到 public/data/,結果改了原檔網站還在讀舊的
   // (結局字幕整段對不上才發現)。單一來源,沒有第二份可以過期。
@@ -394,7 +394,7 @@ applyStaticLang(storedLang());
       document.getElementById('stage')!.innerHTML =
         `<span class="itag">${tx().inj}</span><b class="inj">${stZh(pre)}</b><span class="inj">${stSub(pre)}</span>` +
         `<span class="cnt">${tx().lit(lit.toLocaleString())}</span>` +
-        `<span class="src">${srcText(pre.src, lg())}</span>`;
+        `<span class="src">${srcText(pre.src, lg(), pre.src_en)}</span>`;
       cards.chipsFor(-24); cards.setSpikes(0, 0, 'prelude');
       return;
     }
@@ -416,7 +416,7 @@ applyStaticLang(storedLang());
       document.getElementById('stage')!.innerHTML =
         `<span class="itag">${tx().ours}</span><b class="inj">${stZh(ep)}</b><span class="inj">${stSub(ep)}</span>` +
         `<span class="cnt inj">${tx().dim(decay.toFixed(2))}</span>` +
-        `<span class="src">${srcText(ep.src, lg())}</span>`;
+        `<span class="src">${srcText(ep.src, lg(), ep.src_en)}</span>`;
       cards.chipsFor(250); if (spikes) cards.setSpikes(spikes[spikes.length - 1], (scn.nFrames - 1) * scn.dtMs, 'epilogue');
       return;
     }
@@ -454,7 +454,7 @@ applyStaticLang(storedLang());
       `<span class="cnt">${cloud.stride > 1
           ? tx().fSampled(nActive.toLocaleString(), cloud.stride, (nActive * cloud.stride).toLocaleString())
           : tx().fLive(nActive.toLocaleString())}</span>` +
-      `<span class="src">${srcText(st.src, lg())}</span>`;
+      `<span class="src">${srcText(st.src, lg(), st.src_en)}</span>`;
     cards.chipsFor(st.t);
     if (spikes) cards.setSpikes(spikes[Math.min(frame, spikes.length - 1)], ms, 'live');
   }

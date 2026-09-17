@@ -8,7 +8,8 @@
       "injected": true,
       "src": "scripts/export_hexmap.py;github.com/reiserlab/male-drosophila-visual-system-connectome-code 的 docs/coordinate-systems.md(外部);docs/verification_log.md §六角座標慣例",
       "en": "The eye sees something rushing in",
-      "sub_en": "This part is drawn by us, not computed by the model: the model's visual front end cannot compute looming. Only the small patch of view the object covers is stimulated; the image grows and its edge responds most. The patch sits at the eye's official centre (hex 18,19); which way is straight ahead is still unconfirmed"
+      "sub_en": "This part is drawn by us, not computed by the model: the model's visual front end cannot compute looming. Only the small patch of view the object covers is stimulated; the image grows and its edge responds most. The patch sits at the eye's official centre (hex 18,19); which way is straight ahead is still unconfirmed",
+      "src_en": "scripts/export_hexmap.py; github.com/reiserlab/male-drosophila-visual-system-connectome-code → docs/coordinate-systems.md (external); docs/verification_log.md §hex coordinate convention"
     },
     {
       "t": 0,
@@ -17,7 +18,8 @@
       "injected": true,
       "src": "docs/verification_log.md §視覺路徑 go/no-go;build_scenario.py T_STIM",
       "en": "Something rushes at the fly",
-      "sub_en": "This step is injected by us: the model's visual front end cannot compute looming. The detectors are fed for only 6 ms"
+      "sub_en": "This step is injected by us: the model's visual front end cannot compute looming. The detectors are fed for only 6 ms",
+      "src_en": "docs/verification_log.md §visual pathway go/no-go; build_scenario.py T_STIM"
     },
     {
       "t": 1,
@@ -29,7 +31,8 @@
         "synapse"
       ],
       "en": "The signal is at the synapse, not yet at the giant fiber",
-      "sub_en": "The detectors are firing; the giant fiber receives it only at 3.3 ms. No other nerve cell sits in between: the detectors connect straight to the giant fiber, and the junction where two cells hand over a signal is called a synapse. Crossing it takes 1.8 ms. Watch the voltage meter at top right: the giant fiber's voltage is climbing from −52 towards −45, and it fires only once it crosses that line. A line lit at one end means the signal has left but not yet arrived"
+      "sub_en": "The detectors are firing; the giant fiber receives it only at 3.3 ms. No other nerve cell sits in between: the detectors connect straight to the giant fiber, and the junction where two cells hand over a signal is called a synapse. Crossing it takes 1.8 ms. Watch the voltage meter at top right: the giant fiber's voltage is climbing from −52 towards −45, and it fires only once it crosses that line. A line lit at one end means the signal has left but not yet arrived",
+      "src_en": "engine --trace-out(runs/build/escape.trace.csv); scripts/fly/escape_path.py"
     },
     {
       "t": 3,
@@ -37,7 +40,8 @@
       "sub": "311 顆逼近偵測器裡有 309 顆直接接到同側的巨纖維(本站的連線檔只留權重 2 以上的邊);首次放電 3.3 ms",
       "src": "scripts/build_scenario.py → runs/build/escape.csv",
       "en": "The giant fiber fires",
-      "sub_en": "309 of the 311 looming detectors wire straight into the giant fiber on their own side (this site's edge file keeps links of weight 2 and above); first spike at 3.3 ms"
+      "sub_en": "309 of the 311 looming detectors wire straight into the giant fiber on their own side (this site's edge file keeps links of weight 2 and above); first spike at 3.3 ms",
+      "src_en": "scripts/build_scenario.py → runs/build/escape.csv"
     },
     {
       "t": 8,
@@ -45,7 +49,8 @@
       "sub": "刺激 6 ms 就停,偵測器 12 ms 前全部安靜;一群往下送命令的神經細胞(DNp03、AN19B001 等)接手",
       "src": "scripts/trace_drivers.py;runs/build/escape.csv",
       "en": "Detectors go dark, the command travels down",
-      "sub_en": "The stimulus stops at 6 ms; the detectors are all quiet by 12 ms. A group of descending nerve cells (DNp03, AN19B001 and others) takes over"
+      "sub_en": "The stimulus stops at 6 ms; the detectors are all quiet by 12 ms. A group of descending nerve cells (DNp03, AN19B001 and others) takes over",
+      "src_en": "scripts/trace_drivers.py; runs/build/escape.csv"
     },
     {
       "t": 14,
@@ -53,15 +58,17 @@
       "sub": "管跳躍肌的神經細胞 14.4 ms 放電(走巨纖維直連)、管翅膀下壓肌的 15.7 ms(走 AN19B001)。訊號已穿過那段只有神經線、完全沒有細胞的脖子。從管肌肉的神經細胞到肌肉這一段,我們的資料裡沒有:畫面上的琥珀色線是我們畫的,只有亮起來的時機是真的",
       "src": "runs/build/escape.csv",
       "en": "Jump muscle and wing muscle move",
-      "sub_en": "The nerve cells driving the jump muscle fire at 14.4 ms (direct from the giant fiber); those driving the wing depressor at 15.7 ms (via AN19B001). The signal has crossed the neck, which holds only nerve fibres and no cell bodies. The last stretch, from those nerve cells to the muscle, is not in our data: the amber lines on screen are drawn by us; only their timing is real"
+      "sub_en": "The nerve cells driving the jump muscle fire at 14.4 ms (direct from the giant fiber); those driving the wing depressor at 15.7 ms (via AN19B001). The signal has crossed the neck, which holds only nerve fibres and no cell bodies. The last stretch, from those nerve cells to the muscle, is not in our data: the amber lines on screen are drawn by us; only their timing is real",
+      "src_en": "runs/build/escape.csv"
     },
     {
       "t": 30,
       "zh": "視葉已經安靜,肌肉還在動——而且不會自己停",
-      "sub": "教科書裡的中繼站 PSI 在這個情境裡完全沒放電(被抑制壓住)。管翅膀肌的神經細胞會一直放電:我們跑到 600 ms,整個腦還沒安靜,翅膀肌的神經到 562 ms 還在放。這個模型一旦點燃就沒有機制讓它停,真果蠅不是這樣。模擬只播到 250 ms,後面那段收尾是我們加的,不是模型算的",
+      "sub": "教科書裡的中繼站 PSI 在這個情境裡完全沒放電(被抑制壓住)。管翅膀肌的神經細胞會一直放電:我們跑到 600 ms,整個腦還沒安靜,翅膀肌的神經到 562 毫秒之後還在放(跑 20 次,最後一次放電落在 562 到 599.9 毫秒)。這個模型一旦點燃就沒有機制讓它停,真果蠅不是這樣。模擬只播到 250 ms,後面那段收尾是我們加的,不是模型算的",
       "src": "docs/verification_log.md §模型不會自己停;runs/build/escape.csv",
       "en": "The optic lobe is quiet, the muscles keep going, and it never stops by itself",
-      "sub_en": "The textbook relay PSI never fires in this scenario (held down by inhibition). The nerve cells driving the wing muscle keep firing: we ran to 600 ms and the brain was still not quiet; the wing-muscle nerves were still firing at 562 ms. Once lit, this model has no mechanism to stop, unlike a real fly. Playback stops at 250 ms; the wind-down after that is added by us, not computed"
+      "sub_en": "The textbook relay PSI never fires in this scenario (held down by inhibition). The nerve cells driving the wing muscle keep firing: we ran to 600 ms and the brain was still not quiet; the the wing-muscle nerves were still firing past 562 ms (across 20 runs their last spike lands between 562 and 599.9 ms). Once lit, this model has no mechanism to stop, unlike a real fly. Playback stops at 250 ms; the wind-down after that is added by us, not computed",
+      "src_en": "docs/verification_log.md §the model never stops; runs/build/escape.csv"
     },
     {
       "t": 250,
@@ -70,7 +77,8 @@
       "sub": "模型跑到 600 ms 都還在放電,真的果蠅這時也還在飛。這一段是我們畫的收尾,讓畫面回到靜止:神經細胞的光和翅膀都是我們慢慢關掉的,不是模擬算出來的",
       "src": "docs/verification_log.md §模型不會自己停、§我們加的結局;src/main.ts EPILOGUE",
       "en": "Our added ending: letting it come to rest",
-      "sub_en": "The model was still firing at 600 ms, and a real fly would still be flying. This wind-down is drawn by us to bring the picture back to rest: the glow of the nerve cells and the wings are dimmed by us, not computed by the simulation"
+      "sub_en": "The model was still firing at 600 ms, and a real fly would still be flying. This wind-down is drawn by us to bring the picture back to rest: the glow of the nerve cells and the wings are dimmed by us, not computed by the simulation",
+      "src_en": "docs/verification_log.md §the model never stops, §the ending we added; src/main.ts EPILOGUE"
     }
   ]
 }

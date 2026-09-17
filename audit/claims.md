@@ -47,8 +47,8 @@
 | muscle-link | 26 | 連線起點:真實運動神經元 | measured | scripts/export_edges.py(nodesByStage wing/jump) | 路徑OK |
 | muscle-link | 0 | 資料集裡的肌肉 | measured | annotation superclass 清單(scripts/fly/io_inventory.py) | 路徑OK |
 | escape-speed | 18 ms | 燈熄 → 巨纖維放電 | paper | Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀 | 非路徑(論文/標註) |
-| escape-speed | 25 ms | 燈熄 → 起飛 | paper | 同上 | 非路徑(論文/標註) |
-| escape-speed | 6 ms | 影像達 54° → 起飛(逼近刺激) | paper | 同上 | 非路徑(論文/標註) |
+| escape-speed | 25 ms | 燈熄 → 起飛 | paper | Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀 | 非路徑(論文/標註) |
+| escape-speed | 6 ms | 影像達 54° → 起飛(逼近刺激) | paper | Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀 | 非路徑(論文/標註) |
 | escape-speed | 0.93 ms | 巨纖維→跳躍肌 | paper | Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀 | 非路徑(論文/標註) |
 | escape-speed | 0.1-0.4 s | 人眨一次眼(常識,未引文獻) | todo | 未引文獻 | 非路徑(論文/標註) |
 | escape-is-decision | ~200 ms | 長模式的準備期 | paper | Card & Dickinson, Curr Biol 18(17):1300-1307 (2008),摘要經 Europe PMC 親讀(PMID 18760606) | 非路徑(論文/標註) |
@@ -93,7 +93,7 @@
 | tried-pulse-length | 14.4 / 15.7 ms | 跳躍肌 / 翅膀肌的運動神經元首次放電 | measured | runs/build/escape.csv | 路徑OK |
 | tried-pulse-length | 13.8–16.8 / 11.9–15.7 ms | 跑 20 次的範圍:跳躍肌 / 翅膀肌(出貨那次是 14.4 / 15.7) | measured | public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py | 路徑OK |
 | next-fix-model | 0.93 vs 1.8 ms | 真果蠅 vs 模型:巨纖維→跳躍肌 | paper | Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀 | 非路徑(論文/標註) |
-| next-fix-model | 3 | 尚未做的實驗 | measured | docs/verification_log.md 各節的「侷限」 | 路徑OK |
+| next-fix-model | 4 | 尚未做的實驗 | measured | docs/verification_log.md 各節的「侷限」 | 路徑OK |
 | next-new-stories | 61,210 | 可塑連線(學習實驗的場地) | measured | scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt | 路徑OK |
 | next-new-stories | ppk23/ppk25/IR52b | 這隻腦標註的受器種類(無糖受器) | measured | scripts/fly/receptor_types.py;docs/data_facts.md §最大未知(receptorType 欄位) | 路徑OK |
 | stage@-24ms | (無數字) | 眼睛看到有東西撲過來 | injected | scripts/export_hexmap.py;github.com/reiserlab/male-drosophila-visual-system-connectome-code 的 docs/coordinate-systems.md(外部);docs/verification_log.md §六角座標慣例 | 路徑OK |
@@ -102,7 +102,7 @@
 | stage@3ms | 311 顆; 309 顆; 3.3 ms | 巨纖維放電了 | measured | scripts/build_scenario.py → runs/build/escape.csv | 路徑OK |
 | stage@8ms | 6 ms; 12 ms | 偵測器開始暗下去,命令往下走 | measured | scripts/trace_drivers.py;runs/build/escape.csv | 路徑OK |
 | stage@14ms | 14.4 ms; 15.7 ms | 跳躍肌與翅膀肌動了 | measured | runs/build/escape.csv | 路徑OK |
-| stage@30ms | 600 ms; 562 ms; 250 ms | 視葉已經安靜,肌肉還在動——而且不會自己停 | measured | docs/verification_log.md §模型不會自己停;runs/build/escape.csv | 路徑OK |
+| stage@30ms | 600 ms; 250 ms | 視葉已經安靜,肌肉還在動——而且不會自己停 | measured | docs/verification_log.md §模型不會自己停;runs/build/escape.csv | 路徑OK |
 | stage@250ms | 600 ms | 我們加的結局:讓牠停下來 | injected | docs/verification_log.md §模型不會自己停、§我們加的結局;src/main.ts EPILOGUE | 路徑OK |
 
 路徑缺失:0

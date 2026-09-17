@@ -61,11 +61,17 @@ python3 scripts/audit_claims.py         # 事實欄的來源路徑必須存在,�
 python3 scripts/verify_stages.py        # 字幕裡的毫秒數必須等於出貨情境的實際放電時刻(中英)
 python3 scripts/retraction_lint.py      # 已撤回的說法不得再出現(卡片、字幕,以及 docs/ 與 README 這些讀者讀得到的檔)
 python3 scripts/citation_record_lint.py # ◆ 的每條來源,作者字串必須出現在查證紀錄裡(它驗登記,不驗你真的讀過)
-python3 scripts/lang_residue.py         # 英文版六個畫面不得殘留中文(含實驗台;需 vite build + Chrome)
+python3 scripts/lang_residue.py         # 英文版 74 個畫面不得殘留中文(六個主畫面 + 34 張卡 × 2 層;需 vite build + Chrome)
 python3 scripts/verify_playground.py    # 實驗台:summary 必須由 runs 重算得出,種子 1 必須等於出貨情境
 ```
 
-每支都有 `--self-test` 負向案例,證明它擋得住錯的東西(2026-09-16 實跑七支 exit 0)。
+每支都有 `--self-test`,跑的是**指名的那幾個**負向案例:例如「來源指向不存在的檔」「手改實驗台的中位數」
+「英文頁殘留中文」。它證明的是**這幾種錯會被擋下**,不是「錯的東西都擋得住」。
+
+2026-09-17 我請一個沒參與建造的模型專門攻擊這八支閘門,它做了 25 個明顯錯誤的稻草人,八支全部放行。
+那一輪的結構性發現是:閘門守的是 `content/` 與部分 `docs/`,而 `src/`、`public/`、`dist/` 沒人守——
+撤回過的說法只要搬進程式碼字串或打包產物就能活下來。已經把撤回掃描與卡數比對擴到那些目錄,
+並把英文殘留掃描從 6 個畫面擴到 74 個;`audit/va_20260918.md` 裡有完整清單與還沒補的洞。
 
 閘門管不到的事,寫在這裡比較誠實:它們驗的是「登記有沒有做、數字對不對得上、禁用詞有沒有出現」,
 不驗「這個說法在科學上對不對」,也不驗英文翻譯品質。那兩件事目前靠人審,見 `audit/`。

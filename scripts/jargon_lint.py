@@ -47,10 +47,28 @@ D = json.loads(CARDS.read_text(encoding="utf-8"))
 # 階段標籤(content/stages.json)也是小朋友會直接看到的文案,一併納入。
 # 審查者抓到 STAGES 原本硬寫在 main.ts 裡含 BAN 級詞「軸突」而 lint 掃不到。
 # 2026-09-15 冷審:stages 沒有 en 欄時英文側掃的是空字串=恆真;現在明講「未檢查」而不假裝 PASS。
+# 2026-09-17 閘門稽核 S1:卡片標題與問答題目是小朋友看得到的散文,原本完全不在掃描面內
+# (稻草人把兩個 BAN 詞放進標題,閘門報「BAN 0 處」)。事實欄的標籤不掃:那是資料標籤,
+# 本來就是術語,套「首次出現要當場解釋」會是錯的規則。
+_extra = []
+for c in json.loads(CARDS.read_text(encoding="utf-8"))["cards"]:
+    parts = {"zh": [c["title"]["zh"]], "en": [c["title"]["en"]]}
+    q = c.get("question") or {}
+    for lg in ("zh", "en"):
+        if q.get(lg): parts[lg].append(q[lg])
+        if isinstance(q.get("options"), dict): parts[lg] += list(q["options"].get(lg) or [])
+    _extra.append({"id": f"{c['id']}@標題與題目", "module": c["module"],
+                   "kid": {"zh": " ".join(parts["zh"]), "en": " ".join(parts["en"])},
+                   "more": {"zh": "", "en": ""}, "glossed": c.get("glossed", [])})
+
 for st in json.loads(STAGES.read_text(encoding="utf-8"))["stages"]:
-    D["cards"].append({"id": f"stage@{st['t']}ms", "module": "B", "kid": {"zh": st["zh"] + " " + st["sub"], "en": st.get("en", "") + " " + st.get("sub_en", "")},
+    D["cards"] += _extra if not D.get("_extra_done") else []
+D["_extra_done"] = True
+D["cards"].append({"id": f"stage@{st['t']}ms", "module": "B", "kid": {"zh": st["zh"] + " " + st["sub"], "en": st.get("en", "") + " " + st.get("sub_en", "")},
                        "more": {"zh": "", "en": ""}, "glossed": st.get("glossed", [])})
 _missing_en = [st["t"] for st in json.loads(STAGES.read_text(encoding="utf-8"))["stages"] if not st.get("en")]
+_fatal = []
+if _missing_en: _fatal.append(f"字幕 en 欄缺 {len(_missing_en)} 段,英文側未檢查")
 if _missing_en: print(f"⚠ 字幕 en 欄缺({len(_missing_en)} 段):英文側本次未檢查,不算 PASS(M2e 補英文後自動納入)")
 
 BAN = {
@@ -116,4 +134,6 @@ if len(reused) > 6: print(f"   … 另 {len(reused)-6} 處")
 adv = sum(1 for c in D["cards"] for lang in ("zh","en")
           for w in BAN[lang] if w.lower() in c["more"][lang].lower())
 print(f"\n【對照】同樣這些術語在「想知道更多」層出現 {adv} 處 —— 那一層本來就該有,不算錯。")
-sys.exit(1 if (bans or needs) else 0)
+for m in _fatal: print(f"❌ {m}")
+# 2026-09-17 閘門稽核 S2:這支原本印「不算 PASS」然後 exit 0,警告與判決脫鉤。
+sys.exit(1 if (bans or needs or _fatal) else 0)

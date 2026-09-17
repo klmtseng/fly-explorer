@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500&display=swap">
+<style>
+ html,body{margin:0;background:#07090a;overflow:hidden;
+   font-family:"Noto Sans TC",system-ui,sans-serif;color:#dfe6e0}
+ .stage{position:absolute;inset:0;background-size:cover;background-position:52% 40%;background-repeat:no-repeat;transform:scale(1.18);transform-origin:52% 40%}
+ .scrim{position:absolute;left:0;right:0;bottom:0;height:46%;
+   background:linear-gradient(transparent,rgba(5,7,8,.86) 58%)}
+ .txt{position:absolute;left:64px;bottom:58px;right:64px}
+ h1{font:800 46px/1.15 "Bricolage Grotesque",sans-serif;margin:0 0 10px;letter-spacing:-.015em}
+ h1.zh{font-family:"Noto Sans TC",sans-serif;font-weight:500;font-size:42px}
+ p{margin:0;font:400 20px/1.5 "Noto Sans TC",sans-serif;color:#b9c2ba;max-width:62ch}
+ .url{position:absolute;right:64px;bottom:60px;font:500 18px/1 "IBM Plex Mono",monospace;color:#8fe3a8}
+ .key{position:absolute;left:64px;top:52px;display:flex;gap:26px;
+   font:400 15px/1 "IBM Plex Mono",monospace;color:#9aa39c}
+ .key span{display:flex;align-items:center;gap:8px}
+ .key i{width:11px;height:11px;border-radius:50%;display:block}
+ .key b{font-weight:400}
+ .key.zh{font-family:"Noto Sans TC",sans-serif;font-size:14px}
+</style></head><body>
+<div class="stage" id="st"></div><div class="scrim"></div>
+<div class="key" id="key">
+  <span><i style="background:#8fe3a8"></i><b data-zh="發光=真資料">real data</b></span>
+  <span><i style="background:#C8629E"></i><b data-zh="洋紅=我們注入的">injected by us</b></span>
+  <span><i style="background:#9AA8C4"></i><b data-zh="線稿=我們畫的">body we drew</b></span>
+  <span><i style="background:#E8A34A"></i><b data-zh="琥珀=神經到肌肉">nerve to muscle</b></span>
+</div>
+<div class="txt"><h1 id="h"></h1><p id="s"></p></div>
+<div class="url">fly-brain-explorer.vercel.app</div>
+<script>
+ var q=new URLSearchParams(location.search);
+ document.getElementById('st').style.backgroundImage='url("'+q.get('img')+'")';
+ var h=document.getElementById('h'); h.textContent=q.get('t')||'';
+ if(q.get('zh')) h.className='zh';
+ document.getElementById('s').textContent=q.get('s')||'';
+ if(q.get('nokey')) document.getElementById('key').style.display='none';
+ if(q.get('zh')){ var k=document.getElementById('key'); k.className='key zh';
+   k.querySelectorAll('b[data-zh]').forEach(function(b){ b.textContent=b.dataset.zh; }); }
+</script></body></html>

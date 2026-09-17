@@ -519,3 +519,24 @@ escape.bin 一個 byte 都沒改,改的是顯示層。原 30 ms 字幕的「播�
 結論沒有改變而且變強:每一次都撐到 600 ms 被切斷為止,沒有任何一次自己停。
 原本引用的 562 是翅膀肌那個範圍的**下端**,不是代表值。卡片已改成範圍並加一條「0 / 20 次自己停」。
 
+
+## Shiu et al. 2024 的模型參數(2026-09-17 親讀登記)
+
+閘門 `citation_record_lint.py` 收緊後發現:卡片有六條 ◆ 引這篇,而本檔從來沒有一筆**引用登記**
+——只有 :169 順口提過他們的作法。補登如下。
+
+- **Shiu PK, Sterne GR, Spiller N, Franconville R, et al. "A Drosophila computational brain model
+  reveals sensorimotor processing." _Nature_ 634:210-219 (2024).**
+  DOI 10.1038/s41586-024-07763-9;PMID 39358519;PMCID PMC11446845。
+  取得方式:PubMed E-utilities esummary 取 canonical 識別碼(不猜 ID),
+  全文由 Europe PMC `PMC11446845/fullTextXML` 開放取得,**方法段原文親讀**。
+- 逐字原文(Methods,微分方程之後的參數列):
+  > `V resting = −52 mV (resting potential from ref. 18); V reset = −52 mV (reset potential after spike);
+  > V threshold = −45 mV (threshold for spiking); R mbr = 10 Kohm cm2; T refractory = 2.2 ms (refractory period);
+  > C mbr = 2 µF cm−2; τ = 5 ms (synapse decay timescale); T dly = 1.8 ms (time delay from spike to change in
+  > membrane potential); W syn = 0.275 mV (free parameter; synaptic weight, that is, how much each synapse
+  > influences downstream membrane potential)`
+- 對應到卡片的四個數字:0.275 mV(唯一自由參數)、1.8 ms(突觸延遲)、−52 → −45 mV(靜息→閾值)、
+  2.2 ms(不應期)——單位與角色均與原文一致。
+- 注意:原文把其中多數參數標為引自它自己的 ref. 18,所以「這些值的**原始出處**」對本專案而言是二手;
+  我們引的是**這篇所用的模型參數**,這一點成立,卡片也是這樣寫的。

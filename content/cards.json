@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "note": "內容清單。每張卡的每個事實都必須帶 provenance 與 source;source 要指得出產生它的腳本或論文。 標記定義(2026-09-15 審計後):● 我們的腳本從資料算出;◆ 我們親讀了 source 欄所列的那份文件(若該文件本身是轉引,source 欄寫明「引 X」);○ 二手轉引、示意、或常識未引文獻。 value 含中文單位時加 value_en(英文版顯示用;閘門仍讀 value)。",
+  "note": "內容清單。每張卡的每個事實都必須帶 provenance 與 source;source 要指得出產生它的腳本或論文。 標記定義(2026-09-15 審計後):● 我們的腳本從資料算出;◆ 我們親讀了 source 欄所列的那份文件(若該文件本身是轉引,source 欄寫明「引 X」);○ 二手轉引、示意、或常識未引文獻。 value 含中文單位時加 value_en(英文版顯示用;閘門仍讀 value)。 ● 的可重現程度分兩種:算連線結構那些是純 Python,只要自行下載 MaleCNS 原始資料(CC-BY 4.0)就能重跑;算模擬結果那些,統計可以用本倉出貨的每次執行原始輸出重算,但重跑模擬本身需要不公開研究倉裡的引擎。",
   "provenance": {
     "measured": {
       "mark": "●",
@@ -55,7 +55,7 @@
         "en": "A fly's nervous system"
       },
       "kid": {
-        "zh": "果蠅比一粒米還小,可是牠腦裡有大約十六萬五千個神經細胞。這些細胞佔了牠身體長度的三分之一。",
+        "zh": "果蠅比一粒米還小,可是牠的神經系統裡有大約十六萬五千個神經細胞。這些細胞佔了牠身體長度的三分之一。",
         "en": "A fruit fly is smaller than a grain of rice. Still, it packs about 165,000 nerve cells — and they run through about a third of its body."
       },
       "more": {
@@ -79,7 +79,8 @@
             "en": "drawn in the point cloud (has a soma position)"
           },
           "provenance": "measured",
-          "source": "scripts/export_soma.py;CLAUDE.md §我們有、別人沒有的東西"
+          "source": "scripts/export_soma.py;CLAUDE.md §我們有、別人沒有的東西",
+          "source_en": "scripts/export_soma.py; CLAUDE.md §what we have that others do not"
         },
         {
           "value": "995 µm",
@@ -266,8 +267,8 @@
         "en": "815 wires to the muscles"
       },
       "question": {
-        "zh": "果蠅控制身體的神經元,你猜哪個部位最多?",
-        "en": "Which body part gets the most motor neurons?",
+        "zh": "果蠅控制身體的神經細胞,你猜哪個部位最多?",
+        "en": "Which body part gets the most motor nerve cells?",
         "options": {
           "zh": [
             "翅膀",
@@ -336,7 +337,8 @@
             "en": "takeoff wingbeat"
           },
           "provenance": "todo",
-          "source": "arXiv:1504.04484(親讀)——但該值是它引用 Chen & Sun 的量測,屬二手轉引;且該文是數值模擬研究,169 Hz 是它的輸入參數,不是本文的觀測"
+          "source": "arXiv:1504.04484(親讀)——但該值是它引用 Chen & Sun 的量測,屬二手轉引;且該文是數值模擬研究,169 Hz 是它的輸入參數,不是本文的觀測",
+          "source_en": "arXiv:1504.04484 (read first-hand) but the value is cited from Chen & Sun, so it is secondhand here; that paper is a numerical simulation and 169 Hz is one of its inputs, not something it measured"
         },
         {
           "value": "134°",
@@ -363,7 +365,8 @@
             "en": "stroke-plane tilt we drew"
           },
           "provenance": "todo",
-          "source": "src/shell.ts STROKE_TILT(示意,無出處)"
+          "source": "src/shell.ts STROKE_TILT(示意,無出處)",
+          "source_en": "src/shell.ts STROKE_TILT (illustrative, no source)"
         }
       ]
     },
@@ -401,7 +404,8 @@
             "en": "columns in total (892 + 879)"
           },
           "provenance": "measured",
-          "source": "scripts/export_hexmap.py(兩眼相加)"
+          "source": "scripts/export_hexmap.py(兩眼相加)",
+          "source_en": "scripts/export_hexmap.py(both eyes summed)"
         },
         {
           "value": "27",
@@ -419,7 +423,8 @@
             "en": "columns with exactly one of each of 12 types"
           },
           "provenance": "measured",
-          "source": "audit/_hex_per_column.txt(2026-09-15 逐柱重數,腳本內嵌於該檔)"
+          "source": "audit/_hex_per_column.txt(2026-09-15 逐柱重數,腳本內嵌於該檔)",
+          "source_en": "audit/_hex_per_column.txt(2026-09-15 recounted per column, script embedded in that file)"
         }
       ]
     },
@@ -429,8 +434,8 @@
       "anchor": "intro",
       "trigger": "step",
       "title": {
-        "zh": "神經元只會說「有」跟「沒有」",
-        "en": "Neurons only say yes or no"
+        "zh": "神經細胞只會說「有」跟「沒有」",
+        "en": "Nerve cells only say yes or no"
       },
       "kid": {
         "zh": "神經細胞之間傳的每個訊號都一模一樣大,所以沒辦法用大小表達強弱。牠們改用「一秒發幾次」來表達——發得越密就是越強烈。",
@@ -448,7 +453,8 @@
             "en": "MN9 rate (model value, relative index)"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md §對既有結論的影響 第 2 點(原始 spike log taskA_real.csv 66 MB 留在研究倉,未隨網站公開)"
+          "source": "docs/verification_log.md §對既有結論的影響 第 2 點(原始 spike log taskA_real.csv 66 MB 留在研究倉,未隨網站公開)",
+          "source_en": "docs/verification_log.md §impact on earlier conclusions, point 2 (the raw 66 MB spike log taskA_real.csv stays in the private research repo)"
         },
         {
           "value": "2.2 ms",
@@ -490,7 +496,8 @@
             "en": "display decay constant we chose (illustrative, not a measured fluorescence constant)"
           },
           "provenance": "todo",
-          "source": "scripts/render_glow_test.py(顯示參數)"
+          "source": "scripts/render_glow_test.py(顯示參數)",
+          "source_en": "scripts/render_glow_test.py (display parameters)"
         }
       ]
     },
@@ -504,8 +511,8 @@
         "en": "How we know the wiring matters"
       },
       "question": {
-        "zh": "如果把腦裡的連線全部打亂,但每顆神經元連的「數量」都不變,訊號還傳得到嗎?",
-        "en": "If we scramble who connects to whom — but keep every neuron's number of connections identical — does the signal still get through?",
+        "zh": "如果把腦裡的連線全部打亂,但每顆神經細胞連的「數量」都不變,訊號還傳得到嗎?",
+        "en": "If we scramble who connects to whom — but keep every nerve cell's number of connections identical — does the signal still get through?",
         "options": {
           "zh": [
             "還是傳得到",
@@ -521,8 +528,8 @@
         "answer": 1
       },
       "kid": {
-        "zh": "完全傳不到。我們試了三次,每次都把連線打亂但保持每顆細胞連的數目一樣——訊號一次都沒有到達終點。所以重要的不是「連幾條」,是「連到誰」。",
-        "en": "Not at all. We scrambled the wiring three times, always keeping each cell's number of connections the same — and the signal never once arrived. What matters isn't how many wires, it's which wires."
+        "zh": "完全傳不到。我們試了三次,每次都把連線打亂但保持每顆細胞連的數目一樣——三個打亂版本的訊號都沒有到達終點(只跑了三個版本,還不足以說「從不」)。所以重要的不是「連幾條」,是「連到誰」。",
+        "en": "Not at all. We scrambled the wiring three times, always keeping each cell's number of connections the same — and the signal did not arrive in any of the three shuffled versions (three is not enough to say \"never\"). What matters isn't how many wires, it's which wires."
       },
       "more": {
         "zh": "保度數虛無模型:反覆交換兩條邊的終點,使每顆神經元的出度、入度與權重分布逐一完全不變。真實連接組下 MN9 是 207.00 赫茲,三個打亂版本都是 0.00。網路並沒有死(仍有 24-29 萬次放電),只是訊號再也到不了該到的地方。",
@@ -574,7 +581,8 @@
             "en": "model spikes with no input"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md(模型沒有自發活動)"
+          "source": "docs/verification_log.md(模型沒有自發活動)",
+          "source_en": "docs/verification_log.md(the model has no spontaneous activity)"
         },
         {
           "value": "—",
@@ -583,7 +591,8 @@
             "en": "real fly brains show ongoing activity (common knowledge, no citation)"
           },
           "provenance": "todo",
-          "source": "未引文獻"
+          "source": "未引文獻",
+          "source_en": "no citation"
         }
       ]
     },
@@ -613,7 +622,8 @@
             "en": "connection strengths updated during a run"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md §模型沒有學習機制(逐檔搜尋引擎原始碼,無任何寫回權重的程式碼)"
+          "source": "docs/verification_log.md §模型沒有學習機制(逐檔搜尋引擎原始碼,無任何寫回權重的程式碼)",
+          "source_en": "docs/verification_log.md §the model has no learning mechanism (whole engine source searched; no line writes back to the weight array)"
         },
         {
           "value": "61,210",
@@ -623,7 +633,8 @@
             "en": "connections that carry learning in the data (KC to MBON)"
           },
           "provenance": "measured",
-          "source": "scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt"
+          "source": "scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt",
+          "source_en": "scripts/fly/mb_circuit_stats.py; output audit/_mb_stats.txt"
         },
         {
           "value": "665",
@@ -633,7 +644,8 @@
             "en": "lines of engine source searched, headers included"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md §模型沒有學習機制"
+          "source": "docs/verification_log.md §模型沒有學習機制",
+          "source_en": "docs/verification_log.md §the model has no learning mechanism"
         }
       ]
     },
@@ -663,7 +675,8 @@
           },
           "provenance": "measured",
           "source": "public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py",
-          "value_en": "599.2–599.9 ms"
+          "value_en": "599.2–599.9 ms",
+          "source_en": "public/data/playground.json probe_600 (20 runs of 600 ms); scripts/build_playground.py"
         },
         {
           "value": "562.1–599.9 ms",
@@ -673,7 +686,8 @@
           },
           "provenance": "measured",
           "source": "public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py",
-          "value_en": "562.1–599.9 ms"
+          "value_en": "562.1–599.9 ms",
+          "source_en": "public/data/playground.json probe_600 (20 runs of 600 ms); scripts/build_playground.py"
         },
         {
           "value": "0 / 20",
@@ -683,7 +697,8 @@
             "en": "of 20 runs to 600 ms, how many stopped on their own"
           },
           "provenance": "measured",
-          "source": "public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py"
+          "source": "public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py",
+          "source_en": "public/data/playground.json probe_600 (20 runs of 600 ms); scripts/build_playground.py"
         }
       ]
     },
@@ -697,8 +712,8 @@
         "en": "311 detectors, two wires"
       },
       "question": {
-        "zh": "果蠅整個視野裡負責偵測「有東西撲過來」的神經元,最後會匯集到幾顆神經元身上?",
-        "en": "All the neurons watching for something rushing at the fly — how many cells do they funnel into?",
+        "zh": "果蠅整個視野裡負責偵測「有東西撲過來」的神經細胞,最後會匯集到幾顆神經細胞身上?",
+        "en": "All the nerve cells watching for something rushing at the fly — how many cells do they funnel into?",
         "options": {
           "zh": [
             "幾百顆",
@@ -730,7 +745,8 @@
           },
           "provenance": "measured",
           "source": "public/data/escape_edges.json(出貨連線檔)重算:LC4 126/126 貢獻 6,362 個突觸、LPLC2 183/185 貢獻 4,860;無任一顆同時連兩顆巨纖維;scripts/fly/escape_path.py",
-          "value_en": "309 / 311 → 2"
+          "value_en": "309 / 311 → 2",
+          "source_en": "public/data/escape_edges.json (shipped edge file) recomputed: LC4 126/126 contributing 6,362 synapses; LPLC2 183/185 contributing 4,860; none connects to both giant fibers; scripts/fly/escape_path.py"
         },
         {
           "value": "LC4=速度, LPLC2=大小",
@@ -791,7 +807,8 @@
             "en": "wing MN first spike in sim (via AN19B001)"
           },
           "provenance": "measured",
-          "source": "runs/build/escape.csv;docs/verification_log.md §DLMn 首波"
+          "source": "runs/build/escape.csv;docs/verification_log.md §DLMn 首波",
+          "source_en": "runs/build/escape.csv; docs/verification_log.md §DLMn first wave"
         },
         {
           "value": "0 次",
@@ -811,7 +828,8 @@
             "en": "range across 20 runs for the wing motor neuron's first spike (the shipped run was 15.7)"
           },
           "provenance": "measured",
-          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py"
+          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py",
+          "source_en": "public/data/playground.json conditions[both](same stimulus set, 20 random seeds); scripts/build_playground.py"
         }
       ]
     },
@@ -849,7 +867,8 @@
             "en": "muscles in the dataset"
           },
           "provenance": "measured",
-          "source": "annotation superclass 清單(scripts/fly/io_inventory.py)"
+          "source": "annotation superclass 清單(scripts/fly/io_inventory.py)",
+          "source_en": "annotation superclass list(scripts/fly/io_inventory.py)"
         }
       ]
     },
@@ -863,8 +882,8 @@
         "en": "Lights out: airborne in 25 milliseconds"
       },
       "kid": {
-        "zh": "實驗裡燈突然熄掉,果蠅腦裡的巨纖維 18 毫秒後就放電(一毫秒是千分之一秒),25 毫秒後整隻飛起來——差不多是眨一次眼的十分之一。如果是有東西撲過來,牠會等影子大到某個程度才跳,從那一刻算起只要大約 6 毫秒。你眨一次眼大概要零點一到零點四秒,牠在那之前早就飛走了。",
-        "en": "When the lights suddenly go out, the giant fiber in the fly's brain fires 18 milliseconds later (a millisecond is a thousandth of a second) and the whole fly is airborne at 25 ms — about a tenth of a blink. If something looms toward it, the fly waits until the shadow reaches a certain size and then jumps within about 6 ms of that moment. A blink takes you roughly a tenth to four-tenths of a second; the fly is long gone before that."
+        "zh": "實驗裡燈突然熄掉,果蠅腦裡的巨纖維 18 毫秒後就放電(一毫秒是千分之一秒),25 毫秒後整隻飛起來——差不多是眨一次眼的十分之一。如果是有東西撲過來,牠會等影子大到某個程度才跳,從那一刻算起通常在十幾毫秒以內(平均 6 毫秒,但每次差很多)。你眨一次眼大概要零點一到零點四秒,牠在那之前早就飛走了。",
+        "en": "When the lights suddenly go out, the giant fiber in the fly's brain fires 18 milliseconds later (a millisecond is a thousandth of a second) and the whole fly is airborne at 25 ms — about a tenth of a blink. If something looms toward it, the fly waits until the shadow reaches a certain size and then jumps withusually within about ten to twenty milliseconds (the average is 6 ms, but it varies a lot from fly to fly) of that moment. A blink takes you roughly a tenth to four-tenths of a second; the fly is long gone before that."
       },
       "more": {
         "zh": "Fotowat 等人 2009 的量測:燈熄後巨纖維單一放電平均 18 ms(SD 1.5),起飛平均 25 ms(SD 2);逼近刺激下,起飛發生在影像角度達到 54°(SD 5°)之後 6 ms(SD 11)。果蠅在我們完成一個單突觸反射的時間裡,跑完了光轉換、1,771 根柱子的平行運算、運動特徵抽取、決策與起飛。兩個祕訣:體型(訊號要走的距離短),以及最後兩跳用電突觸(間隙連接)直接導電,跳過化學突觸的延遲。註:與人類反射的比較沒有引用具體數字,因為量的終點不同(起飛 vs 肌電訊號),只能當數量級對照。",
@@ -878,7 +897,8 @@
             "en": "lights-off → giant fiber spike"
           },
           "provenance": "paper",
-          "source": "Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀"
+          "source": "Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀",
+          "source_en": "Fotowat et al. J Neurophysiol 102(2):875-885 (2009), PMC3817277 full text read first-hand"
         },
         {
           "value": "25 ms",
@@ -887,7 +907,8 @@
             "en": "lights-off → takeoff"
           },
           "provenance": "paper",
-          "source": "同上"
+          "source": "Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀",
+          "source_en": "Fotowat et al. J Neurophysiol 102(2):875-885 (2009), PMC3817277 full text read first-hand"
         },
         {
           "value": "6 ms",
@@ -896,7 +917,8 @@
             "en": "image reaches 54° → takeoff (looming)"
           },
           "provenance": "paper",
-          "source": "同上"
+          "source": "Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀",
+          "source_en": "Fotowat et al. J Neurophysiol 102(2):875-885 (2009), PMC3817277 full text read first-hand"
         },
         {
           "value": "0.93 ms",
@@ -905,7 +927,8 @@
             "en": "giant fiber → jump muscle"
           },
           "provenance": "paper",
-          "source": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀"
+          "source": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀",
+          "source_en": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019, bioRxiv full text read first-hand"
         },
         {
           "value": "0.1-0.4 s",
@@ -914,7 +937,8 @@
             "en": "one human blink (common knowledge, no citation)"
           },
           "provenance": "todo",
-          "source": "未引文獻"
+          "source": "未引文獻",
+          "source_en": "no citation"
         }
       ],
       "glossed": [
@@ -947,7 +971,8 @@
             "en": "long-mode preparation"
           },
           "provenance": "paper",
-          "source": "Card & Dickinson, Curr Biol 18(17):1300-1307 (2008),摘要經 Europe PMC 親讀(PMID 18760606)"
+          "source": "Card & Dickinson, Curr Biol 18(17):1300-1307 (2008),摘要經 Europe PMC 親讀(PMID 18760606)",
+          "source_en": "Card & Dickinson, Curr Biol 18(17):1300-1307 (2008), abstract read first-hand via Europe PMC (PMID 18760606)"
         },
         {
           "value": "兩種模式",
@@ -957,7 +982,8 @@
           },
           "provenance": "paper",
           "source": "von Reyn et al. Nat Neurosci 17:962-970 (2014),摘要經 Europe PMC 親讀(PMID 24908103)",
-          "value_en": "two modes"
+          "value_en": "two modes",
+          "source_en": "von Reyn et al. Nat Neurosci 17:962-970 (2014), abstract read first-hand via Europe PMC (PMID 24908103)"
         }
       ]
     },
@@ -986,7 +1012,8 @@
             "en": "real fly: GF → jump muscle (incl. 0.35 ms NMJ)"
           },
           "provenance": "paper",
-          "source": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀"
+          "source": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀",
+          "source_en": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019, bioRxiv full text read first-hand"
         },
         {
           "value": "1.8 ms",
@@ -1004,7 +1031,8 @@
             "en": "gap junction protein"
           },
           "provenance": "paper",
-          "source": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀"
+          "source": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀",
+          "source_en": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019, bioRxiv full text read first-hand"
         }
       ]
     },
@@ -1033,7 +1061,8 @@
             "en": "plastic connections (KC→MBON; 463,640 synapses)"
           },
           "provenance": "measured",
-          "source": "scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt(2026-09-15 重跑)"
+          "source": "scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt(2026-09-15 重跑)",
+          "source_en": "scripts/fly/mb_circuit_stats.py; output audit/_mb_stats.txt (re-run 2026-09-15)"
         },
         {
           "value": "0.24%",
@@ -1085,7 +1114,8 @@
           },
           "provenance": "paper",
           "source": "Azevedo et al. J Comp Neurol 513:532-541 (2009),摘要經 Europe PMC 親讀",
-          "value_en": "86.1 ± 8.1 billion"
+          "value_en": "86.1 ± 8.1 billion",
+          "source_en": "Azevedo et al. J Comp Neurol 513:532-541 (2009), abstract read first-hand via Europe PMC"
         }
       ]
     },
@@ -1114,7 +1144,8 @@
             "en": "Morgan's fly genetics paper"
           },
           "provenance": "todo",
-          "source": "Morgan T.H. Science 32:120-122 (1910);引文經 FlyBase FBrf0000547 親讀核對,論文原文未親讀"
+          "source": "Morgan T.H. Science 32:120-122 (1910);引文經 FlyBase FBrf0000547 親讀核對,論文原文未親讀",
+          "source_en": "Morgan T.H. Science 32:120-122 (1910); quotation checked against FlyBase FBrf0000547; the original paper was not read first-hand"
         },
         {
           "value": "7-9 天",
@@ -1124,7 +1155,8 @@
           },
           "provenance": "paper",
           "source": "Bloomington Drosophila Stock Center fly-culture 頁(親讀:7 天 29°C / 9 天 25°C)",
-          "value_en": "7–9 days"
+          "value_en": "7–9 days",
+          "source_en": "Bloomington Drosophila Stock Center fly-culture page (read first-hand: 7 days at 29°C, 9 days at 25°C)"
         },
         {
           "value": "1993",
@@ -1142,7 +1174,8 @@
             "en": "human disease genes with a fly homologue (714/929)"
           },
           "provenance": "paper",
-          "source": "Reiter et al. Genome Res 11:1114-1125 (2001),摘要親讀"
+          "source": "Reiter et al. Genome Res 11:1114-1125 (2001),摘要親讀",
+          "source_en": "Reiter et al. Genome Res 11:1114-1125 (2001), abstract read first-hand"
         }
       ]
     },
@@ -1172,7 +1205,8 @@
           },
           "provenance": "todo",
           "source": "未引文獻",
-          "value_en": "about 1 year"
+          "value_en": "about 1 year",
+          "source_en": "no citation"
         }
       ]
     },
@@ -1227,7 +1261,8 @@
             "en": "macaque visual cortex (surface area)"
           },
           "provenance": "paper",
-          "source": "Van Essen, in The Visual Neurosciences (2003),PDF 親讀;講獼猴非人類"
+          "source": "Van Essen, in The Visual Neurosciences (2003),PDF 親讀;講獼猴非人類",
+          "source_en": "Van Essen, in The Visual Neurosciences (2003), PDF read first-hand; about macaques, not humans"
         },
         {
           "value": "2.2%",
@@ -1236,7 +1271,8 @@
             "en": "human V1 share of cortex (area)"
           },
           "provenance": "paper",
-          "source": "Van Essen, in The Visual Neurosciences (2003),PDF 親讀,人類章節(V1 = 21 cm², 2.2%)"
+          "source": "Van Essen, in The Visual Neurosciences (2003),PDF 親讀,人類章節(V1 = 21 cm², 2.2%)",
+          "source_en": "Van Essen, in The Visual Neurosciences (2003), PDF read first-hand, human chapter (V1 = 21 cm², 2.2%)"
         },
         {
           "value": "861 ± 81 億",
@@ -1246,7 +1282,8 @@
           },
           "provenance": "paper",
           "source": "Azevedo et al. J Comp Neurol 513:532-541 (2009),摘要經 Europe PMC 親讀",
-          "value_en": "86.1 ± 8.1 billion"
+          "value_en": "86.1 ± 8.1 billion",
+          "source_en": "Azevedo et al. J Comp Neurol 513:532-541 (2009), abstract read first-hand via Europe PMC"
         }
       ]
     },
@@ -1304,7 +1341,8 @@
             "en": "worm neurons (first complete connectome, 1986)"
           },
           "provenance": "todo",
-          "source": "White et al. Phil Trans R Soc B (1986);原頁被擋,數字為二手轉引"
+          "source": "White et al. Phil Trans R Soc B (1986);原頁被擋,數字為二手轉引",
+          "source_en": "White et al. Phil Trans R Soc B (1986); original page blocked, figure is secondhand"
         },
         {
           "value": "3,016 / 548,000",
@@ -1314,7 +1352,8 @@
             "en": "fly larva connectome neurons / synapses"
           },
           "provenance": "paper",
-          "source": "Winding et al. Science 379(6636):eadd9330 (2023);PMC7614541 摘要親讀,原句「comprising 3016 neurons and 548,000 synapses」"
+          "source": "Winding et al. Science 379(6636):eadd9330 (2023);PMC7614541 摘要親讀,原句「comprising 3016 neurons and 548,000 synapses」",
+          "source_en": "Winding et al. Science 379(6636):eadd9330 (2023); PMC7614541 abstract read first-hand, verbatim: \"comprising 3016 neurons and 548,000 synapses\""
         },
         {
           "value": "166,691",
@@ -1323,7 +1362,8 @@
             "en": "male fly CNS (this site)"
           },
           "provenance": "paper",
-          "source": "Berg et al. Cell 189(18) (2026);bioRxiv 前導版親讀"
+          "source": "Berg et al. Cell 189(18) (2026);bioRxiv 前導版親讀",
+          "source_en": "Berg et al. Cell 189(18) (2026); bioRxiv preprint read first-hand"
         },
         {
           "value": "120,000 / 5.23 億",
@@ -1333,7 +1373,8 @@
           },
           "provenance": "paper",
           "source": "microns-explorer.org/cortical-mm3(官方專案頁親讀)",
-          "value_en": "120,000 / 523 million"
+          "value_en": "120,000 / 523 million",
+          "source_en": "microns-explorer.org/cortical-mm3(official project page read first-hand)"
         },
         {
           "value": "57,000 / 1.5 億",
@@ -1343,7 +1384,8 @@
           },
           "provenance": "paper",
           "source": "Shapson-Coe et al. Science 384:eadk4858 (2024),Research Article Summary 親讀",
-          "value_en": "57,000 / 150 million"
+          "value_en": "57,000 / 150 million",
+          "source_en": "Shapson-Coe et al. Science 384:eadk4858 (2024), Research Article Summary read first-hand"
         },
         {
           "value": "2023 起",
@@ -1353,7 +1395,8 @@
           },
           "provenance": "todo",
           "source": "NIH BRAIN Initiative 官方頁被重導向,為二手轉引",
-          "value_en": "since 2023"
+          "value_en": "since 2023",
+          "source_en": "NIH BRAIN Initiative official page redirected, secondhand"
         }
       ]
     },
@@ -1402,7 +1445,8 @@
             "en": "giant fiber crosses threshold"
           },
           "provenance": "measured",
-          "source": "runs/build/escape.trace.csv(引擎 --trace-out)"
+          "source": "runs/build/escape.trace.csv(引擎 --trace-out)",
+          "source_en": "runs/build/escape.trace.csv (engine --trace-out)"
         },
         {
           "value": "0.275 mV",
@@ -1438,7 +1482,8 @@
             "en": "detector→GF synapses total / per detector"
           },
           "provenance": "measured",
-          "source": "public/data/escape_edges.json 重算(6,362 + 4,860)"
+          "source": "public/data/escape_edges.json 重算(6,362 + 4,860)",
+          "source_en": "public/data/escape_edges.json recomputed (6,362 + 4,860)"
         },
         {
           "value": "2.8–3.3 ms",
@@ -1448,7 +1493,8 @@
             "en": "range across 20 runs for the giant fiber's first spike (the shipped run was 3.3)"
           },
           "provenance": "measured",
-          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py"
+          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py",
+          "source_en": "public/data/playground.json conditions[both](same stimulus set, 20 random seeds); scripts/build_playground.py"
         }
       ]
     },
@@ -1458,12 +1504,12 @@
       "anchor": "experiment",
       "trigger": "click",
       "title": {
-        "zh": "試過:把接點力道調小 13%,反應差 70 倍",
-        "en": "Tried: weaken every junction by 13%, response drops 70×"
+        "zh": "試過:在這個設定附近,同一格跑兩次差 67 倍",
+        "en": "Tried: near this setting, two runs of the same cell differ 67-fold"
       },
       "kid": {
-        "zh": "論文的「每個接點推多用力」是在另一隻(雌性)果蠅腦上調出來的。我們套到這隻雄性腦上,再調小 13%,結果同樣戳 25 顆隨機細胞,兩次跑出來的數字差了 67 倍。所以我們學到的不是「調小一點就會安靜」,而是「在這個設定附近,只跑一次的數字不能信」。",
-        "en": "The paper's 'push strength per junction' was tuned on a different (female) fly brain. We applied it to this male brain and weakened it by 13%. Poking the same 25 random cells twice gave answers 67 times apart. So what we learned is not 'weaker means quieter', it is 'near this setting a single run tells you nothing'."
+        "zh": "**這張卡的原標題被我們自己撤回了。**原本寫「調小 13%,反應差 70 倍」,依據只有跑一次。論文的「每個接點推多用力」是在另一隻(雌性)果蠅腦上調出來的。我們套到這隻雄性腦上,再調小 13%,結果同樣戳 25 顆隨機細胞,兩次跑出來的數字差了 67 倍。所以我們學到的不是「調小一點就會安靜」,而是「在這個設定附近,只跑一次的數字不能信」。",
+        "en": "**We withdrew this card's original headline.** It used to say weakening every junction by 13% makes the response drop 70-fold, and that rested on a single run. The paper's 'push strength per junction' was tuned on a different (female) fly brain. We applied it to this male brain and weakened it by 13%. Poking the same 25 random cells twice gave answers 67 times apart. So what we learned is not 'weaker means quieter', it is 'near this setting a single run tells you nothing'."
       },
       "more": {
         "zh": "**這張卡是撤回後重寫的(2026-09-16)。** 原本寫「0.275 給 121,592 次放電、0.240 給 1,747,兩者之間有相變」,依據是單次跑(trials=1)。本站出貨的 `public/data/phase_sweep.json` 同一格(w_syn 0.275→0.240、k=25、同樣 trials=1)是 146,647→117,208,只差 1.25 倍。同一格兩次單跑差 67 倍(1,747 vs 117,208),而我們自己的雙穩態測試(固定參數只換亂數種子跑六次,變異係數最高 1.26)早就說明這個區間單次數字不可採信。**所以「有相變」這個宣稱撤回**,留下的是可重複的部分:0.179 在另一組隨機刺激下六個種子都引爆(均值約 60,000、CV 0.08),引爆與否取決於刺激集合而不是單一增益值。侷限:刺激是隨機神經元非真實感覺族群,只測 100 Hz × 300 ms,k 取樣粗。後果:情境盤點全部改成多 trial 重跑。",
@@ -1478,7 +1524,8 @@
             "en": "same cell (w_syn 0.24, k=25), two single runs"
           },
           "provenance": "measured",
-          "source": "scripts/phase_sweep.py;public/data/phase_sweep.json table[1].counts[1];docs/verification_log.md §臨界點"
+          "source": "scripts/phase_sweep.py;public/data/phase_sweep.json table[1].counts[1];docs/verification_log.md §臨界點",
+          "source_en": "scripts/phase_sweep.py; public/data/phase_sweep.json table[1].counts[1]; docs/verification_log.md §critical point"
         },
         {
           "value": "1.26",
@@ -1488,7 +1535,8 @@
             "en": "coefficient of variation, six seeds at fixed parameters"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md §雙穩態:臨界點附近單次試驗無意義"
+          "source": "docs/verification_log.md §雙穩態:臨界點附近單次試驗無意義",
+          "source_en": "docs/verification_log.md §bistability: single trials near the critical point are meaningless"
         },
         {
           "value": "0.275 mV",
@@ -1526,7 +1574,8 @@
             "en": "coefficient of variation over six runs"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md §雙穩態"
+          "source": "docs/verification_log.md §雙穩態",
+          "source_en": "docs/verification_log.md §bistability"
         },
         {
           "value": "22×",
@@ -1535,7 +1584,8 @@
             "en": "max / min"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md §雙穩態"
+          "source": "docs/verification_log.md §雙穩態",
+          "source_en": "docs/verification_log.md §bistability"
         }
       ]
     },
@@ -1602,7 +1652,8 @@
             "en": "three pulse lengths (6 shipped)"
           },
           "provenance": "measured",
-          "source": "scripts/build_scenario.py T_STIM;docs/verification_log.md §脈衝長度"
+          "source": "scripts/build_scenario.py T_STIM;docs/verification_log.md §脈衝長度",
+          "source_en": "scripts/build_scenario.py T_STIM; docs/verification_log.md §stimulus pulse length"
         },
         {
           "value": "14.4 / 15.7 ms",
@@ -1621,7 +1672,8 @@
             "en": "range across 20 runs: jump / wing (the shipped run was 14.4 / 15.7)"
           },
           "provenance": "measured",
-          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py"
+          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py",
+          "source_en": "public/data/playground.json conditions[both](same stimulus set, 20 random seeds); scripts/build_playground.py"
         }
       ]
     },
@@ -1636,7 +1688,7 @@
       },
       "kid": {
         "zh": "我們發現模型缺四樣東西,每一樣都是下一步可以做的實驗:第一,眼睛到偵測器那段為什麼斷了;第二,真果蠅有「直接通電」的接點,所以比模型快,模型沒有;第三,模型一旦點燃就停不下來,真果蠅會停;第四,模型學不會東西,連線的強度從頭到尾都不會變。這四個都還沒有人做,誰先做誰就知道答案。",
-        "en": "We found four things the model lacks, and each is an experiment waiting to be done: first, why the stretch from eye to detectors is broken; second, real flies have 'direct electrical' junctions that make them faster than the model, which has none; third, once lit the model never stops, while a real fly does. Nobody has done these four yet — whoever does first gets the answer."
+        "en": "We found four things the model lacks, and each is an experiment waiting to be done: first, why the stretch from eye to detectors is broken; second, real flies have 'direct electrical' junctions that make them faster than the model, which has none; third, once lit the model never stops, while a real fly does. Fourth, it cannot learn: no connection strength ever changes. Nobody has done these four yet — whoever does first gets the answer."
       },
       "more": {
         "zh": "①視覺前端:LC4 從視覺柱只收到 1.23 Hz,要追髓質運動路徑(T4/T5)為何靜默——是權重門檻、還是缺少視網膜的時間濾波。②電突觸:巨纖維到跳躍肌實際 0.93 ms,模型固定 1.8 ms 化學延遲;加入間隙連接需要另一種耦合項與 Shaking-B 表達位置的標註。③停止機制:600 ms 仍在放電,候選是放電後適應、慢抑制或神經調節;每加一項都要重跑保度數打亂對照,確認新機制沒有把「結構決定能否引爆」這個結果改掉。④學習:引擎沒有任何突觸可塑性,權重載入後就是常數;要補上得讓 KC→MBON 的強度變成可變狀態、實作多巴胺區室的調節規則,並設計可否證的行為測試(見「誠實說:我們的模型學不會東西」)。",
@@ -1650,16 +1702,19 @@
             "en": "real fly vs model: GF → jump muscle"
           },
           "provenance": "paper",
-          "source": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀"
+          "source": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀",
+          "source_en": "Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019, bioRxiv full text read first-hand"
         },
         {
-          "value": "3",
+          "value": "4",
           "label": {
             "zh": "尚未做的實驗",
             "en": "experiments not yet done"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md 各節的「侷限」"
+          "source": "docs/verification_log.md 各節的「侷限」",
+          "value_en": "4",
+          "source_en": "docs/verification_log.md the \"limits\" paragraph in each section"
         }
       ]
     },
@@ -1688,7 +1743,8 @@
             "en": "plastic connections (site of a learning experiment)"
           },
           "provenance": "measured",
-          "source": "scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt"
+          "source": "scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt",
+          "source_en": "scripts/fly/mb_circuit_stats.py; output audit/_mb_stats.txt"
         },
         {
           "value": "ppk23/ppk25/IR52b",
@@ -1697,7 +1753,8 @@
             "en": "receptor types annotated (no sugar receptors)"
           },
           "provenance": "measured",
-          "source": "scripts/fly/receptor_types.py;docs/data_facts.md §最大未知(receptorType 欄位)"
+          "source": "scripts/fly/receptor_types.py;docs/data_facts.md §最大未知(receptorType 欄位)",
+          "source_en": "scripts/fly/receptor_types.py; docs/data_facts.md §biggest unknown (receptorType field)"
         }
       ]
     }

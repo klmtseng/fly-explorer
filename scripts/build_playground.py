@@ -177,7 +177,7 @@ def main():
             probe.append({"seed": sd, "last_spike_ms": round(last_all * sc, 1), "last_wing_ms": round(last_wing * sc, 1)})
         print(f"  probe600  {len(probe)} 次;最後放電 {min(p['last_spike_ms'] for p in probe)}–{max(p['last_spike_ms'] for p in probe)} ms")
     data = {
-        "note": "實驗台:同一套協定換刺激集合,每格真跑 5 次。每一格的每一次原始數字都在 runs 欄裡,可自行檢查。",
+        "note": f"實驗台:同一套協定換刺激集合,每格真跑 {a.seeds} 次。每一格的每一次原始數字都在 runs 欄裡,可自行檢查。",
         "protocol": {"w_syn_mv": W_SYN, "r_poi_hz": R_POI, "t_run_ms": T_RUN, "stim_ms": T_STIM,
                      "csr": "mcns_w2", "engine": "flysim (LIF, 化學突觸, 無可塑性)", "seeds": a.seeds,
                      "same_as": "public/data/scenarios/escape.bin 的協定完全相同"},

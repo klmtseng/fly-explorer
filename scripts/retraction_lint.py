@@ -8,8 +8,14 @@ exit 0 = 乾淨;1 = 命中。--self-test:塞一條撤回句進暫存副本,必�
 import json, sys, pathlib, copy
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 R = json.loads((ROOT / "content/retracted.json").read_text())["phrases"]
+def _positions(text, needle):
+    i = text.find(needle); out = []
+    while i >= 0: out.append(i); i = text.find(needle, i + 1)
+    return out
+
+
 def scan(cards, stages):
-    hits = []
+    hits = []; exempted = []
     for c in cards:
         blobs = [("kid.zh", c["kid"]["zh"]), ("kid.en", c["kid"]["en"]), ("more.zh", c["more"]["zh"]), ("more.en", c["more"]["en"]),
                  ("title", json.dumps(c["title"], ensure_ascii=False)), ("facts", json.dumps(c["facts"], ensure_ascii=False)),
@@ -17,21 +23,40 @@ def scan(cards, stages):
         for where, text in blobs:
             for r in R:
                 for k in ("zh", "en"):
-                    if r[k] and r[k] in text: hits.append((c["id"], where, r[k], r["ref"]))
+                    if not r[k]: continue
+                    for pos in _positions(text, r[k]):
+                        # 2026-09-17:卡片也需要文件層那種豁免——「本卡原本寫 X,已撤回」按建構會含 X。
+                        # 但不給整卡豁免(那等於加一個詞就能亂寫):撤回字樣必須出現在該句**附近 60 字**內。
+                        near = text[max(0, pos - 120):pos + len(r[k]) + 120]
+                        if any(x in near for x in EXEMPT):
+                            exempted.append((c["id"], where, r[k])); continue
+                        hits.append((c["id"], where, r[k], r["ref"]))
     for s in stages:
         text = s["zh"] + s.get("sub", "") + " " + s.get("en", "") + " " + s.get("sub_en", "")
         for r in R:
             for k in ("zh", "en"):
-                if r[k] and r[k] in text: hits.append((f"stage@{s['t']}", "sub", r[k], r["ref"]))
+                if not r[k]: continue
+                for pos in _positions(text, r[k]):
+                    near = text[max(0, pos - 120):pos + len(r[k]) + 120]
+                    if any(x in near for x in EXEMPT):
+                        exempted.append((f"stage@{s['t']}", "sub", r[k])); continue
+                    hits.append((f"stage@{s['t']}", "sub", r[k], r["ref"]))
+    scan.exempted = exempted
     return hits
 
-EXEMPT = ("撤回", "retracted", "Retracted", "~~")   # 同一行在講「這條已撤回」不算命中
+EXEMPT = ("撤回", "retracted", "Retracted", "retraction", "Retraction", "withdrew", "withdrawn", "Withdrawn", "~~")   # 同一行在講「這條已撤回」不算命中
 # 歸檔的審查報告按性質就是在**引用**它要攻擊的宣稱,整份豁免;豁免清單會印在輸出裡,不靜默跳過
 EXEMPT_FILES = ("docs/review_", "audit/")
 def scan_docs():
     """讀者讀得到的文件:README 指過去的 docs/、首頁本身。逐行掃,帶豁免字樣的行跳過。"""
     hits = []
-    files = sorted((ROOT / "docs").glob("*.md")) + [ROOT / "README.md", ROOT / "index.html", ROOT / "DESIGN.md"]
+    # 2026-09-17 閘門稽核:先前只掃 docs/*.md 與三個檔,而**撤回句最可能活下來的地方是程式碼與
+    # 打包後的產物**——src/ 的字串、public/ 的資料檔、dist/ 的舊 bundle 都直接送到讀者眼前。
+    files = (sorted((ROOT / "docs").glob("*.md")) + sorted((ROOT / "docs").glob("*.html"))
+             + [ROOT / "README.md", ROOT / "index.html", ROOT / "DESIGN.md", ROOT / "CLAUDE.md"]
+             + sorted((ROOT / "src").rglob("*.ts")) + sorted((ROOT / "src").rglob("*.css"))
+             + sorted((ROOT / "public").rglob("*.json")) + sorted((ROOT / "dist").rglob("*.html"))
+             + sorted((ROOT / "dist").rglob("*.js")) + sorted((ROOT / "dist/data").rglob("*.json")))
     skipped = []
     for f in files:
         if not f.exists(): continue
@@ -44,7 +69,7 @@ def scan_docs():
                 for k in ("zh", "en"):
                     if r[k] and r[k] in line:
                         hits.append((f"{f.relative_to(ROOT)}:{i}", "doc", r[k], r["ref"]))
-    scan_docs.skipped = skipped
+    scan_docs.skipped = skipped; scan_docs.nfiles = len([f for f in files if f.exists()])
     return hits
 if __name__ == "__main__":
     cards = json.loads((ROOT / "content/cards.json").read_text())["cards"]
@@ -68,5 +93,7 @@ if __name__ == "__main__":
         print("SELF-TEST", "PASS" if ok else "FAIL"); sys.exit(0 if ok else 1)
     hits = scan(cards, stages) + scan_docs()
     for h in hits: print("❌", *h)
-    print(f"掃過的文件:docs/*.md + README.md + index.html + DESIGN.md;整份豁免(歸檔審查報告):{len(getattr(scan_docs, 'skipped', []))} 個 → {', '.join(getattr(scan_docs, 'skipped', []))}")
+    ex = getattr(scan, "exempted", [])
+    print(f"內容層豁免(撤回字樣在前後 120 字內):{len(ex)} 處 → {', '.join(f'{a}/{b}' for a, b, _ in ex) or '無'}")
+    print(f"掃過的文件:{getattr(scan_docs, 'nfiles', 0)} 個(docs/*.md|html + README/index/DESIGN/CLAUDE + src/*.ts,css + public 與 dist 的 json/js/html);整份豁免(歸檔審查報告):{len(getattr(scan_docs, 'skipped', []))} 個 → {', '.join(getattr(scan_docs, 'skipped', []))}")
     print(f"retracted phrases: {len(R)}; hits: {len(hits)}; RESULT:", "PASS" if not hits else "FAIL"); sys.exit(1 if hits else 0)

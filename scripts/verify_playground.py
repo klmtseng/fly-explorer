@@ -83,7 +83,11 @@ def p2_seed1_matches_shipped(pg, msgs):
 def p3_coverage(pg, msgs):
     """條件數、每格次數、可播檔案,必須與程式碼宣告的一致。"""
     lab = LAB_TS.read_text(encoding="utf-8")
-    declared = set(re.findall(r"^\s{2}(\w+):\s*\{ bin: '([^']+)', trace: '([^']+)' \}", lab, re.M))
+    # 2026-09-17 閘門稽核 S23:原本的正則要求逗號後恰好一個空白,而 lab.ts 是對齊過的,
+    # 於是 declared 實測為**空集合**,整個「可播檔案必須存在」的迴圈按建構不可能 FAIL。
+    declared = set(re.findall(r"^\s*(\w+):\s*\{\s*bin:\s*'([^']+)',\s*trace:\s*'([^']+)'\s*\}", lab, re.M))
+    if not declared:
+        fail(msgs, "P3 從 lab.ts 抓不到任何可播條件——正則與程式碼格式脫鉤,這道檢查等於沒跑")
     keys = {c["key"] for c in pg["conditions"]}
     for key, binp, tracep in declared:
         if key not in keys:
@@ -103,15 +107,16 @@ def p4_prose_matches(pg, msgs):
     """網頁文案講的「跑過 N 次」必須等於實際次數(覆蓋宣稱重數)。"""
     n = pg["protocol"]["seeds"]
     zh = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
-    for f in [LAB_TS, ROOT / "README.md"]:
+    for f in [LAB_TS, ROOT / "README.md", ROOT / "index.html"] + sorted((ROOT / "docs").glob("*.md")):
         if not f.exists(): continue
         for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
-            for m in re.finditer(r"跑過([一二三四五六七八九十]|\d+)次", line):
+            for m in re.finditer(r"跑過\s*([一二三四五六七八九十]|\d+)\s*次", line):
                 v = zh.get(m.group(1), None) or int(m.group(1)) if m.group(1).isdigit() else zh.get(m.group(1))
                 if v != n:
                     fail(msgs, f"P4 {f.relative_to(ROOT)}:{i} 寫「跑過{m.group(1)}次」,實際 {n} 次")
-            for m in re.finditer(r"run (\w+) times|actually run (\w+) times", line):
-                pass
+            for m in re.finditer(r"(?:actually )?run (\d+) times", line):
+                if int(m.group(1)) != n:
+                    fail(msgs, f"P4 {f.relative_to(ROOT)}:{i} 寫「run {m.group(1)} times」,實際 {n} 次")
 
 
 def check(path=None):
@@ -139,12 +144,14 @@ def main():
         def m_summary(v): v["conditions"][0]["summary"]["total_spikes"]["median"] = 99999
         def m_seed1(v): v["conditions"][0]["runs"][0]["first_ms"]["gf"] = 1.0
         def m_count(v): v["conditions"][0]["runs"].pop()
+        def m_seeds(v): v["protocol"]["seeds"] = 99   # P3:protocol 與實際次數脫鉤
         r0 = subprocess.run([sys.executable, str(me)], capture_output=True, text=True)
         print(f"  {'✓' if r0.returncode == 0 else '✗'} 正向:未改動的資料 exit {r0.returncode}(預期 0)")
         res = [r0.returncode == 0,
                run(m_summary, "負向:手改 summary 的中位數"),
                run(m_seed1, "負向:改掉種子 1 的首次放電(與出貨情境脫鉤)"),
-               run(m_count, "負向:某一格少跑一次")]
+               run(m_count, "負向:某一格少跑一次"),
+               run(m_seeds, "負向:protocol.seeds 與實際次數不符")]
         print("SELF-TEST", "PASS" if all(res) else "FAIL"); sys.exit(0 if all(res) else 1)
 
     pg, msgs = check()
