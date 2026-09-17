@@ -1,6 +1,6 @@
 # 宣稱清單(機器產生,validity-audit 第 1 步)
 
-卡片 34 張,事實 88 條,階段字幕 8 段。
+卡片 34 張,事實 91 條,階段字幕 8 段。
 
 | 卡/階段 | 數值 | 標籤 | 標記 | 來源欄 | 路徑檢查 |
 |---|---|---|---|---|---|
@@ -42,6 +42,7 @@
 | escape-two-muscles | 0 | 巨纖維→翅膀肌運動神經元 直連 | measured | scripts/fly/escape_path.py | 路徑OK |
 | escape-two-muscles | 15.7 ms | 模擬裡翅膀肌運動神經元首次放電(走 AN19B001) | measured | runs/build/escape.csv;docs/verification_log.md §DLMn 首波 | 路徑OK |
 | escape-two-muscles | 0 次 | PSI 在本情境的放電 | measured | runs/build/escape.csv | 路徑OK |
+| escape-two-muscles | 12.2–15.7 ms | 同一組刺激跑五次,翅膀肌運動神經元首次放電的範圍(出貨那次是 15.7) | measured | public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py | 路徑OK |
 | muscle-link | 26 | 連線起點:真實運動神經元 | measured | scripts/export_edges.py(nodesByStage wing/jump) | 路徑OK |
 | muscle-link | 0 | 資料集裡的肌肉 | measured | annotation superclass 清單(scripts/fly/io_inventory.py) | 路徑OK |
 | escape-speed | 18 ms | 燈熄 → 巨纖維放電 | paper | Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀 | 非路徑(論文/標註) |
@@ -79,6 +80,7 @@
 | why-sudden | 1.8 ms | 突觸延遲 | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
 | why-sudden | −52 → −45 mV | 靜息電位 → 閾值(模型參數) | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
 | why-sudden | 11,222 / 36 | 偵測器→巨纖維突觸總數 / 每顆平均 | measured | public/data/escape_edges.json 重算(6,362 + 4,860) | 路徑OK |
+| why-sudden | 2.8–3.3 ms | 同一組刺激跑五次,巨纖維首次放電的範圍(出貨那次是 3.3) | measured | public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py | 路徑OK |
 | tried-critical-point | 1,747 vs 117,208 | 同一格(w_syn 0.24, k=25)兩次單跑的放電數 | measured | scripts/phase_sweep.py;public/data/phase_sweep.json table[1].counts[1];docs/verification_log.md §臨界點 | 路徑OK |
 | tried-critical-point | 1.26 | 雙穩態測試的變異係數(同參數換種子跑六次) | measured | docs/verification_log.md §雙穩態:臨界點附近單次試驗無意義 | 路徑OK |
 | tried-critical-point | 0.275 mV | 論文的唯一自由參數 | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
@@ -88,6 +90,7 @@
 | tried-visual-frontend | 283.8 Hz | 直接餵偵測器:巨纖維 | measured | scripts/visual_pathway_test.py;docs/verification_log.md | 路徑OK |
 | tried-pulse-length | 25 / 3 / 6 ms | 三版脈衝長度(出貨 6) | measured | scripts/build_scenario.py T_STIM;docs/verification_log.md §脈衝長度 | 路徑OK |
 | tried-pulse-length | 14.4 / 15.7 ms | 跳躍肌 / 翅膀肌的運動神經元首次放電 | measured | runs/build/escape.csv | 路徑OK |
+| tried-pulse-length | 14.4–16.3 / 12.2–15.7 ms | 跑五次的範圍:跳躍肌 / 翅膀肌(出貨那次是 14.4 / 15.7) | measured | public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py | 路徑OK |
 | next-fix-model | 0.93 vs 1.8 ms | 真果蠅 vs 模型:巨纖維→跳躍肌 | paper | Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀 | 非路徑(論文/標註) |
 | next-fix-model | 3 | 尚未做的實驗 | measured | docs/verification_log.md 各節的「侷限」 | 路徑OK |
 | next-new-stories | 61,210 | 可塑連線(學習實驗的場地) | measured | scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt | 路徑OK |

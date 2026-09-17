@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """英文版殘留中文掃描(確定性閘門)。
 
-把建好的 dist/ 用無頭 Chrome 開成英文版(?lang=en),分別看首頁、小朋友版、專業版、自由探索四個畫面,
+把建好的 dist/ 用無頭 Chrome 開成英文版(?lang=en),分別看首頁、小朋友版、專業版、自由探索,以及實驗台的兩個狀態,
 把 DOM 裡看得到的文字抓出來,任何 CJK 字元都算 FAIL——例外只有一種:「§」後面的段名
 (那是指向中文文件的錨點,例如 docs/verification_log.md §六角座標慣例),以及 <script>/<style>/註解。
 
@@ -46,7 +46,8 @@ def main():
     time.sleep(1.0)
     fails = 0
     try:
-        for name, q in [("home", ""), ("kid", "&track=kid"), ("more", "&track=more"), ("free", "&track=free")]:
+        for name, q in [("home", ""), ("kid", "&track=kid"), ("more", "&track=more"), ("free", "&track=free"),
+                         ("lab", "&track=free&lab=1"), ("lab-rand", "&track=free&lab=rand_311&labplay=1")]:   # 實驗台預設關著,要用深連結打開才掃得到
             dom = dump(f"http://127.0.0.1:{port}/?preset=low&lang=en{q}")
             if len(dom) < 1000: print(f"{name}: FAIL(DOM 空,Chrome 沒跑起來?)"); fails += 1; continue
             r = residues(visible_text(dom))

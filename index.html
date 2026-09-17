@@ -116,6 +116,52 @@
 
   }
 
+
+  /* ===== 實驗台:換刺激條件,看真的跑出來的結果 ===== */
+  #lab[hidden]{display:none}
+  #lab{position:fixed;z-index:6;right:12px;top:12px;bottom:12px;width:min(420px,calc(100vw - 24px));
+    display:flex;flex-direction:column;background:#FAF7F0;color:#25221E;border:1px solid #C9C1B2;border-radius:3px;
+    font-family:"Noto Sans TC","PingFang TC",system-ui,sans-serif;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  #lab .labBar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
+    border-bottom:1px solid #D9D2C4;font:700 15px "Noto Serif TC",serif}
+  #lab .labBar button{background:none;border:1px solid #C9C1B2;border-radius:2px;color:#686057;
+    font:500 12px "IBM Plex Mono",monospace;padding:5px 9px;cursor:pointer}
+  #lab .labBody{overflow:auto;padding:14px}
+  #lab .lead{margin:0 0 12px;font-size:13.5px;line-height:1.6;color:#686057}
+  #lab .grp{margin-bottom:10px}
+  #lab .grp h4{margin:0 0 6px;font:500 12px "IBM Plex Mono",monospace;color:#862F36}
+  #lab .cond{display:inline-block;margin:0 6px 6px 0;padding:7px 11px;cursor:pointer;
+    background:#EDE8DF;border:1px solid #C9C1B2;border-radius:2px;color:#25221E;font-size:13.5px;text-align:left}
+  #lab .cond.on{background:#243D83;border-color:#243D83;color:#FAF7F0;font-weight:500}
+  #lab .result{margin-top:12px;border:1px solid #D9D2C4;border-radius:2px;background:#fff}
+  #lab .rhead{padding:10px 12px;border-bottom:1px solid #D9D2C4;font-weight:500;font-size:14.5px}
+  #lab .rhead span{display:block;font:400 12px "IBM Plex Mono",monospace;color:#686057;margin-top:2px}
+  #lab .chain{padding:4px 12px}
+  #lab .step{display:flex;align-items:baseline;gap:8px;padding:7px 0;border-bottom:1px solid #EDE8DF;font-size:13.5px}
+  #lab .step:last-child{border-bottom:0}
+  #lab .step b{min-width:6.5em;font-weight:500}
+  #lab .step .when{font:400 12.5px "IBM Plex Mono",monospace;color:#25221E}
+  #lab .step .runs{margin-left:auto;font:400 11.5px "IBM Plex Mono",monospace;color:#686057}
+  #lab .step .rng{color:#686057}
+  #lab .step.dead{background:#FBEFEF}
+  #lab .step.dead .when{color:#862F36;font-weight:500}
+  #lab .tot{padding:9px 12px;border-top:1px solid #D9D2C4;font:400 13px "IBM Plex Mono",monospace;color:#686057}
+  #lab .tot b{color:#25221E}
+  #lab #labPlay{display:block;width:calc(100% - 24px);margin:0 12px 12px;padding:10px;cursor:pointer;
+    background:#243D83;color:#FAF7F0;border:0;border-radius:2px;font:500 14px "Noto Sans TC",sans-serif}
+  #lab .nodata{margin:0;padding:10px 12px 12px;font-size:12.5px;color:#686057}
+  #lab .proto{margin:12px 0 0;font-size:11.5px;line-height:1.55;color:#686057}
+  #lab .proto.strong{color:#862F36}
+  @media (max-width:560px){
+    #lab{left:8px;right:8px;top:auto;bottom:8px;max-height:76vh;width:auto}
+    #lab .labBody{padding:10px}
+    #lab .lead{font-size:12.5px;margin-bottom:9px}
+    #lab .cond{font-size:12px;padding:6px 8px;margin:0 4px 4px 0}
+    #lab .step{font-size:12.5px;flex-wrap:wrap;gap:4px}
+    #lab .step b{min-width:5.5em}
+    #lab .step .runs{margin-left:0;flex-basis:100%}
+    #lab .proto{font-size:10.5px}
+  }
   /* ===== 說明卡抽屜:DESIGN.md「標本劇場 + 一張紙」。舞台不動,兩套皮膚只換這張紙。 ===== */
   #spk{font:500 11px "IBM Plex Mono",monospace;color:#c9cbc4;text-shadow:0 1px 3px rgba(0,0,0,.9);pointer-events:none}
   #spk b{color:#8fe3a8;font-weight:500}   /* 數字是真資料 → 允許發光綠 */
@@ -282,7 +328,7 @@
      使用者實機回報電壓計壓住 HUD 副標,絕對定位互疊的老毛病,跟底部同一種修法。 -->
 <div id="top">
   <div id="hud"><b id="count">載入中…</b><span id="sub"></span><span id="drawn" hidden></span></div>
-  <div id="modes"><button id="mCal" aria-pressed="true" data-en="Calcium">鈣成像</button><button id="mGrp" aria-pressed="false" data-en="Groups">功能分色</button><button id="mShell" aria-pressed="true" class="sep" data-en="Body">身體</button><button id="mCap" aria-pressed="true" title="顯示/隱藏舞台字幕" data-en="Text">字幕</button><button id="mHome" class="sep" title="回到預設視角,果蠅置中"><span class="ic">⌖ </span><span data-en="Fit">歸位</span></button><button id="mSpin" class="sep" aria-pressed="false" title="自動慢慢轉,看各個角度"><span class="ic">⟳ </span><span data-en="Spin">自轉</span></button><button id="mZoomIn" class="sep" title="放大" aria-label="放大">＋</button><button id="mZoomOut" title="縮小" aria-label="縮小">－</button><button id="mCards" class="sep" title="說明卡片索引">📖<span class="ic" data-en=" Cards"> 卡片</span></button></div>
+  <div id="modes"><button id="mCal" aria-pressed="true" data-en="Calcium">鈣成像</button><button id="mGrp" aria-pressed="false" data-en="Groups">功能分色</button><button id="mShell" aria-pressed="true" class="sep" data-en="Body">身體</button><button id="mCap" aria-pressed="true" title="顯示/隱藏舞台字幕" data-en="Text">字幕</button><button id="mHome" class="sep" title="回到預設視角,果蠅置中"><span class="ic">⌖ </span><span data-en="Fit">歸位</span></button><button id="mSpin" class="sep" aria-pressed="false" title="自動慢慢轉,看各個角度"><span class="ic">⟳ </span><span data-en="Spin">自轉</span></button><button id="mZoomIn" class="sep" title="放大" aria-label="放大">＋</button><button id="mZoomOut" title="縮小" aria-label="縮小">－</button><button id="mCards" class="sep" title="說明卡片索引">📖<span class="ic" data-en=" Cards"> 卡片</span></button><button id="mLab" title="實驗台:換刺激條件看結果">🧪<span class="ic" data-en=" Lab"> 實驗台</span></button></div>
   <!-- 巨纖維膜電壓計:資料層(引擎 --trace-out 原樣輸出),讓人看到閾值以下的爬升 -->
   <!-- 桌機:電壓計與 PiP 上下堆疊(display:contents);手機:並排一列,把直式螢幕的高度還給主畫面 -->
   <div id="panels">
@@ -321,6 +367,7 @@
     <span><i class="mus"></i><span data-en="Amber = nerve→muscle, drawn by us (not in the connectome)">琥珀 ＝ 神經→肌肉,連接組沒有,我們畫的</span><em data-en="(timing from real motor neurons)">（時機來自真實運動神經元）</em></span>
   </div>
 </div>
+<div id="lab" hidden></div>
 <div id="scrolly" hidden></div>
 <button id="exitTrack" hidden data-en="↩ Switch version">↩ 換版本</button>
 <!-- 首頁三扇門:選了才進舞台。示意版,結構先對,美術後補。 -->

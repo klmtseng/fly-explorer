@@ -8,6 +8,7 @@ import { loadEdges, type EdgeLayer } from './edges';
 import { buildMuscles, type Muscles } from './muscles';
 import stagesJson from '../content/stages.json';
 import { createCards, srcText, storedLang } from './cards';
+import { createLab } from './lab';
 import tracksJson from '../content/tracks.json';
 import { loadGauge, type Gauge } from './gauge';
 import { buildShell } from './shell';
@@ -213,7 +214,8 @@ applyStaticLang(storedLang());
   const spinBtn = document.getElementById('mSpin')!;
   controls.autoRotateSpeed = 1.2;                       // 每圈 50 秒,慢到看得清楚
   spinBtn.addEventListener('click', () => { controls.autoRotate = !controls.autoRotate; spinBtn.setAttribute('aria-pressed', String(controls.autoRotate)); });
-  let hudRefresh: (() => void) | null = null;   // 載入後 HUD 的字串由這個閉包重畫(語言切換時再叫一次)
+  let hudRefresh: (() => void) | null = null;
+  let labRef: { setLang(l: 'zh' | 'en'): void } | null = null;   // applyLang 早於 lab 建立,用可空參照接   // 載入後 HUD 的字串由這個閉包重畫(語言切換時再叫一次)
   const cards = createCards();
   // ---- 介面雙語:靜態文字用 data-en(原中文存進 data-zh),動態字串走 T 表;語言切換時整頁重套 ----
   const T = {
@@ -234,7 +236,7 @@ applyStaticLang(storedLang());
     applyStaticLang(lg());
     $('legend').innerHTML = GROUPS.map(g =>
       `<div><i style="background:#${g.color.toString(16).padStart(6,'0')}"></i>${g[lg()]}</div>`).join('');
-    pip.setLang(lg()); gauge?.setLang(lg()); hudRefresh?.();
+    pip.setLang(lg()); gauge?.setLang(lg()); hudRefresh?.(); labRef?.setLang(lg());
   }
   { const orig = cards.setLang; cards.setLang = (l) => { orig(l); applyLang(); if (track === 'kid' || track === 'more') { const y = scrolly.scrollTop; buildScrolly(); scrolly.scrollTop = y; onScroll(); } else if (scn) showFrame(Number($p('scrub').value)); }; }
   const dolly = (f: number) => {                         // 沿視線把相機拉近/推遠,受 min/maxDistance 夾住
@@ -304,6 +306,10 @@ applyStaticLang(storedLang());
   applyLang();   // pip/gauge 到齊後跑一次:圖例、PiP 讀數、電壓計標籤都照當前語言(2026-09-16 補:圖例原本只在切語言時才填,開場是空的)
   // ③注入前奏:t<0 的「眼睛看到東西」示意。模型視覺前端算不出逼近,這段是我們畫的,
   // 用洋紅渲染並在時鐘與標籤標示。逼近物體 = 從兩眼中心往外擴的環。
+  // 實驗台:目前舞台上播的是哪一個條件。null = 出貨的基準情境。
+  // 非基準時字幕必須換掉——基準字幕在講逃跑的時間軸(「跳躍肌與翅膀肌動了」),
+  // 套到「隨機 311 顆」那種條件上就是說謊。放電計數器同理(它的累計值只對基準那一次成立)。
+  let labCond: { key: string; label: string } | null = null;
   const PRELUDE = 24;                       // 前奏幀數(以 dtMs 計的虛擬毫秒)
   // 結局幀數(我們加的,不是模擬):模型跑到 600 ms 都還在放電、真果蠅這時也還在飛,
   // 使用者仍希望畫面收在靜止——那就明標「我們加的結局」(洋紅,跟前奏同一套標示),把光與翅膀慢慢關掉。
@@ -426,6 +432,17 @@ applyStaticLang(storedLang());
     $p('scrub').value = String(frame);
     const ms = frame * scn.dtMs;   // 不假設 dtMs==1
     document.getElementById('clock')!.textContent = ms.toFixed(1) + ' ms';
+    if (labCond) {   // 實驗台的非基準條件:只說這是哪個條件、現在第幾毫秒,不套用基準的劇情字幕
+      document.getElementById('stage')!.innerHTML =
+        `<b>${labCond.label}</b>` +
+        `<span>${lg() === 'en' ? 'Lab condition. Same protocol as the replay, only the stimulated set changed. The captions of the standard replay do not apply here.'
+                               : '實驗台的條件。協定與重播完全相同,只換了刺激哪些神經元;標準重播的字幕不適用於這一段。'}</span>` +
+        `<span class="cnt">${tx().fLive(nActive.toLocaleString())}</span>` +
+        `<span class="src">public/data/playground.json</span>`;
+      cards.chipsFor(-999); cards.setSpikes(0, ms, 'prelude');
+      document.getElementById('spk')!.hidden = true;
+      return;
+    }
     let st = STAGES[0];
     for (const s2 of STAGES) if (frame >= s2.t) st = s2;
     document.getElementById('stage')!.innerHTML =
@@ -574,6 +591,33 @@ applyStaticLang(storedLang());
         showFrame(Math.max(-PRELUDE, Math.min(scn.nFrames - 1 + EPILOGUE, f)));
       }
     } }   // 測試/分享用深連結
+  // ---- 實驗台:換刺激條件,看真的跑過五次的結果;可播的條件會換掉舞台資料 ----
+  const lab = createLab(async (key, bin, trace, label) => {
+    try {
+      const next = await loadScenario(bin);
+      if (next.nPoints !== cloud.nAll) throw new Error(`情境檔點數 ${next.nPoints} ≠ 點雲 ${cloud.nAll}`);
+      scn = next;
+      labCond = key === 'both' ? null : { key, label };
+      // 電壓計換成同一次執行的軌跡;基準以外的條件沒有前奏與結局(那兩段是為逃跑故事做的)
+      const host = document.getElementById('gaugeHost')!;
+      host.innerHTML = ''; gauge = await loadGauge(trace, host); host.hidden = false; gauge.setLang(lg());
+      const lo = labCond ? 0 : -PRELUDE, hi = labCond ? scn.nFrames - 1 : scn.nFrames - 1 + EPILOGUE;
+      $p('scrub').min = String(lo); $p('scrub').max = String(hi);
+      document.getElementById('spk')!.hidden = !!labCond;
+      playing = false; stopAt = null; cine = null;
+      document.getElementById('play')!.textContent = '▶';
+      showFrame(lo);
+    } catch (err) {
+      console.warn('實驗台情境未載入:', err);
+      document.getElementById('stage')!.innerHTML = `<b class="inj">${lg() === 'en' ? 'Could not load that run' : '這個條件的資料載入失敗'}</b>`;
+    }
+  });
+  labRef = lab; lab.setLang(lg());   // applyLang 在 lab 建立前就跑過了,這裡補套一次
+  document.getElementById('mLab')!.addEventListener('click', () => { lab.isOpen() ? lab.close() : lab.open(); });
+  // 深連結:?lab=1 打開實驗台;?lab=<條件> 直接選那個條件;再加 &labplay=1 就在舞台上播
+  { const q = new URLSearchParams(location.search), v = q.get('lab');
+    if (v === '1') lab.open(); else if (v) lab.select(v, q.get('labplay') === '1'); }
+
   if (scn && new URLSearchParams(location.search).get('play') === '1') setTimeout(() => document.getElementById('play')!.click(), 600);   // 測試用:自動播放(延後,等載入時的重新取景先跑完)
 
   let frames = 0, acc = 0, fps = 0;

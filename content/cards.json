@@ -790,6 +790,16 @@
           "provenance": "measured",
           "source": "runs/build/escape.csv",
           "value_en": "0 spikes"
+        },
+        {
+          "value": "12.2–15.7 ms",
+          "value_en": "12.2–15.7 ms",
+          "label": {
+            "zh": "同一組刺激跑五次,翅膀肌運動神經元首次放電的範圍(出貨那次是 15.7)",
+            "en": "range across five runs for the wing motor neuron's first spike (the shipped run was 15.7)"
+          },
+          "provenance": "measured",
+          "source": "public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py"
         }
       ]
     },
@@ -1417,6 +1427,16 @@
           },
           "provenance": "measured",
           "source": "public/data/escape_edges.json 重算(6,362 + 4,860)"
+        },
+        {
+          "value": "2.8–3.3 ms",
+          "value_en": "2.8–3.3 ms",
+          "label": {
+            "zh": "同一組刺激跑五次,巨纖維首次放電的範圍(出貨那次是 3.3)",
+            "en": "range across five runs for the giant fiber's first spike (the shipped run was 3.3)"
+          },
+          "provenance": "measured",
+          "source": "public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py"
         }
       ]
     },
@@ -1559,8 +1579,8 @@
         "en": "Our first stimulus lasted 25 ms and the whole screen lit up at once — no relay to see. At 3 ms the jump muscle never fired at all. 6 ms was right: detectors first, giant fiber at 3.3 ms, the jump-muscle nerve cell at 14.4 ms, the wing-muscle one at 15.7 ms. The site plays the 6 ms version."
       },
       "more": {
-        "zh": "三版對照(6 ms 出貨):25 ms → 偵測器 0-32 ms、巨纖維 3.3-31.9、全部重疊;3 ms → 巨纖維 5 次、TTMn 沒放電、PSI 沒放電;6 ms → 巨纖維 7 次、TTMn 14.4 ms 一次、DLMn 15.7-249.1、PSI 沒放電。要有接力,脈衝必須比傳遞(3-13 ms)短。注意 6 ms 版 TTMn 只放電 1 次、巨纖維 7 次,統計極薄,字幕只寫首次時刻不寫速率。",
-        "en": "Three versions (6 ms shipped): 25 ms → detectors 0-32 ms, giant fiber 3.3-31.9, everything overlapping; 3 ms → giant fiber 5 spikes, TTMn silent, PSI silent; 6 ms → giant fiber 7 spikes, TTMn once at 14.4 ms, DLMn 15.7-249.1 ms, PSI silent. For a visible relay the pulse must be shorter than the transit (3-13 ms). Note the 6 ms version has TTMn firing once and the giant fiber seven times — thin statistics, so captions give first-spike times only, never rates."
+        "zh": "三版對照(6 ms 出貨):25 ms → 偵測器 0-32 ms、巨纖維 3.3-31.9、全部重疊;3 ms → 巨纖維 5 次、TTMn 沒放電、PSI 沒放電;6 ms → 巨纖維 7 次、TTMn 14.4 ms 一次、DLMn 15.7-249.1、PSI 沒放電。要有接力,脈衝必須比傳遞(3-13 ms)短。注意 6 ms 版 TTMn 只放電 1 次、巨纖維 7 次,統計極薄,字幕只寫首次時刻不寫速率。\n\n**2026-09-17 補**:做實驗台時把同一組刺激用五個亂數種子各跑一次,才發現這些毫秒數有跑次之間的離散:巨纖維 2.8–3.3、跳躍肌 14.4–16.3、翅膀肌 12.2–15.7。網站重播的是其中一次(種子 1),它的三個數字分別落在範圍的兩端,不是中位數。重播的字幕講的是你正在看的那一次,卡片這裡給的是五次的範圍。",
+        "en": "Three versions (6 ms shipped): 25 ms → detectors 0-32 ms, giant fiber 3.3-31.9, everything overlapping; 3 ms → giant fiber 5 spikes, TTMn silent, PSI silent; 6 ms → giant fiber 7 spikes, TTMn once at 14.4 ms, DLMn 15.7-249.1 ms, PSI silent. For a visible relay the pulse must be shorter than the transit (3-13 ms). Note the 6 ms version has TTMn firing once and the giant fiber seven times — thin statistics, so captions give first-spike times only, never rates.\n\n**Added 2026-09-17:** building the lab meant running the same stimulus set under five random seeds, which showed these millisecond values vary from run to run: giant fiber 2.8 to 3.3, jump muscle 14.4 to 16.3, wing muscle 12.2 to 15.7. The replay on the site is one of those runs (seed 1), and its three numbers sit at the ends of the range rather than at the median. The replay captions describe the run you are watching; the range here is what five runs give."
       },
       "facts": [
         {
@@ -1580,6 +1600,16 @@
           },
           "provenance": "measured",
           "source": "runs/build/escape.csv"
+        },
+        {
+          "value": "14.4–16.3 / 12.2–15.7 ms",
+          "value_en": "14.4–16.3 / 12.2–15.7 ms",
+          "label": {
+            "zh": "跑五次的範圍:跳躍肌 / 翅膀肌(出貨那次是 14.4 / 15.7)",
+            "en": "range across five runs: jump / wing (the shipped run was 14.4 / 15.7)"
+          },
+          "provenance": "measured",
+          "source": "public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py"
         }
       ]
     },

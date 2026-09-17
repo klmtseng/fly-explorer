@@ -1,0 +1,1241 @@
+{
+ "note": "實驗台:同一套協定換刺激集合,每格真跑 5 次。每一格的每一次原始數字都在 runs 欄裡,可自行檢查。",
+ "protocol": {
+  "w_syn_mv": 0.179,
+  "r_poi_hz": 150.0,
+  "t_run_ms": 250.0,
+  "stim_ms": 6.0,
+  "csr": "mcns_w2",
+  "engine": "flysim (LIF, 化學突觸, 無可塑性)",
+  "seeds": 5,
+  "same_as": "public/data/scenarios/escape.bin 的協定完全相同"
+ },
+ "groups": {
+  "detect": "逼近偵測器 LC4+LPLC2",
+  "gf": "巨纖維 DNp01",
+  "jump": "跳躍肌運動神經元 TTMn",
+  "wing": "翅膀下壓肌運動神經元 DLMn",
+  "psi": "教科書中繼 PSI"
+ },
+ "conditions": [
+  {
+   "key": "both",
+   "zh": "兩種偵測器全上(出貨情境)",
+   "en": "Both detector types (the shipped scenario)",
+   "n_stim": 311,
+   "resampled": false,
+   "runs": [
+    {
+     "total_spikes": 2205,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.3,
+      "jump": 14.4,
+      "wing": 15.7
+     },
+     "count": {
+      "detect": 280,
+      "gf": 7,
+      "jump": 1,
+      "wing": 56
+     }
+    },
+    {
+     "total_spikes": 2266,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 2.8,
+      "jump": 15.2,
+      "wing": 15.5
+     },
+     "count": {
+      "detect": 313,
+      "gf": 7,
+      "jump": 1,
+      "wing": 55
+     }
+    },
+    {
+     "total_spikes": 2136,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.0,
+      "wing": 13.8,
+      "jump": 15.2
+     },
+     "count": {
+      "detect": 285,
+      "gf": 6,
+      "wing": 54,
+      "jump": 1
+     }
+    },
+    {
+     "total_spikes": 2507,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.0,
+      "wing": 12.6,
+      "jump": 16.3
+     },
+     "count": {
+      "detect": 277,
+      "gf": 7,
+      "wing": 60,
+      "jump": 1
+     }
+    },
+    {
+     "total_spikes": 2277,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.0,
+      "wing": 12.2,
+      "jump": 14.9
+     },
+     "count": {
+      "detect": 304,
+      "gf": 7,
+      "wing": 57,
+      "jump": 1
+     }
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 2266,
+     "min": 2136,
+     "max": 2507
+    },
+    "detect": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0
+     },
+     "count": {
+      "median": 285,
+      "min": 277,
+      "max": 313
+     }
+    },
+    "gf": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 3.0,
+      "min": 2.8,
+      "max": 3.3
+     },
+     "count": {
+      "median": 7,
+      "min": 6,
+      "max": 7
+     }
+    },
+    "jump": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 15.2,
+      "min": 14.4,
+      "max": 16.3
+     },
+     "count": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     }
+    },
+    "wing": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 13.8,
+      "min": 12.2,
+      "max": 15.7
+     },
+     "count": {
+      "median": 56,
+      "min": 54,
+      "max": 60
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  },
+  {
+   "key": "lc4",
+   "zh": "只刺激 LC4",
+   "en": "LC4 only",
+   "n_stim": 126,
+   "resampled": false,
+   "runs": [
+    {
+     "total_spikes": 2025,
+     "first_ms": {
+      "detect": 0.1,
+      "gf": 3.8,
+      "jump": 16.0,
+      "wing": 17.2
+     },
+     "count": {
+      "detect": 111,
+      "gf": 5,
+      "jump": 1,
+      "wing": 59
+     }
+    },
+    {
+     "total_spikes": 1960,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.5,
+      "wing": 13.1
+     },
+     "count": {
+      "detect": 110,
+      "gf": 5,
+      "wing": 60
+     }
+    },
+    {
+     "total_spikes": 2062,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.5,
+      "jump": 16.7,
+      "wing": 17.0
+     },
+     "count": {
+      "detect": 128,
+      "gf": 5,
+      "jump": 1,
+      "wing": 60
+     }
+    },
+    {
+     "total_spikes": 2050,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.7,
+      "wing": 53.8
+     },
+     "count": {
+      "detect": 105,
+      "gf": 5,
+      "wing": 45
+     }
+    },
+    {
+     "total_spikes": 1854,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.5,
+      "jump": 16.5,
+      "wing": 17.4
+     },
+     "count": {
+      "detect": 124,
+      "gf": 5,
+      "jump": 1,
+      "wing": 59
+     }
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 2025,
+     "min": 1854,
+     "max": 2062
+    },
+    "detect": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.1
+     },
+     "count": {
+      "median": 111,
+      "min": 105,
+      "max": 128
+     }
+    },
+    "gf": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 3.5,
+      "min": 3.5,
+      "max": 3.8
+     },
+     "count": {
+      "median": 5,
+      "min": 5,
+      "max": 5
+     }
+    },
+    "jump": {
+     "fired_in": 3,
+     "of": 5,
+     "first_ms": {
+      "median": 16.5,
+      "min": 16.0,
+      "max": 16.7
+     },
+     "count": {
+      "median": 1,
+      "min": 0,
+      "max": 1
+     }
+    },
+    "wing": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 17.2,
+      "min": 13.1,
+      "max": 53.8
+     },
+     "count": {
+      "median": 59,
+      "min": 45,
+      "max": 60
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  },
+  {
+   "key": "lplc2",
+   "zh": "只刺激 LPLC2",
+   "en": "LPLC2 only",
+   "n_stim": 185,
+   "resampled": false,
+   "runs": [
+    {
+     "total_spikes": 2223,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.8,
+      "jump": 24.4,
+      "wing": 55.6
+     },
+     "count": {
+      "detect": 172,
+      "gf": 8,
+      "jump": 1,
+      "wing": 59
+     }
+    },
+    {
+     "total_spikes": 1942,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.8,
+      "jump": 19.1,
+      "wing": 51.4
+     },
+     "count": {
+      "detect": 168,
+      "gf": 8,
+      "jump": 1,
+      "wing": 50
+     }
+    },
+    {
+     "total_spikes": 2079,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.9,
+      "jump": 23.1,
+      "wing": 54.4
+     },
+     "count": {
+      "detect": 193,
+      "gf": 8,
+      "jump": 1,
+      "wing": 51
+     }
+    },
+    {
+     "total_spikes": 2206,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 4.0,
+      "jump": 23.4,
+      "wing": 55.2
+     },
+     "count": {
+      "detect": 158,
+      "gf": 8,
+      "jump": 1,
+      "wing": 59
+     }
+    },
+    {
+     "total_spikes": 2496,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.7,
+      "jump": 20.9,
+      "wing": 25.0
+     },
+     "count": {
+      "detect": 185,
+      "gf": 6,
+      "jump": 1,
+      "wing": 46
+     }
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 2206,
+     "min": 1942,
+     "max": 2496
+    },
+    "detect": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0
+     },
+     "count": {
+      "median": 172,
+      "min": 158,
+      "max": 193
+     }
+    },
+    "gf": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 3.8,
+      "min": 3.7,
+      "max": 4.0
+     },
+     "count": {
+      "median": 8,
+      "min": 6,
+      "max": 8
+     }
+    },
+    "jump": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 23.1,
+      "min": 19.1,
+      "max": 24.4
+     },
+     "count": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     }
+    },
+    "wing": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 54.4,
+      "min": 25.0,
+      "max": 55.6
+     },
+     "count": {
+      "median": 51,
+      "min": 46,
+      "max": 59
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  },
+  {
+   "key": "dose_155",
+   "zh": "隨機挑一半偵測器(155)",
+   "en": "half the detectors, picked at random (155)",
+   "n_stim": 155,
+   "resampled": true,
+   "pool": "detectors",
+   "runs": [
+    {
+     "total_spikes": 1836,
+     "first_ms": {
+      "detect": 0.1,
+      "gf": 3.9,
+      "wing": 14.0,
+      "jump": 19.8
+     },
+     "count": {
+      "detect": 140,
+      "gf": 6,
+      "wing": 55,
+      "jump": 1
+     }
+    },
+    {
+     "total_spikes": 2238,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.6,
+      "wing": 16.5,
+      "jump": 18.8
+     },
+     "count": {
+      "detect": 139,
+      "gf": 6,
+      "wing": 49,
+      "jump": 1
+     }
+    },
+    {
+     "total_spikes": 1903,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.3,
+      "jump": 22.5,
+      "wing": 54.1
+     },
+     "count": {
+      "detect": 163,
+      "gf": 6,
+      "jump": 1,
+      "wing": 50
+     }
+    },
+    {
+     "total_spikes": 1813,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.9,
+      "wing": 16.9,
+      "jump": 19.7
+     },
+     "count": {
+      "detect": 131,
+      "gf": 7,
+      "wing": 54,
+      "jump": 1
+     }
+    },
+    {
+     "total_spikes": 1913,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 3.6,
+      "wing": 13.8,
+      "jump": 21.2
+     },
+     "count": {
+      "detect": 159,
+      "gf": 7,
+      "wing": 54,
+      "jump": 1
+     }
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 1903,
+     "min": 1813,
+     "max": 2238
+    },
+    "detect": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.1
+     },
+     "count": {
+      "median": 140,
+      "min": 131,
+      "max": 163
+     }
+    },
+    "gf": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 3.6,
+      "min": 3.3,
+      "max": 3.9
+     },
+     "count": {
+      "median": 6,
+      "min": 6,
+      "max": 7
+     }
+    },
+    "jump": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 19.8,
+      "min": 18.8,
+      "max": 22.5
+     },
+     "count": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+     }
+    },
+    "wing": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 16.5,
+      "min": 13.8,
+      "max": 54.1
+     },
+     "count": {
+      "median": 54,
+      "min": 49,
+      "max": 55
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  },
+  {
+   "key": "dose_78",
+   "zh": "隨機挑四分之一(78)",
+   "en": "a quarter of the detectors (78)",
+   "n_stim": 78,
+   "resampled": true,
+   "pool": "detectors",
+   "runs": [
+    {
+     "total_spikes": 305,
+     "first_ms": {
+      "detect": 0.2,
+      "gf": 5.4,
+      "wing": 22.1
+     },
+     "count": {
+      "detect": 62,
+      "gf": 5,
+      "wing": 1
+     }
+    },
+    {
+     "total_spikes": 349,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 4.5,
+      "wing": 19.4
+     },
+     "count": {
+      "detect": 72,
+      "gf": 5,
+      "wing": 1
+     }
+    },
+    {
+     "total_spikes": 407,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 4.3,
+      "wing": 17.9,
+      "jump": 19.2
+     },
+     "count": {
+      "detect": 78,
+      "gf": 6,
+      "wing": 1,
+      "jump": 1
+     }
+    },
+    {
+     "total_spikes": 356,
+     "first_ms": {
+      "detect": 0.1,
+      "gf": 4.4
+     },
+     "count": {
+      "detect": 66,
+      "gf": 6
+     }
+    },
+    {
+     "total_spikes": 359,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 4.4,
+      "wing": 19.4
+     },
+     "count": {
+      "detect": 77,
+      "gf": 7,
+      "wing": 1
+     }
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 356,
+     "min": 305,
+     "max": 407
+    },
+    "detect": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.2
+     },
+     "count": {
+      "median": 72,
+      "min": 62,
+      "max": 78
+     }
+    },
+    "gf": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 4.4,
+      "min": 4.3,
+      "max": 5.4
+     },
+     "count": {
+      "median": 6,
+      "min": 5,
+      "max": 7
+     }
+    },
+    "jump": {
+     "fired_in": 1,
+     "of": 5,
+     "first_ms": {
+      "median": 19.2,
+      "min": 19.2,
+      "max": 19.2
+     },
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 1
+     }
+    },
+    "wing": {
+     "fired_in": 4,
+     "of": 5,
+     "first_ms": {
+      "median": 19.4,
+      "min": 17.9,
+      "max": 22.1
+     },
+     "count": {
+      "median": 1,
+      "min": 0,
+      "max": 1
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  },
+  {
+   "key": "dose_39",
+   "zh": "隨機挑八分之一(39)",
+   "en": "an eighth of the detectors (39)",
+   "n_stim": 39,
+   "resampled": true,
+   "pool": "detectors",
+   "runs": [
+    {
+     "total_spikes": 93,
+     "first_ms": {
+      "detect": 0.4,
+      "gf": 6.5
+     },
+     "count": {
+      "detect": 31,
+      "gf": 2
+     }
+    },
+    {
+     "total_spikes": 281,
+     "first_ms": {
+      "detect": 0.1,
+      "gf": 5.4
+     },
+     "count": {
+      "detect": 42,
+      "gf": 5
+     }
+    },
+    {
+     "total_spikes": 224,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 6.0
+     },
+     "count": {
+      "detect": 37,
+      "gf": 5
+     }
+    },
+    {
+     "total_spikes": 125,
+     "first_ms": {
+      "detect": 0.2,
+      "gf": 6.7
+     },
+     "count": {
+      "detect": 36,
+      "gf": 3
+     }
+    },
+    {
+     "total_spikes": 160,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 6.2
+     },
+     "count": {
+      "detect": 40,
+      "gf": 3
+     }
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 160,
+     "min": 93,
+     "max": 281
+    },
+    "detect": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 0.1,
+      "min": 0.0,
+      "max": 0.4
+     },
+     "count": {
+      "median": 37,
+      "min": 31,
+      "max": 42
+     }
+    },
+    "gf": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 6.2,
+      "min": 5.4,
+      "max": 6.7
+     },
+     "count": {
+      "median": 3,
+      "min": 2,
+      "max": 5
+     }
+    },
+    "jump": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "wing": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  },
+  {
+   "key": "dose_16",
+   "zh": "隨機挑十六分之一(16)",
+   "en": "a sixteenth of the detectors (16)",
+   "n_stim": 16,
+   "resampled": true,
+   "pool": "detectors",
+   "runs": [
+    {
+     "total_spikes": 10,
+     "first_ms": {
+      "detect": 1.0
+     },
+     "count": {
+      "detect": 8
+     }
+    },
+    {
+     "total_spikes": 13,
+     "first_ms": {
+      "detect": 0.3
+     },
+     "count": {
+      "detect": 12
+     }
+    },
+    {
+     "total_spikes": 34,
+     "first_ms": {
+      "detect": 0.0,
+      "gf": 9.7
+     },
+     "count": {
+      "detect": 13,
+      "gf": 1
+     }
+    },
+    {
+     "total_spikes": 19,
+     "first_ms": {
+      "detect": 0.4,
+      "gf": 9.6
+     },
+     "count": {
+      "detect": 14,
+      "gf": 1
+     }
+    },
+    {
+     "total_spikes": 13,
+     "first_ms": {
+      "detect": 0.1
+     },
+     "count": {
+      "detect": 12
+     }
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 13,
+     "min": 10,
+     "max": 34
+    },
+    "detect": {
+     "fired_in": 5,
+     "of": 5,
+     "first_ms": {
+      "median": 0.3,
+      "min": 0.0,
+      "max": 1.0
+     },
+     "count": {
+      "median": 12,
+      "min": 8,
+      "max": 14
+     }
+    },
+    "gf": {
+     "fired_in": 2,
+     "of": 5,
+     "first_ms": {
+      "median": 9.65,
+      "min": 9.6,
+      "max": 9.7
+     },
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 1
+     }
+    },
+    "jump": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "wing": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  },
+  {
+   "key": "rand_311",
+   "zh": "同樣數量的隨機神經元(311)",
+   "en": "311 random neurons, same count as the real set",
+   "n_stim": 311,
+   "resampled": true,
+   "pool": "anywhere",
+   "runs": [
+    {
+     "total_spikes": 452,
+     "first_ms": {},
+     "count": {}
+    },
+    {
+     "total_spikes": 307,
+     "first_ms": {},
+     "count": {}
+    },
+    {
+     "total_spikes": 346,
+     "first_ms": {},
+     "count": {}
+    },
+    {
+     "total_spikes": 359,
+     "first_ms": {},
+     "count": {}
+    },
+    {
+     "total_spikes": 327,
+     "first_ms": {},
+     "count": {}
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 346,
+     "min": 307,
+     "max": 452
+    },
+    "detect": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "gf": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "jump": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "wing": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  },
+  {
+   "key": "rand_126",
+   "zh": "同樣數量的隨機神經元(126)",
+   "en": "126 random neurons, matching the LC4 count",
+   "n_stim": 126,
+   "resampled": true,
+   "pool": "anywhere",
+   "runs": [
+    {
+     "total_spikes": 144,
+     "first_ms": {},
+     "count": {}
+    },
+    {
+     "total_spikes": 117,
+     "first_ms": {},
+     "count": {}
+    },
+    {
+     "total_spikes": 196,
+     "first_ms": {},
+     "count": {}
+    },
+    {
+     "total_spikes": 105,
+     "first_ms": {},
+     "count": {}
+    },
+    {
+     "total_spikes": 126,
+     "first_ms": {
+      "detect": 1.3
+     },
+     "count": {
+      "detect": 3
+     }
+    }
+   ],
+   "summary": {
+    "total_spikes": {
+     "median": 126,
+     "min": 105,
+     "max": 196
+    },
+    "detect": {
+     "fired_in": 1,
+     "of": 5,
+     "first_ms": {
+      "median": 1.3,
+      "min": 1.3,
+      "max": 1.3
+     },
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 3
+     }
+    },
+    "gf": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "jump": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "wing": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    },
+    "psi": {
+     "fired_in": 0,
+     "of": 5,
+     "first_ms": null,
+     "count": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+     }
+    }
+   }
+  }
+ ]
+}
