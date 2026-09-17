@@ -6,14 +6,14 @@
 
 把 MaleCNS 雄性果蠅**中樞神經系統**(腦+腹神經索)連接組做成 3D 網站。連接組共 166,691 顆神經元,其中 **140,024 顆帶有三維細胞體座標**,網站畫的就是這 140,024 顆做成給國小到國中生看的 3D 網站,
 重播我們自己跑出來的逃跑反射模擬:眼睛看到東西撲過來 → 巨纖維放電 → 跳躍肌與翅膀肌的神經細胞動起來。
-三條路:**小朋友版**(一步一步捲、有問答)、**專業版**(同一條路,完整數字、出處與模型限制)、**自由探索**(3D 舞台與 33 張說明卡)。中英雙語。
+三條路:**小朋友版**(一步一步捲、有問答)、**專業版**(同一條路,完整數字、出處與模型限制)、**自由探索**(3D 舞台與 34 張說明卡)。中英雙語。
 
 ## 狀態(2026-09-16)
 
 | 項目 | 狀態 |
 |---|---|
 | 3D 點雲、逃跑情境重播、身體線稿、肌肉圖解、電壓計 | 完成 |
-| 33 張說明卡(小朋友 / 想知道更多 × 中 / 英),每個數字附出處與標記 | 完成,經一輪 validity-audit(內審 + 獨立冷審)|
+| 34 張說明卡(小朋友 / 想知道更多 × 中 / 英),每個數字附出處與標記 | 完成,經一輪 validity-audit(內審 + 獨立冷審)|
 | 字幕與介面雙語 | 完成;**英文翻譯尚未經母語者或第二模型複審** |
 | 確定性閘門(見下)| 全部 PASS |
 | 複眼六角座標「哪個方向是正前方」 | **未驗證**,字幕與卡片都明寫 |
@@ -80,7 +80,7 @@ python3 scripts/lang_residue.py         # 英文版四個畫面不得殘留中�
 
 ## English
 
-An educational 3D site for kids and teens built on the real MaleCNS male fruit-fly connectome. The connectome has 166,691 neurons; 140,024 of them carry 3D soma coordinates, and those are the ones the site draws. It covers the whole central nervous system, brain and ventral nerve cord, replaying an escape-reflex simulation we ran ourselves. Three tracks: Kids (scroll-driven, with quizzes), In depth (same path with full numbers, sources and model limits), Explore freely (3D stage + 33 cards). Chinese and English.
+An educational 3D site for kids and teens built on the real MaleCNS male fruit-fly connectome. The connectome has 166,691 neurons; 140,024 of them carry 3D soma coordinates, and those are the ones the site draws. It covers the whole central nervous system, brain and ventral nerve cord, replaying an escape-reflex simulation we ran ourselves. Three tracks: Kids (scroll-driven, with quizzes), In depth (same path with full numbers, sources and model limits), Explore freely (3D stage + 34 cards). Chinese and English.
 
 **What glows is real data; line art is ours.** Green glow = real neuron positions and simulated spikes. Magenta = injected by us (the model cannot compute looming) or added by us (the ending). Grey line art = the body we drew. Amber = nerve-to-muscle, absent from the connectome. Every number on a card carries a mark: ● measured by our scripts, ◆ from a paper we read first-hand, ○ secondhand or illustrative.
 

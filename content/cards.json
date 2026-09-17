@@ -588,6 +588,56 @@
       ]
     },
     {
+      "id": "no-learning",
+      "module": "C",
+      "anchor": "idle",
+      "trigger": "model",
+      "title": {
+        "zh": "誠實說:我們的模型學不會東西",
+        "en": "Honestly: our model cannot learn"
+      },
+      "kid": {
+        "zh": "真的果蠅聞到一個味道、接著碰到不舒服的事,下次就會躲開。牠記得住。我們的模型不會。腦裡負責記住氣味的那個地方,在資料裡是接好的,可是模型跑的時候,每一條連線的強度從頭到尾都固定,沒有一條會因為經驗而改變。所以畫面上演的是一次反射,不是一段記憶。",
+        "en": "A real fly that smells something and then has a bad experience will avoid that smell next time. It remembers. Our model does not. The part of the brain that stores smells is wired up in the data, but while the model runs, the strength of every connection stays exactly where it started. Nothing changes with experience. So what you watch is one reflex, not a memory."
+      },
+      "more": {
+        "zh": "引擎(LIF,參數沿 Shiu et al. 2024)**沒有實作任何突觸可塑性**:權重表載入後就是唯讀常數,模擬過程中沒有任何一行程式碼寫回權重陣列(2026-09-17 逐檔搜尋 570 行引擎原始碼確認,記錄在 docs/verification_log.md)。資料本身帶著學習所需的結構——KC→MBON 的 61,210 條連線就在圖裡,多巴胺神經元也在——但模型不把多巴胺當調節訊號,它跟其他神經元一樣只是放電。要讓它真的學,至少三件事:①把那些連線的強度變成可變狀態;②實作區室化的調節規則(KC 與該區室多巴胺神經元同時活躍時壓抑該連線);③設計一個可否證的行為測試,否則分不出「學會了」與「參數漂移」。三件都還沒做。",
+        "en": "The engine (leaky integrate-and-fire, parameters from Shiu et al. 2024) **implements no synaptic plasticity at all**. The weight table is read-only once loaded, and no line in the simulation ever writes back to the weight array (checked line by line across 570 lines of engine source on 2026-09-17; recorded in docs/verification_log.md). The data itself carries the structure learning needs. The 61,210 Kenyon-cell-to-output-neuron connections are right there in the graph, and the dopamine neurons are too. But the model treats dopamine as just another spiking cell, not as a modulator. Making it actually learn needs at least three things: turn those connection strengths into mutable state, implement the compartment rule that depresses a connection when the Kenyon cell and its compartment's dopamine neuron fire together, and design a falsifiable behavioural test so that learning can be told apart from parameter drift. None of the three is done."
+      },
+      "facts": [
+        {
+          "value": "0",
+          "value_en": "0",
+          "label": {
+            "zh": "模擬過程中被更新的連線強度",
+            "en": "connection strengths updated during a run"
+          },
+          "provenance": "measured",
+          "source": "docs/verification_log.md §模型沒有學習機制(逐檔搜尋引擎原始碼,無任何寫回權重的程式碼)"
+        },
+        {
+          "value": "61,210",
+          "value_en": "61,210",
+          "label": {
+            "zh": "資料裡負責學習的那些連線(KC→MBON)",
+            "en": "connections that carry learning in the data (KC to MBON)"
+          },
+          "provenance": "measured",
+          "source": "scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt"
+        },
+        {
+          "value": "570",
+          "value_en": "570",
+          "label": {
+            "zh": "被逐檔搜尋過的引擎原始碼行數",
+            "en": "lines of engine source searched"
+          },
+          "provenance": "measured",
+          "source": "docs/verification_log.md §模型沒有學習機制"
+        }
+      ]
+    },
+    {
       "id": "never-stops",
       "module": "C",
       "anchor": "timeline",
@@ -942,8 +992,8 @@
       "anchor": "mushroom-body",
       "trigger": "click",
       "title": {
-        "zh": "整顆腦裡唯一能改的地方",
-        "en": "The one place the brain can change"
+        "zh": "腦裡負責記住氣味的地方",
+        "en": "Where the brain remembers smells"
       },
       "kid": {
         "zh": "果蠅大部分的腦是「出生就接好、一輩子不太變」的。負責記住氣味的主要地方叫蘑菇體——牠靠那裡記住「這個味道上次讓我不舒服」。",
@@ -1539,16 +1589,16 @@
       "anchor": "experiment",
       "trigger": "click",
       "title": {
-        "zh": "還能往哪走:把模型缺的三樣東西補上",
-        "en": "Where next: three things the model is missing"
+        "zh": "還能往哪走:把模型缺的四樣東西補上",
+        "en": "Where next: four things the model is missing"
       },
       "kid": {
-        "zh": "我們發現模型缺三樣東西,每一樣都是下一步可以做的實驗:第一,眼睛到偵測器那段為什麼斷了;第二,真果蠅有「直接通電」的接點,所以比模型快,模型沒有;第三,模型一旦點燃就停不下來,真果蠅會停。這三個都還沒有人做,誰先做誰就知道答案。",
-        "en": "We found three things the model lacks, and each is an experiment waiting to be done: first, why the stretch from eye to detectors is broken; second, real flies have 'direct electrical' junctions that make them faster than the model, which has none; third, once lit the model never stops, while a real fly does. Nobody has done these three yet — whoever does first gets the answer."
+        "zh": "我們發現模型缺四樣東西,每一樣都是下一步可以做的實驗:第一,眼睛到偵測器那段為什麼斷了;第二,真果蠅有「直接通電」的接點,所以比模型快,模型沒有;第三,模型一旦點燃就停不下來,真果蠅會停;第四,模型學不會東西,連線的強度從頭到尾都不會變。這四個都還沒有人做,誰先做誰就知道答案。",
+        "en": "We found four things the model lacks, and each is an experiment waiting to be done: first, why the stretch from eye to detectors is broken; second, real flies have 'direct electrical' junctions that make them faster than the model, which has none; third, once lit the model never stops, while a real fly does. Nobody has done these four yet — whoever does first gets the answer."
       },
       "more": {
-        "zh": "①視覺前端:LC4 從視覺柱只收到 1.23 Hz,要追髓質運動路徑(T4/T5)為何靜默——是權重門檻、還是缺少視網膜的時間濾波。②電突觸:巨纖維到跳躍肌實際 0.93 ms,模型固定 1.8 ms 化學延遲;加入間隙連接需要另一種耦合項與 Shaking-B 表達位置的標註。③停止機制:600 ms 仍在放電,候選是放電後適應、慢抑制或神經調節;每加一項都要重跑保度數打亂對照,確認新機制沒有把「結構決定能否引爆」這個結果改掉。",
-        "en": "① Visual front end: LC4 receives only 1.23 Hz from the columns; trace why the medulla motion pathway (T4/T5) is silent — a weight threshold, or missing temporal filtering in the retina. ② Electrical synapses: giant fiber to jump muscle takes 0.93 ms in the real fly against a fixed 1.8 ms chemical delay in the model; adding gap junctions needs a different coupling term and annotation of where Shaking-B is expressed. ③ A stop mechanism: still firing at 600 ms; candidates are spike-frequency adaptation, slow inhibition or neuromodulation — and every addition must re-run the degree-preserving shuffle control to check it hasn't altered the 'structure decides whether it ignites' result."
+        "zh": "①視覺前端:LC4 從視覺柱只收到 1.23 Hz,要追髓質運動路徑(T4/T5)為何靜默——是權重門檻、還是缺少視網膜的時間濾波。②電突觸:巨纖維到跳躍肌實際 0.93 ms,模型固定 1.8 ms 化學延遲;加入間隙連接需要另一種耦合項與 Shaking-B 表達位置的標註。③停止機制:600 ms 仍在放電,候選是放電後適應、慢抑制或神經調節;每加一項都要重跑保度數打亂對照,確認新機制沒有把「結構決定能否引爆」這個結果改掉。④學習:引擎沒有任何突觸可塑性,權重載入後就是常數;要補上得讓 KC→MBON 的強度變成可變狀態、實作多巴胺區室的調節規則,並設計可否證的行為測試(見「誠實說:我們的模型學不會東西」)。",
+        "en": "① Visual front end: LC4 receives only 1.23 Hz from the columns; trace why the medulla motion pathway (T4/T5) is silent — a weight threshold, or missing temporal filtering in the retina. ② Electrical synapses: giant fiber to jump muscle takes 0.93 ms in the real fly against a fixed 1.8 ms chemical delay in the model; adding gap junctions needs a different coupling term and annotation of where Shaking-B is expressed. ③ A stop mechanism: still firing at 600 ms; candidates are spike-frequency adaptation, slow inhibition or neuromodulation — and every addition must re-run the degree-preserving shuffle control to check it hasn't altered the 'structure decides whether it ignites' result. (4) Learning: the engine has no synaptic plasticity, the weights are constant once loaded. Adding it means making the Kenyon-cell-to-output-neuron strengths mutable, implementing the dopamine compartment rule, and designing a falsifiable behavioural test. See the card \"Honestly: our model cannot learn\"."
       },
       "facts": [
         {

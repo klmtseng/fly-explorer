@@ -1,6 +1,6 @@
 # 宣稱清單(機器產生,validity-audit 第 1 步)
 
-卡片 33 張,事實 85 條,階段字幕 8 段。
+卡片 34 張,事實 88 條,階段字幕 8 段。
 
 | 卡/階段 | 數值 | 標籤 | 標記 | 來源欄 | 路徑檢查 |
 |---|---|---|---|---|---|
@@ -31,6 +31,9 @@
 | shuffle-control | 0.388% | 打亂後保留的原始連線 | measured | scripts/fly/shuffle_csr.py | 路徑OK |
 | no-spontaneous | 0 | 不給輸入時的模型放電數 | measured | docs/verification_log.md(模型沒有自發活動) | 路徑OK |
 | no-spontaneous | — | 真果蠅腦有持續自發活動(常識,未引文獻) | todo | 未引文獻 | 非路徑(論文/標註) |
+| no-learning | 0 | 模擬過程中被更新的連線強度 | measured | docs/verification_log.md §模型沒有學習機制(逐檔搜尋引擎原始碼,無任何寫回權重的程式碼) | 路徑OK |
+| no-learning | 61,210 | 資料裡負責學習的那些連線(KC→MBON) | measured | scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt | 路徑OK |
+| no-learning | 570 | 被逐檔搜尋過的引擎原始碼行數 | measured | docs/verification_log.md §模型沒有學習機制 | 路徑OK |
 | never-stops | 599.8 ms | 最後一次放電(模擬盡頭) | measured | docs/verification_log.md §模型不會自己停(600 ms 探測) | 路徑OK |
 | never-stops | 562 ms | 翅膀肌最後放電 | measured | docs/verification_log.md §模型不會自己停 | 路徑OK |
 | escape-converge | 309 / 311 → 2 | 直接連到巨纖維的偵測器(權重 ≥2) | measured | public/data/escape_edges.json(出貨連線檔)重算:LC4 126/126 貢獻 6,362 個突觸、LPLC2 183/185 貢獻 4,860;無任一顆同時連兩顆巨纖維;scripts/fly/escape_path.py | 路徑OK |

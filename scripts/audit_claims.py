@@ -52,6 +52,17 @@ out = ["# 宣稱清單(機器產生,validity-audit 第 1 步)", "", f"卡片 {le
 out += ["| %s | %s | %s | %s | %s | %s |" % tuple(str(x).replace("|","\\|") for x in r) for r in rows]
 out += ["", f"路徑缺失:{len(missing)}"] + [f"- {a}: {b}" for a, b in missing]
 (ROOT/"audit/claims.md").write_text("\n".join(out)+"\n")
+# 卡片張數的覆蓋宣稱:任何地方寫「N 張卡 / N cards」都必須等於實際張數
+# (2026-09-17:加了一張「模型學不會東西」後,index.html/README/宣傳稿三處還寫著 33,使用者的提問才讓它曝光)
+COUNT_RE = re.compile(r"(\d+)\s*(?:張(?:說明)?卡|(?:explanation\s+)?cards)")
+for f in [ROOT/"index.html", ROOT/"README.md"] + sorted((ROOT/"docs").glob("*.md")):
+    if not f.exists(): continue
+    # 歸檔的審查報告在講「哪幾張卡有問題」,不是在宣稱總數,整份豁免(與 retraction_lint 同一個原則)
+    if f.name.startswith("review_") or f.name.startswith("promo_"): continue
+    for i, line in enumerate(f.read_text(encoding="utf-8", errors="ignore").splitlines(), 1):
+        for m in COUNT_RE.finditer(line):
+            if int(m.group(1)) != len(cards):
+                missing.append((f"{f.relative_to(ROOT)}:{i}", f"寫著 {m.group(1)} 張卡,實際 {len(cards)} 張"))
 dups = [str(q) for q in list(ROOT.glob("public/**/cards.json")) + list(ROOT.glob("public/**/stages.json")) + list(ROOT.glob("src/**/*.json"))]
 if dups: missing.append(("單一真相", "content/ 之外還有副本:" + ", ".join(dups) + "(熱審 2026-09-15:public/ 舊快照含全部撤回句)"))
 print(f"facts={sum(len(c['facts']) for c in cards)} stages={len(stages)} missing_paths={len(missing)}")
