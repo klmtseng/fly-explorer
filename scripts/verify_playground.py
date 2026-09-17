@@ -107,7 +107,7 @@ def p4_prose_matches(pg, msgs):
     """網頁文案講的「跑過 N 次」必須等於實際次數(覆蓋宣稱重數)。"""
     n = pg["protocol"]["seeds"]
     zh = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
-    for f in [LAB_TS, ROOT / "README.md", ROOT / "index.html"] + sorted((ROOT / "docs").glob("*.md")):
+    for f in [LAB_TS, ROOT / "README.md", ROOT / "README.zh-TW.md", ROOT / "index.html"] + sorted((ROOT / "docs").glob("*.md")):
         if not f.exists(): continue
         for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
             for m in re.finditer(r"跑過\s*([一二三四五六七八九十]|\d+)\s*次", line):

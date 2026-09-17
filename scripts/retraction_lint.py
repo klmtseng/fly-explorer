@@ -53,7 +53,7 @@ def scan_docs():
     # 2026-09-17 閘門稽核:先前只掃 docs/*.md 與三個檔,而**撤回句最可能活下來的地方是程式碼與
     # 打包後的產物**——src/ 的字串、public/ 的資料檔、dist/ 的舊 bundle 都直接送到讀者眼前。
     files = (sorted((ROOT / "docs").glob("*.md")) + sorted((ROOT / "docs").glob("*.html"))
-             + [ROOT / "README.md", ROOT / "index.html", ROOT / "DESIGN.md", ROOT / "CLAUDE.md"]
+             + [ROOT / "README.md", ROOT / "README.zh-TW.md", ROOT / "index.html", ROOT / "DESIGN.md", ROOT / "CLAUDE.md"]
              + sorted((ROOT / "src").rglob("*.ts")) + sorted((ROOT / "src").rglob("*.css"))
              + sorted((ROOT / "public").rglob("*.json")) + sorted((ROOT / "dist").rglob("*.html"))
              + sorted((ROOT / "dist").rglob("*.js")) + sorted((ROOT / "dist/data").rglob("*.json")))

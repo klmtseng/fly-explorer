@@ -1,46 +1,62 @@
-# 透視果蠅 · Fly Explorer
+**English** · [中文](README.zh-TW.md)
 
-**你看到亮起來的,是一顆真的腦在算。**
+# Fly Explorer
 
-**線上版:https://fly-brain-explorer.vercel.app**(手機直式最佳;另一個網址 https://fly-explorer-sage.vercel.app 指向同一份)
+**The neurons are real. The positions are real. What makes them light up is a simulation running on their real wiring.**
 
-把 MaleCNS 雄性果蠅**中樞神經系統**(腦+腹神經索)連接組做成 3D 網站。連接組共 166,691 顆神經元,其中 **140,024 顆帶有三維細胞體座標**,網站畫的就是這 140,024 顆做成給國小到國中生看的 3D 網站,
-重播我們自己跑出來的逃跑反射模擬:眼睛看到東西撲過來 → 巨纖維放電 → 跳躍肌與翅膀肌的神經細胞動起來。
-三條路:**小朋友版**(一步一步捲、有問答)、**專業版**(同一條路,完整數字、出處與模型限制)、**自由探索**(3D 舞台與 34 張說明卡)。中英雙語。
+Live: **https://fly-brain-explorer.vercel.app** (best on a phone, held upright. https://fly-explorer-sage.vercel.app serves the same build.)
 
-## 狀態(2026-09-16)
+A 3D site about the MaleCNS male fruit-fly connectome, written for children and teenagers but with the numbers kept honest enough for a specialist. The connectome contains 166,691 neurons across the whole central nervous system, brain and ventral nerve cord. **140,024 of them carry measured 3D soma coordinates, and those are the ones the site draws.** On top of that it replays an escape reflex we simulated ourselves: something looms, the giant fiber fires, and the nerve cells that drive the jump muscle and the wing muscles follow.
 
-| 項目 | 狀態 |
+Three ways in:
+
+- **Kids** — a scroll-driven story, one step at a time, with quizzes.
+- **In depth** — the same path with the full numbers, the source of each one, and the model's limits.
+- **Explore freely** — the 3D stage plus 34 cards you can open in any order.
+
+Everything is bilingual (English / 中文). The site defaults to English; add `?lang=zh` for Chinese.
+
+## What is data and what we drew
+
+Nothing on the screen blurs that line, and the legend says so on every screen:
+
+| On screen | Meaning |
 |---|---|
-| 3D 點雲、逃跑情境重播、身體線稿、肌肉圖解、電壓計 | 完成 |
-| 實驗台:換刺激條件,看真的各跑過 20 次的結果(9 種條件,4 種可在舞台上播) | 完成 |
-| 34 張說明卡(小朋友 / 想知道更多 × 中 / 英),每個數字附出處與標記 | 完成,經一輪 validity-audit(內審 + 獨立冷審)|
-| 字幕與介面雙語 | 完成;**英文翻譯尚未經母語者或第二模型複審** |
-| 確定性閘門(見下)| 全部 PASS |
-| 複眼六角座標「哪個方向是正前方」 | **未驗證**,字幕與卡片都明寫 |
-| 模型會不會自己停 | **不會**(跑到 600 ms 仍在放電);250 ms 之後的收尾是我們加的,畫面用洋紅標示 |
-| 語音解說 | 未做 |
+| **Green glow** | Real neuron positions, simulated activity |
+| **Magenta** | Injected by us, because the model cannot compute it (the looming detector's input), or added by us (the wind-down after 250 ms) |
+| **Cool grey line art** | The fly's body, drawn by us. A connectome has no body in it |
+| **Amber** | Motor neuron to muscle. Not in the connectome either. Only the timing is real |
 
-## 誠實標示
+Every number on a card carries one of three marks:
 
-畫面上每樣東西都分得出「資料」與「我們畫的」:
+- **●** computed from the data by a script in this repo
+- **◆** from a paper we read first-hand (the reading is registered in `docs/verification_log.md`)
+- **○** secondhand, illustrative, or not verified
 
-- **發光**(綠)= 真實神經元的位置與模擬的放電。
-- **洋紅** = 模型算不出、我們注入的(視覺前端的逼近偵測)或我們加的(結局)。
-- **冷灰線稿** = 我們畫的身體,連接組裡沒有。
-- **琥珀** = 運動神經元到肌肉那一段,連接組沒有;只有時機是真的。
+The rule behind the colours is in `docs/visual_provenance.md`. It exists because the most tempting thing to do with a connectome is to animate something that looks alive and let the viewer assume it was measured.
 
-卡片上的每個數字帶三種標記:● 我們的腳本從資料算出來的;◆ 我們親自讀過的論文;○ 二手轉引、示意或未查證。
-規範在 `docs/visual_provenance.md`。
+## Model limits, stated up front
 
-## 模型限制(先講清楚)
+- The engine is a leaky integrate-and-fire model using the parameters of Shiu et al. 2024. **Chemical synapses only**: no electrical synapses, no neuromodulation, no synaptic plasticity.
+- **The model cannot learn.** The weight table is read-only once loaded. The 61,210 Kenyon-cell-to-output-neuron connections that carry olfactory learning in a real fly are present in the data and completely inert here.
+- **The visual front end does not carry the signal.** Driving the optic columns gets LC4 to 1.23 Hz and LPLC2 to zero, so the looming step is injected instead. It is drawn in magenta and labelled.
+- **PSI, the relay the textbook puts between the giant fiber and the wing depressor, never fires in this scenario.** Zero out its inhibitory inputs and it fires in all three seeds tested, so inhibition is what holds it down. But the wing readout does not change, and in the fly that GF→PSI synapse is a mixed electrical-and-chemical one whose electrical half is the dominant type in this circuit. A connectome records only chemical synapses, so **this model cannot test the textbook route, and its silence is not evidence against the textbook.** Ablation data: `docs/verification_log.md`, section on PSI inhibition.
+- **The model never stops.** In 20 runs to 600 ms, not one stopped on its own. Playback ends at 250 ms and the wind-down after that is ours, in magenta.
+- Which direction is "straight ahead" in the eye's hex coordinates is **unverified**. The site says so rather than guessing.
+- **The English text has not been reviewed by a native speaker.**
 
-- 引擎是 leaky integrate-and-fire(參數沿 Shiu et al. 2024),只有化學突觸,沒有電突觸、沒有神經調節。
-- 視覺前端算不出逼近刺激,所以「眼睛看到東西」那一步是注入的。
-- 教科書裡巨纖維→PSI→翅膀肌的中繼在這個情境裡沒放電;模擬裡翅膀訊號走了另一條路。卡片照模擬講,並註明與教科書不同。
-- 模擬比真果蠅慢,也不會自己停。
+## Status
 
-## 跑起來
+| | |
+|---|---|
+| 3D point cloud, escape replay, body line art, muscle diagram, voltage meter | done |
+| Lab: swap the stimulus set and see results that were really run 20 times each (9 conditions, 4 playable on the stage) | done |
+| 34 cards (kids / in depth × en / zh), every number with a source and a mark | done, through four rounds of validity audit |
+| Captions and interface in both languages | done. Translation quality not yet reviewed by a native speaker or a second model |
+| Deterministic gates (below) | all passing |
+| Voice narration | not started |
+
+## Run it
 
 ```bash
 npm install
@@ -48,88 +64,66 @@ npm run dev        # http://localhost:5173
 npm run build      # dist/
 ```
 
-手機直式 308 px 是驗收基準。桌機用 `?preset=low` 可以模擬手機路徑。
-深連結:`?track=kid|more|free`、`?lang=en`、`?cap=0`(無字幕)、`?card=<id>`、`?t=<毫秒>`(跳到某一刻)、
-`?lab=1`(打開實驗台)、`?lab=<條件>&labplay=1`(直接播某個條件,例如 `?lab=rand_311&labplay=1`)。
+A 308 px upright phone is the acceptance target; on a desktop, `?preset=low` takes the phone path.
 
-## 閘門(改內容前後都跑)
+Deep links: `?track=kid|more|free`, `?lang=en|zh`, `?cap=0` (captions off), `?card=<id>`, `?t=<ms>` (jump to a moment), `?lab=1` (open the lab), `?lab=<condition>&labplay=1` (play one condition on the stage, e.g. `?lab=rand_311&labplay=1`).
 
-```bash
-python3 scripts/jargon_lint.py          # 小朋友層不得出現術語清單,首次出現要當場解釋(中英)
-python3 scripts/audit_numbers.py        # 正文裡每個數字必須在事實欄或 docs/ 找得到(中英)
-python3 scripts/audit_claims.py         # 事實欄的來源路徑必須存在,且不得指向未公開的研究倉
-python3 scripts/verify_stages.py        # 字幕裡的毫秒數必須等於出貨情境的實際放電時刻(中英)
-python3 scripts/retraction_lint.py      # 已撤回的說法不得再出現(卡片、字幕,以及 docs/ 與 README 這些讀者讀得到的檔)
-python3 scripts/citation_record_lint.py # ◆ 的每條來源,作者字串必須出現在查證紀錄裡(它驗登記,不驗你真的讀過)
-python3 scripts/lang_residue.py         # 英文版 74 個畫面不得殘留中文(六個主畫面 + 34 張卡 × 2 層;需 vite build + Chrome)
-python3 scripts/verify_playground.py    # 實驗台:summary 必須由 runs 重算得出,種子 1 必須等於出貨情境
-```
+## The lab
 
-每支都有 `--self-test`,跑的是**指名的那幾個**負向案例:例如「來源指向不存在的檔」「手改實驗台的中位數」
-「英文頁殘留中文」。它證明的是**這幾種錯會被擋下**,不是「錯的東西都擋得住」。
+Open it with `?lab=1`. Nine stimulus conditions, the same protocol as the replay, changing only which neurons get stimulated. **Every cell was actually run 20 times**, and the page shows the median with the range across those runs (`scripts/build_playground.py` → `public/data/playground.json`).
 
-2026-09-17 我請一個沒參與建造的模型專門攻擊這八支閘門,它做了 25 個明顯錯誤的稻草人,八支全部放行。
-那一輪的結構性發現是:閘門守的是 `content/` 與部分 `docs/`,而 `src/`、`public/`、`dist/` 沒人守——
-撤回過的說法只要搬進程式碼字串或打包產物就能活下來。已經把撤回掃描與卡數比對擴到那些目錄,
-並把英文殘留掃描從 6 個畫面擴到 74 個;`audit/va_20260918.md` 裡有完整清單與還沒補的洞。
+**This is not a live simulation in your browser.** Each cell was computed ahead of time on the full connectome. That choice is deliberate: the edge file shipped to the browser carries excitatory edges only, so simulating with it would ignite instantly and would contradict this project's own finding, since PSI stays silent precisely because its strongest early input is inhibitory.
 
-## 科學宣稱的檢查與評估(2026-09-17 新增,尚未列入發佈閘門)
+Four of the conditions also ship playable stage data. When a non-baseline condition plays, the standard captions are swapped out and the spike counter is hidden, because both were written for the baseline run and reusing them elsewhere would be a lie.
 
-上面八支管的是「數字對不對、撤回有沒有回流、英文有沒有殘留中文」。
-管不到的是「科學上說錯但用詞乾淨」。這條線另有四支,方法與第一次實跑的數字在
-`docs/sci_eval.md`:
+You can recompute every median and range from the raw per-run numbers in the repo. You cannot re-run the simulation: the engine and the weighted connectivity file live in a private research repo.
+
+## Gates (run before and after touching content)
 
 ```bash
-python3 scripts/sci_claims.py       # 揀出值得查文獻的句子(73 句,不是全站)
-python3 scripts/verify_quotes.py    # 「文獻說 X」必須逐字對得上原文(引文接地)
-python3 scripts/disclosure_lint.py  # 專業層承認的模型限制,讀者層不准悄悄不提
-python3 scripts/sci_eval.py         # 盲測上面這些檢查器:逐類召回 + 誤報率 + 兩條基線
+python3 scripts/jargon_lint.py          # jargon banned in the kids layer; first use must be explained on the spot (en+zh)
+python3 scripts/audit_numbers.py        # every number in prose must exist in a fact field or under docs/ (en+zh)
+python3 scripts/audit_claims.py         # source paths must exist, must not point at the private repo, must not be empty files
+python3 scripts/verify_stages.py        # millisecond values in captions must equal the shipped scenario's actual spike times
+python3 scripts/retraction_lint.py      # retracted wording must not reappear (content, docs, src, public, dist)
+python3 scripts/citation_record_lint.py # every ◆ needs a registered reading with a year/DOI/PMID on the same line
+python3 scripts/lang_residue.py         # no Chinese left on 74 English screens (6 main + 34 cards × 2 layers; needs a build + Chrome)
+python3 scripts/verify_playground.py    # lab summaries must be recomputable from the runs; seed 1 must equal the shipped scenario
+python3 scripts/disclosure_lint.py      # a limit admitted in the in-depth layer may not go unmentioned in a reader-facing layer
+python3 scripts/verify_quotes.py        # every "the paper says X" must match the source verbatim (needs one --fetch to cache sources)
 ```
 
-`disclosure_lint.py` 曾經是紅的:它指出小朋友層與字幕講 PSI 沒放電,卻沒說這個模型
-量不了教科書那條路。**2026-09-18 已修**——同時做了消融測試(`scripts/fly/ablate_psi_inhibition.py`):
-把進 PSI 的 309 條抑制性邊歸零重跑,PSI 三個種子都放電,所以「被抑制壓住」是對的;
-但解除抑制後翅膀讀數完全沒變,而真正的限制是連接組只記錄化學突觸。全部寫在
-`docs/verification_log.md §PSI 抑制消融`。
+Each has a `--self-test` that runs **specific** negative cases, for example "source points at a file that does not exist", "lab median edited by hand", "Chinese left on an English page". That proves **those** errors get caught. It does not prove that wrong things in general get caught, and this README used to claim the stronger thing.
 
-`disclosure_lint.py` 與 `verify_quotes.py` 現在也是發佈前要跑的(前者純離線;
-後者第一次要 `--fetch` 抓原文進 `audit/sources/` 快取,之後離線重驗)。
+On 2026-09-17 a model that had not helped build any of this was asked to attack the gates. It produced 25 obviously wrong strawmen and **all eight gates of the day passed every one of them.** The structural finding: the gates guarded `content/` and part of `docs/`, while `src/`, `public/` and `dist/` were unguarded, so retracted wording could survive by moving into a code string or a build artefact. The retraction scan and the card-count check now cover those directories, and the English-residue sweep went from 6 screens to 74. `audit/va_20260918.md` has the full list, including the holes still open.
 
-閘門管不到的事,寫在這裡比較誠實:它們驗的是「登記有沒有做、數字對不對得上、禁用詞有沒有出現」,
-不驗「這個說法在科學上對不對」,也不驗英文翻譯品質。那兩件事目前靠人審,見 `audit/`。
+## Checking the science, and evaluating the checker
 
-## 實驗台
+The gates above answer "do the numbers add up, did a retraction propagate, is there Chinese left on the English page". They cannot answer **"this sentence is scientifically wrong but the wording is clean"**. That is a separate lane, and its method and measured results are in `docs/sci_eval.md`:
 
-`?lab=1` 打開。九種刺激條件,協定與重播完全相同,只換「刺激哪些神經元」,每一格**真的各跑 20 次**,
-顯示中位數與 20 次的範圍(`scripts/build_playground.py` → `public/data/playground.json`)。
+```bash
+python3 scripts/sci_claims.py       # pick the sentences worth checking against literature (73, not the whole site)
+python3 scripts/verify_quotes.py    # "the paper says X" must appear verbatim in the fetched source
+python3 scripts/disclosure_lint.py  # an admitted model limit may not be dropped on the way to the reader
+python3 scripts/sci_eval.py         # blind-test a checker: per-class recall, false-positive rate, two baselines
+```
 
-**這不是瀏覽器裡的即時模擬。** 每一格都是先用完整連接組跑出來的。不做即時是有原因的:
-出貨的連線檔只有興奮性邊,拿它即時算會一點就爆,而且會推翻本站自己的發現
-(PSI 不放電的原因正是它最強的早期輸入是抑制性的)。
+The evaluation does not measure accuracy, because "is this sentence true" has no ground truth. It measures discrimination: take sentences verified as true, inject one specific class of error while keeping the wording clean, and see what a checker catches. It reports **per error class** (any class at zero recall fails the whole evaluation) and always prints two baselines alongside, "flag nothing" and "flag everything", so a recall figure can never be read on its own.
 
-其中四種條件另外匯出了可播的舞台資料,選了會換掉舞台上播的那一次。非基準條件播放時,
-標準重播的字幕會被換掉,放電計數器會收起來——那些是為基準那一次做的,套到別的條件上就是說謊。
+First real run: a fresh-context reviewer with web access to the literature, given 33 sentences and forbidden to read this repo, scored **16/21 recall with 1/13 false positives**; on the items decidable from public literature alone it was **10/10 with no false positives**. A deterministic floor that only applies the candidate filter and does no science at all scores 0.52 / 0.33.
 
-## 資料與出處
+That run also overturned two of our own judgements and one of its own. Both corrections are written up in `docs/sci_eval.md`, because the useful output of an audit is the claim you have to take back.
 
-- **連接組**:MaleCNS v1.0,Berg et al. 2026,CC BY 4.0,https://male-cns.janelia.org 。本倉只含衍生資料(座標、出貨情境的放電記錄),原始 1.1 GB 權重表請自行下載。
-- **模型**:Shiu et al. 2024 的 LIF 參數。引擎本身在未公開的研究倉;卡片引用的量測腳本已複製到 `scripts/fly/`(見該目錄 README)。
-- **數字的出處鏈**:`docs/verification_log.md`、`docs/data_facts.md`、`docs/research_context_cards.md`。
+## Data and provenance
 
-## 授權
+- **Connectome**: MaleCNS v1.0, Berg et al. 2026, CC BY 4.0, https://male-cns.janelia.org . This repo contains derived data only (coordinates, the shipped scenario's spike record). The 1.1 GB weight table is a separate download.
+- **Model**: the LIF parameters of Shiu et al. 2024 (Nature 634:210-219, PMID 39358519), read first-hand and registered in `docs/verification_log.md`.
+- **The chain behind each number**: `docs/verification_log.md`, `docs/data_facts.md`, `docs/research_context_cards.md`, and the machine-generated claim table in `audit/claims.md`.
 
-程式 MIT(`LICENSE`);內容 CC BY 4.0(`LICENSE-CONTENT.md`);資料 CC BY 4.0(MaleCNS)。
+## Found something wrong?
 
----
+Open an issue. Corrections to the science are the most welcome kind, and if you can point at a paper or a line in the data, that is enough. The record of what previous reviews caught, including the times we had to retract our own findings, is in `audit/`.
 
-## English
+## Licence
 
-An educational 3D site for kids and teens built on the real MaleCNS male fruit-fly connectome. The connectome has 166,691 neurons; 140,024 of them carry 3D soma coordinates, and those are the ones the site draws. It covers the whole central nervous system, brain and ventral nerve cord, replaying an escape-reflex simulation we ran ourselves. Three tracks: Kids (scroll-driven, with quizzes), In depth (same path with full numbers, sources and model limits), Explore freely (3D stage + 34 cards). Chinese and English.
-
-**What glows is real data; line art is ours.** Green glow = real neuron positions and simulated spikes. Magenta = injected by us (the model cannot compute looming) or added by us (the ending). Grey line art = the body we drew. Amber = nerve-to-muscle, absent from the connectome. Every number on a card carries a mark: ● measured by our scripts, ◆ from a paper we read first-hand, ○ secondhand or illustrative.
-
-Known limits: leaky integrate-and-fire only (Shiu et al. 2024 parameters), chemical synapses only; the visual front end cannot compute looming; the textbook GF→PSI→wing relay never fires in this scenario; the model is slower than a real fly and never stops on its own. The eye's "which way is forward" convention is unverified. The English translation has not been reviewed by a native speaker.
-
-Live: **https://fly-brain-explorer.vercel.app**
-
-Data: MaleCNS v1.0 (Berg et al. 2026, CC BY 4.0). Code MIT, content CC BY 4.0.
+Code MIT (`LICENSE`). Content CC BY 4.0 (`LICENSE-CONTENT.md`). Data CC BY 4.0 (MaleCNS, Berg et al. 2026).

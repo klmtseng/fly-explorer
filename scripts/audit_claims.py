@@ -76,7 +76,7 @@ COUNT_RE = re.compile(r"(\d+)\s*(?:張(?:說明)?卡|(?:explanation\s+)?cards)")
 #   docs/review_*(歸檔審查報告在引用它要攻擊的舊數字)、PROGRESS.md(逐日進度,舊行本來就記著當時的張數)。
 COUNT_SKIP = ("review_", "PROGRESS.md")
 # 2026-09-17 閘門稽核:再加 src/(卡數會寫在介面字串裡)與 dist/(打包後的舊數字會留在產物裡)。
-_count_files = ([ROOT/"index.html", ROOT/"README.md", ROOT/"DESIGN.md"]
+_count_files = ([ROOT/"index.html", ROOT/"README.md", ROOT/"README.zh-TW.md", ROOT/"DESIGN.md"]
                 + sorted((ROOT/"docs").glob("*.md")) + sorted((ROOT/"docs").glob("*.html"))
                 + sorted((ROOT/"src").rglob("*.ts")) + sorted((ROOT/"dist").rglob("*.html"))
                 + sorted((ROOT/"dist").rglob("*.js")))
