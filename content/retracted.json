@@ -84,6 +84,18 @@
       "en": "never fired in 5 runs",
       "why": "0/5 只把單次發生率壓到 95% 上界 45%,已全部改跑 20 次",
       "ref": "audit/va_20260917.md"
+    },
+    {
+      "zh": "真的腦在算",
+      "en": "a real brain computing",
+      "why": "把模擬講成實測。2026-09-17 冷審:這是 LIF 模擬 + 注入的視覺前端,首頁與圖例已改成「神經元是真的,讓它們亮起來的是模擬」",
+      "ref": "audit/va_20260918.md P1-1/P1-2"
+    },
+    {
+      "zh": "真實活動",
+      "en": "real neurons, real activity",
+      "why": "同上;圖例已改成「真實神經元位置,模擬出來的活動」",
+      "ref": "audit/va_20260918.md P1-2"
     }
   ]
 }

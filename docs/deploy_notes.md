@@ -22,3 +22,24 @@ Vercel 直接 `Invalid vercel.json - should NOT have additional property "//"`,*
 git ls-files -z | tar --null -T - -cf - | tar -xf - -C "$PUB"
 rm -rf "$PUB/docs/promo_drafts.md" "$PUB/docs/promo"
 ```
+
+## 閘門掃不到的讀者表面(2026-09-18)
+
+使用者在手機上看 GitHub 才發現:**repo 的 description 還是中文,而且帶著已撤回的那句「真的腦在算」**。
+閘門一支都碰不到它:那句話不在任何檔案裡,它在 GitHub 的中繼資料裡。
+
+發佈前要人工看一遍的表面,列在這裡(沒有腳本能代勞):
+
+- GitHub repo 的 **description / homepage / topics**(`gh repo view <repo> --json description,homepageUrl,repositoryTopics`)
+- Vercel 專案設定裡的名稱與網域
+- 社群平台上已經發出去的貼文與配圖(改了站上的說法,舊貼文不會跟著改)
+- artifact / 簡報這類已經送出去的副本
+
+**順帶抓到的四處**:把那句話加進 `content/retracted.json` 之後,閘門立刻報出
+`DESIGN.md` 的北極星、`content/tracks.json` 的**首頁大標**(訪客讀到的第一句,中英都還是舊版)、
+以及中文宣傳主圖的標題(`scripts/build_promo_images.py`)。
+`content/tracks.json` 會漏掉,是因為內容層掃描只看 cards 與 stages;現在整個 `content/*.json` 都掃,
+而 `content/retracted.json` 自己豁免(它按定義含有每一句撤回句)。
+
+教訓與 9/17 那輪同型,第四次:**閘門守得住的,只有它掃描集合裡的東西。**
+新增一個讀者看得到的表面時,第一個問題是「哪支閘門掃得到它」。

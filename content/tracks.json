@@ -1,19 +1,124 @@
 {
   "note": "引導版=scrollytelling(2026-09-16):舞台固定在背後,文字一段一段往上捲。每步:stage(停幀)或 play=[從,到](捲動進度=時間軸);card=哪張卡;cam=鏡頭落點(fit 整隻/cns 神經系統/brain 腦/thorax 胸);side=文字塊在左或右;full=文字退場只留一句,腦占滿;len=段落長度(視窗高的倍數,播放段要長才捲得慢)。兩版共用,只換卡片文字層與紙的皮膚。",
-  "hero": {"zh": "果蠅腦,真的那一顆", "en": "A real fly brain", "sub": {"zh": "你看到亮起來的,是一顆真的腦在算。往下捲。", "en": "What lights up is a real brain computing. Scroll."}},
+  "hero": {
+    "zh": "果蠅腦,真的那一顆",
+    "en": "A real fly brain",
+    "sub": {
+      "zh": "神經元是真的,位置是真的。讓它們亮起來的,是照真接線跑出來的模擬。往下捲。",
+      "en": "The neurons are real. The activity is a simulation running on their real wiring. Scroll."
+    }
+  },
   "steps": [
-    {"stage": -24, "card": "body-overview", "cam": "fit", "side": "left", "len": 1.4},
-    {"stage": -24, "card": "why-fly", "cam": "fit", "side": "right", "len": 1.2},
-    {"stage": -24, "card": "hex-columns", "cam": "brain", "side": "left", "len": 1.4},
-    {"play": [-24, 3], "card": "escape-converge", "cam": "brain", "side": "right", "len": 2.4},
-    {"stage": 3, "card": "why-sudden", "cam": "brain", "full": true, "len": 1.2, "line": {"zh": "3.3 毫秒:巨纖維跨過閾值", "en": "3.3 ms: the giant fiber crosses threshold"}},
-    {"play": [3, 16], "card": "escape-two-muscles", "cam": "cns", "side": "left", "len": 2.4},
-    {"stage": 16, "card": "muscle-link", "cam": "thorax", "side": "right", "len": 1.4},
-    {"stage": 16, "card": "wing-beat", "cam": "fit", "side": "left", "len": 1.2},
-    {"play": [16, 250], "card": "escape-speed", "cam": "cns", "full": true, "len": 3.0, "line": {"zh": "16 → 250 毫秒:模擬到此切斷", "en": "16 → 250 ms: the simulation is cut here"}},
-    {"play": [250, 309], "card": "never-stops", "cam": "fit", "side": "right", "len": 2.0},
-    {"stage": 309, "card": "model-vs-real", "cam": "cns", "side": "left", "len": 1.2},
-    {"stage": 309, "card": "no-spontaneous", "cam": "fit", "side": "right", "len": 1.2},
-    {"stage": 309, "card": "whats-next", "cam": "fit", "side": "left", "len": 1.4}
+    {
+      "stage": -24,
+      "card": "body-overview",
+      "cam": "fit",
+      "side": "left",
+      "len": 1.4
+    },
+    {
+      "stage": -24,
+      "card": "why-fly",
+      "cam": "fit",
+      "side": "right",
+      "len": 1.2
+    },
+    {
+      "stage": -24,
+      "card": "hex-columns",
+      "cam": "brain",
+      "side": "left",
+      "len": 1.4
+    },
+    {
+      "play": [
+        -24,
+        3
+      ],
+      "card": "escape-converge",
+      "cam": "brain",
+      "side": "right",
+      "len": 2.4
+    },
+    {
+      "stage": 3,
+      "card": "why-sudden",
+      "cam": "brain",
+      "full": true,
+      "len": 1.2,
+      "line": {
+        "zh": "3.3 毫秒:巨纖維跨過閾值",
+        "en": "3.3 ms: the giant fiber crosses threshold"
+      }
+    },
+    {
+      "play": [
+        3,
+        16
+      ],
+      "card": "escape-two-muscles",
+      "cam": "cns",
+      "side": "left",
+      "len": 2.4
+    },
+    {
+      "stage": 16,
+      "card": "muscle-link",
+      "cam": "thorax",
+      "side": "right",
+      "len": 1.4
+    },
+    {
+      "stage": 16,
+      "card": "wing-beat",
+      "cam": "fit",
+      "side": "left",
+      "len": 1.2
+    },
+    {
+      "play": [
+        16,
+        250
+      ],
+      "card": "escape-speed",
+      "cam": "cns",
+      "full": true,
+      "len": 3.0,
+      "line": {
+        "zh": "16 → 250 毫秒:模擬到此切斷",
+        "en": "16 → 250 ms: the simulation is cut here"
+      }
+    },
+    {
+      "play": [
+        250,
+        309
+      ],
+      "card": "never-stops",
+      "cam": "fit",
+      "side": "right",
+      "len": 2.0
+    },
+    {
+      "stage": 309,
+      "card": "model-vs-real",
+      "cam": "cns",
+      "side": "left",
+      "len": 1.2
+    },
+    {
+      "stage": 309,
+      "card": "no-spontaneous",
+      "cam": "fit",
+      "side": "right",
+      "len": 1.2
+    },
+    {
+      "stage": 309,
+      "card": "whats-next",
+      "cam": "fit",
+      "side": "left",
+      "len": 1.4
+    }
   ]
 }

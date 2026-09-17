@@ -46,7 +46,8 @@ def scan(cards, stages):
 
 EXEMPT = ("撤回", "retracted", "Retracted", "retraction", "Retraction", "withdrew", "withdrawn", "Withdrawn", "~~")   # 同一行在講「這條已撤回」不算命中
 # 歸檔的審查報告按性質就是在**引用**它要攻擊的宣稱,整份豁免;豁免清單會印在輸出裡,不靜默跳過
-EXEMPT_FILES = ("docs/review_", "audit/")
+# content/retracted.json 是清單本身:它按定義一定含有每一句撤回句,掃它等於掃自己
+EXEMPT_FILES = ("docs/review_", "audit/", "content/retracted.json")
 def scan_docs():
     """讀者讀得到的文件:README 指過去的 docs/、首頁本身。逐行掃,帶豁免字樣的行跳過。"""
     hits = []
@@ -55,6 +56,8 @@ def scan_docs():
     files = (sorted((ROOT / "docs").glob("*.md")) + sorted((ROOT / "docs").glob("*.html"))
              + [ROOT / "README.md", ROOT / "README.zh-TW.md", ROOT / "index.html", ROOT / "DESIGN.md", ROOT / "CLAUDE.md"]
              + sorted((ROOT / "src").rglob("*.ts")) + sorted((ROOT / "src").rglob("*.css"))
+             + sorted((ROOT / "content").glob("*.json"))          # 2026-09-18:首頁大標住在 content/tracks.json,
+             #   而內容層掃描只看 cards/stages,於是已撤回的那句在首頁活了兩天
              + sorted((ROOT / "public").rglob("*.json")) + sorted((ROOT / "dist").rglob("*.html"))
              + sorted((ROOT / "dist").rglob("*.js")) + sorted((ROOT / "dist/data").rglob("*.json")))
     skipped = []
