@@ -81,7 +81,7 @@ export function createCards(): Cards {
 
   function renderBar() {
     sheet.querySelectorAll<HTMLButtonElement>('[data-lvl]').forEach(b => { b.setAttribute('aria-pressed', String(b.dataset.lvl === level)); b.textContent = UI[lang][b.dataset.lvl as Level]; });
-    sheet.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    document.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));   // 全站三處:抽屜、舞台、首頁
     document.getElementById('sheetIndexBtn')!.textContent = UI[lang].index;
     document.getElementById('sheetClose')!.setAttribute('aria-label', UI[lang].close);
     document.getElementById('sheetMarks')!.textContent = UI[lang].marks;
@@ -204,7 +204,7 @@ export function createCards(): Cards {
   let lastSpk: [number, number, 'prelude' | 'live' | 'epilogue'] | null = null;
 
   sheet.querySelectorAll<HTMLButtonElement>('[data-lvl]').forEach(b => b.addEventListener('click', () => api.setLevel(b.dataset.lvl as Level)));
-  sheet.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach(b => b.addEventListener('click', () => api.setLang(b.dataset.lang as Lang)));
+  document.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach(b => b.addEventListener('click', () => api.setLang(b.dataset.lang as Lang)));
   document.getElementById('sheetClose')!.addEventListener('click', api.close);
   document.getElementById('sheetIndexBtn')!.addEventListener('click', renderIndex);
   document.getElementById('cPrev')!.addEventListener('click', () => { const i = list.indexOf(cur!); if (i > 0) renderCard(list[i - 1]); });
