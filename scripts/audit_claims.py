@@ -55,16 +55,24 @@ out += ["", f"路徑缺失:{len(missing)}"] + [f"- {a}: {b}" for a, b in missing
 # 卡片張數的覆蓋宣稱:任何地方寫「N 張卡 / N cards」都必須等於實際張數
 # (2026-09-17:加了一張「模型學不會東西」後,index.html/README/宣傳稿三處還寫著 33,使用者的提問才讓它曝光)
 COUNT_RE = re.compile(r"(\d+)\s*(?:張(?:說明)?卡|(?:explanation\s+)?cards)")
-for f in [ROOT/"index.html", ROOT/"README.md"] + sorted((ROOT/"docs").glob("*.md")):
+# 掃描集合 = 讀者/轉發者會看到的「現在式」宣稱檔。冷審 2026-09-17 抓到三個漏網:
+#   DESIGN.md、docs/*.html(只 glob 過 *.md)、以及被我豁免掉的宣傳稿——而宣傳稿正是要發出去的那份。
+# 仍然豁免的兩類,理由與 retraction_lint 相同,且清單會印出來不靜默跳過:
+#   docs/review_*(歸檔審查報告在引用它要攻擊的舊數字)、PROGRESS.md(逐日進度,舊行本來就記著當時的張數)。
+COUNT_SKIP = ("review_", "PROGRESS.md")
+_count_files = ([ROOT/"index.html", ROOT/"README.md", ROOT/"DESIGN.md"]
+                + sorted((ROOT/"docs").glob("*.md")) + sorted((ROOT/"docs").glob("*.html")))
+_count_skipped = []
+for f in _count_files:
     if not f.exists(): continue
-    # 歸檔的審查報告在講「哪幾張卡有問題」,不是在宣稱總數,整份豁免(與 retraction_lint 同一個原則)
-    if f.name.startswith("review_") or f.name.startswith("promo_"): continue
+    if any(x in f.name for x in COUNT_SKIP): _count_skipped.append(str(f.relative_to(ROOT))); continue
     for i, line in enumerate(f.read_text(encoding="utf-8", errors="ignore").splitlines(), 1):
         for m in COUNT_RE.finditer(line):
             if int(m.group(1)) != len(cards):
                 missing.append((f"{f.relative_to(ROOT)}:{i}", f"寫著 {m.group(1)} 張卡,實際 {len(cards)} 張"))
 dups = [str(q) for q in list(ROOT.glob("public/**/cards.json")) + list(ROOT.glob("public/**/stages.json")) + list(ROOT.glob("src/**/*.json"))]
 if dups: missing.append(("單一真相", "content/ 之外還有副本:" + ", ".join(dups) + "(熱審 2026-09-15:public/ 舊快照含全部撤回句)"))
+print(f"卡數比對掃過 {len(_count_files)} 檔,豁免 {len(_count_skipped)} 檔:{', '.join(_count_skipped) or '無'}")
 print(f"facts={sum(len(c['facts']) for c in cards)} stages={len(stages)} missing_paths={len(missing)}")
 for a, b in missing: print("  MISSING", a, b)
 sys.exit(1 if missing else 0)

@@ -1,10 +1,10 @@
 # 宣稱清單(機器產生,validity-audit 第 1 步)
 
-卡片 34 張,事實 91 條,階段字幕 8 段。
+卡片 34 張,事實 92 條,階段字幕 8 段。
 
 | 卡/階段 | 數值 | 標籤 | 標記 | 來源欄 | 路徑檢查 |
 |---|---|---|---|---|---|
-| body-overview | 165,122 | 神經元 | measured | ../fly/scripts/io_inventory.py | 缺:../fly/scripts/io_inventory.py(研究倉路徑:公開版必須自足,腳本請複製到 scripts/fly/) |
+| body-overview | 165,122 | 神經元 | measured | scripts/fly/io_inventory.py | 路徑OK |
 | body-overview | 140,024 | 畫得進點雲(有細胞本體座標) | measured | scripts/export_soma.py;CLAUDE.md §我們有、別人沒有的東西 | 路徑OK |
 | body-overview | 995 µm | 神經系統全長 | measured | scripts/export_soma.py | 路徑OK |
 | body-overview | 36% | 佔體長比例 | measured | scripts/export_soma.py | 路徑OK |
@@ -33,16 +33,17 @@
 | no-spontaneous | — | 真果蠅腦有持續自發活動(常識,未引文獻) | todo | 未引文獻 | 非路徑(論文/標註) |
 | no-learning | 0 | 模擬過程中被更新的連線強度 | measured | docs/verification_log.md §模型沒有學習機制(逐檔搜尋引擎原始碼,無任何寫回權重的程式碼) | 路徑OK |
 | no-learning | 61,210 | 資料裡負責學習的那些連線(KC→MBON) | measured | scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt | 路徑OK |
-| no-learning | 570 | 被逐檔搜尋過的引擎原始碼行數 | measured | docs/verification_log.md §模型沒有學習機制 | 路徑OK |
-| never-stops | 599.8 ms | 最後一次放電(模擬盡頭) | measured | docs/verification_log.md §模型不會自己停(600 ms 探測) | 路徑OK |
-| never-stops | 562 ms | 翅膀肌最後放電 | measured | docs/verification_log.md §模型不會自己停 | 路徑OK |
+| no-learning | 665 | 被逐檔搜尋過的引擎原始碼行數(含標頭) | measured | docs/verification_log.md §模型沒有學習機制 | 路徑OK |
+| never-stops | 599.2–599.9 ms | 全腦最後一次放電(20 次的範圍;模擬在 600 ms 被切斷) | measured | public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py | 路徑OK |
+| never-stops | 562.1–599.9 ms | 翅膀肌運動神經元最後一次放電(20 次的範圍) | measured | public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py | 路徑OK |
+| never-stops | 0 / 20 | 20 次跑滿 600 ms,有幾次在中途自己停下來 | measured | public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py | 路徑OK |
 | escape-converge | 309 / 311 → 2 | 直接連到巨纖維的偵測器(權重 ≥2) | measured | public/data/escape_edges.json(出貨連線檔)重算:LC4 126/126 貢獻 6,362 個突觸、LPLC2 183/185 貢獻 4,860;無任一顆同時連兩顆巨纖維;scripts/fly/escape_path.py | 路徑OK |
 | escape-converge | LC4=速度, LPLC2=大小 | 各自編碼什麼 | paper | Ache et al. Curr Biol (2019) | 非路徑(論文/標註) |
 | escape-two-muscles | 90 | 巨纖維→跳躍肌運動神經元 突觸 | measured | scripts/fly/escape_path.py | 路徑OK |
 | escape-two-muscles | 0 | 巨纖維→翅膀肌運動神經元 直連 | measured | scripts/fly/escape_path.py | 路徑OK |
 | escape-two-muscles | 15.7 ms | 模擬裡翅膀肌運動神經元首次放電(走 AN19B001) | measured | runs/build/escape.csv;docs/verification_log.md §DLMn 首波 | 路徑OK |
 | escape-two-muscles | 0 次 | PSI 在本情境的放電 | measured | runs/build/escape.csv | 路徑OK |
-| escape-two-muscles | 12.2–15.7 ms | 同一組刺激跑五次,翅膀肌運動神經元首次放電的範圍(出貨那次是 15.7) | measured | public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py | 路徑OK |
+| escape-two-muscles | 11.9–15.7 ms | 同一組刺激跑 20 次,翅膀肌運動神經元首次放電的範圍(出貨那次是 15.7) | measured | public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py | 路徑OK |
 | muscle-link | 26 | 連線起點:真實運動神經元 | measured | scripts/export_edges.py(nodesByStage wing/jump) | 路徑OK |
 | muscle-link | 0 | 資料集裡的肌肉 | measured | annotation superclass 清單(scripts/fly/io_inventory.py) | 路徑OK |
 | escape-speed | 18 ms | 燈熄 → 巨纖維放電 | paper | Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀 | 非路徑(論文/標註) |
@@ -80,7 +81,7 @@
 | why-sudden | 1.8 ms | 突觸延遲 | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
 | why-sudden | −52 → −45 mV | 靜息電位 → 閾值(模型參數) | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
 | why-sudden | 11,222 / 36 | 偵測器→巨纖維突觸總數 / 每顆平均 | measured | public/data/escape_edges.json 重算(6,362 + 4,860) | 路徑OK |
-| why-sudden | 2.8–3.3 ms | 同一組刺激跑五次,巨纖維首次放電的範圍(出貨那次是 3.3) | measured | public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py | 路徑OK |
+| why-sudden | 2.8–3.3 ms | 同一組刺激跑 20 次,巨纖維首次放電的範圍(出貨那次是 3.3) | measured | public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py | 路徑OK |
 | tried-critical-point | 1,747 vs 117,208 | 同一格(w_syn 0.24, k=25)兩次單跑的放電數 | measured | scripts/phase_sweep.py;public/data/phase_sweep.json table[1].counts[1];docs/verification_log.md §臨界點 | 路徑OK |
 | tried-critical-point | 1.26 | 雙穩態測試的變異係數(同參數換種子跑六次) | measured | docs/verification_log.md §雙穩態:臨界點附近單次試驗無意義 | 路徑OK |
 | tried-critical-point | 0.275 mV | 論文的唯一自由參數 | paper | Shiu et al. Nature 634:210-219 (2024) | 非路徑(論文/標註) |
@@ -90,7 +91,7 @@
 | tried-visual-frontend | 283.8 Hz | 直接餵偵測器:巨纖維 | measured | scripts/visual_pathway_test.py;docs/verification_log.md | 路徑OK |
 | tried-pulse-length | 25 / 3 / 6 ms | 三版脈衝長度(出貨 6) | measured | scripts/build_scenario.py T_STIM;docs/verification_log.md §脈衝長度 | 路徑OK |
 | tried-pulse-length | 14.4 / 15.7 ms | 跳躍肌 / 翅膀肌的運動神經元首次放電 | measured | runs/build/escape.csv | 路徑OK |
-| tried-pulse-length | 14.4–16.3 / 12.2–15.7 ms | 跑五次的範圍:跳躍肌 / 翅膀肌(出貨那次是 14.4 / 15.7) | measured | public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py | 路徑OK |
+| tried-pulse-length | 13.8–16.8 / 11.9–15.7 ms | 跑 20 次的範圍:跳躍肌 / 翅膀肌(出貨那次是 14.4 / 15.7) | measured | public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py | 路徑OK |
 | next-fix-model | 0.93 vs 1.8 ms | 真果蠅 vs 模型:巨纖維→跳躍肌 | paper | Augustin et al. eNeuro 6(2) ENEURO.0423-18.2019,bioRxiv 全文親讀 | 非路徑(論文/標註) |
 | next-fix-model | 3 | 尚未做的實驗 | measured | docs/verification_log.md 各節的「侷限」 | 路徑OK |
 | next-new-stories | 61,210 | 可塑連線(學習實驗的場地) | measured | scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt | 路徑OK |
@@ -104,5 +105,4 @@
 | stage@30ms | 600 ms; 562 ms; 250 ms | 視葉已經安靜,肌肉還在動——而且不會自己停 | measured | docs/verification_log.md §模型不會自己停;runs/build/escape.csv | 路徑OK |
 | stage@250ms | 600 ms | 我們加的結局:讓牠停下來 | injected | docs/verification_log.md §模型不會自己停、§我們加的結局;src/main.ts EPILOGUE | 路徑OK |
 
-路徑缺失:1
-- body-overview: ../fly/scripts/io_inventory.py(研究倉路徑:公開版必須自足,腳本請複製到 scripts/fly/)
+路徑缺失:0

@@ -601,8 +601,8 @@
         "en": "A real fly that smells something and then has a bad experience will avoid that smell next time. It remembers. Our model does not. The part of the brain that stores smells is wired up in the data, but while the model runs, the strength of every connection stays exactly where it started. Nothing changes with experience. So what you watch is one reflex, not a memory."
       },
       "more": {
-        "zh": "引擎(LIF,參數沿 Shiu et al. 2024)**沒有實作任何突觸可塑性**:權重表載入後就是唯讀常數,模擬過程中沒有任何一行程式碼寫回權重陣列(2026-09-17 逐檔搜尋 570 行引擎原始碼確認,記錄在 docs/verification_log.md)。資料本身帶著學習所需的結構——KC→MBON 的 61,210 條連線就在圖裡,多巴胺神經元也在——但模型不把多巴胺當調節訊號,它跟其他神經元一樣只是放電。要讓它真的學,至少三件事:①把那些連線的強度變成可變狀態;②實作區室化的調節規則(KC 與該區室多巴胺神經元同時活躍時壓抑該連線);③設計一個可否證的行為測試,否則分不出「學會了」與「參數漂移」。三件都還沒做。",
-        "en": "The engine (leaky integrate-and-fire, parameters from Shiu et al. 2024) **implements no synaptic plasticity at all**. The weight table is read-only once loaded, and no line in the simulation ever writes back to the weight array (checked line by line across 570 lines of engine source on 2026-09-17; recorded in docs/verification_log.md). The data itself carries the structure learning needs. The 61,210 Kenyon-cell-to-output-neuron connections are right there in the graph, and the dopamine neurons are too. But the model treats dopamine as just another spiking cell, not as a modulator. Making it actually learn needs at least three things: turn those connection strengths into mutable state, implement the compartment rule that depresses a connection when the Kenyon cell and its compartment's dopamine neuron fire together, and design a falsifiable behavioural test so that learning can be told apart from parameter drift. None of the three is done."
+        "zh": "引擎(LIF,參數沿 Shiu et al. 2024)**沒有實作任何突觸可塑性**:權重表載入後就是唯讀常數,模擬過程中沒有任何一行程式碼寫回權重陣列(2026-09-17 逐檔搜尋引擎全部原始碼確認:三支 .c 共 570 行、兩個標頭檔 95 行且只有結構定義沒有函式本體,記錄在 docs/verification_log.md)。資料本身帶著學習所需的結構——KC→MBON 的 61,210 條連線就在圖裡,多巴胺神經元也在——但模型不把多巴胺當調節訊號,它跟其他神經元一樣只是放電。要讓它真的學,至少三件事:①把那些連線的強度變成可變狀態;②實作區室化的調節規則(KC 與該區室多巴胺神經元同時活躍時壓抑該連線);③設計一個可否證的行為測試,否則分不出「學會了」與「參數漂移」。三件都還沒做。",
+        "en": "The engine (leaky integrate-and-fire, parameters from Shiu et al. 2024) **implements no synaptic plasticity at all**. The weight table is read-only once loaded, and no line in the simulation ever writes back to the weight array (checked line by line across the whole engine source on 2026-09-17: three .c files totalling 570 lines plus two headers of 95 lines that hold only struct definitions and no function bodies; recorded in docs/verification_log.md). The data itself carries the structure learning needs. The 61,210 Kenyon-cell-to-output-neuron connections are right there in the graph, and the dopamine neurons are too. But the model treats dopamine as just another spiking cell, not as a modulator. Making it actually learn needs at least three things: turn those connection strengths into mutable state, implement the compartment rule that depresses a connection when the Kenyon cell and its compartment's dopamine neuron fire together, and design a falsifiable behavioural test so that learning can be told apart from parameter drift. None of the three is done."
       },
       "facts": [
         {
@@ -626,11 +626,11 @@
           "source": "scripts/fly/mb_circuit_stats.py;輸出 audit/_mb_stats.txt"
         },
         {
-          "value": "570",
-          "value_en": "570",
+          "value": "665",
+          "value_en": "665",
           "label": {
-            "zh": "被逐檔搜尋過的引擎原始碼行數",
-            "en": "lines of engine source searched"
+            "zh": "被逐檔搜尋過的引擎原始碼行數(含標頭)",
+            "en": "lines of engine source searched, headers included"
           },
           "provenance": "measured",
           "source": "docs/verification_log.md §模型沒有學習機制"
@@ -651,27 +651,39 @@
         "en": "First, what is real: which nerve cells, how they connect, which lights up first and how long it takes are all computed from real data. Now the place where the model and a real fly differ: the stimulus lasted just 6 milliseconds, yet the activity kept going until we switched the simulation off — still running at 600 ms. A real fly doesn't do that; it flies for a while and then stops. So the part after 250 ms where the glow fades and the wings fold is an ending we added, not something the simulation computed — it's marked in magenta."
       },
       "more": {
-        "zh": "600 ms 探測(同一 6 ms 脈衝):全腦放電每 50 ms 維持 500-600 次(約 1-2 Hz 自持),翅膀肌最後一次放電 562 ms,活動不歸零。模型沒有自發活動(不給輸入全黑),但一旦點燃也沒有機制讓它停:沒有適應、沒有把迴路關掉的抑制回路。這兩點真果蠅都不是這樣。所以我們不做假的淡出——250 ms 之後的收尾明標「我們加的結局」,亮度係數即時顯示。",
-        "en": "A 600 ms probe with the same 6 ms pulse: whole-brain spiking holds at 500-600 per 50 ms (self-sustained at roughly 1-2 Hz), the last wing-muscle spike is at 562 ms, and activity never returns to zero. The model has no spontaneous activity (no input, no light) yet once lit has no mechanism to stop: no adaptation, no inhibitory loop that shuts the circuit down. A real fly is unlike it on both counts. So we don't fake a fade — the wind-down after 250 ms is labelled 'our added ending', with the brightness factor shown live."
+        "zh": "600 ms 探測(同一 6 ms 脈衝):全腦放電每 50 ms 維持 500-600 次(約 1-2 Hz 自持),翅膀肌最後一次放電 562 ms,活動不歸零。模型沒有自發活動(不給輸入全黑),但一旦點燃也沒有機制讓它停:沒有適應、沒有把迴路關掉的抑制回路。這兩點真果蠅都不是這樣。所以我們不做假的淡出——250 ms 之後的收尾明標「我們加的結局」,亮度係數即時顯示。\n\n**2026-09-17 補**:原本這兩個數字各來自一次 600 ms 探測。改成跑 20 次之後:全腦最後一次放電落在 599.2–599.9 ms(也就是每一次都撐到我們切斷為止),翅膀肌最後一次放電 562.1–599.9 ms,**20 次裡沒有任何一次自己停下來**。原本寫的 562 是那個範圍的下端。",
+        "en": "A 600 ms probe with the same 6 ms pulse: whole-brain spiking holds at 500-600 per 50 ms (self-sustained at roughly 1-2 Hz), the last wing-muscle spike is at 562 ms, and activity never returns to zero. The model has no spontaneous activity (no input, no light) yet once lit has no mechanism to stop: no adaptation, no inhibitory loop that shuts the circuit down. A real fly is unlike it on both counts. So we don't fake a fade — the wind-down after 250 ms is labelled 'our added ending', with the brightness factor shown live.\n\n**Added 2026-09-17:** these two numbers each came from a single 600 ms probe. Across 20 runs: the last spike anywhere lands between 599.2 and 599.9 ms, meaning every run was still going when we cut it, and the wing motor neurons' last spike falls between 562.1 and 599.9 ms. **Not one of the 20 runs stopped on its own.** The 562 we used to quote is the bottom of that range."
       },
       "facts": [
         {
-          "value": "599.8 ms",
+          "value": "599.2–599.9 ms",
           "label": {
-            "zh": "最後一次放電(模擬盡頭)",
-            "en": "last spike (end of run)"
+            "zh": "全腦最後一次放電(20 次的範圍;模擬在 600 ms 被切斷)",
+            "en": "last spike anywhere in the brain, range across 20 runs (the run is cut at 600 ms)"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md §模型不會自己停(600 ms 探測)"
+          "source": "public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py",
+          "value_en": "599.2–599.9 ms"
         },
         {
-          "value": "562 ms",
+          "value": "562.1–599.9 ms",
           "label": {
-            "zh": "翅膀肌最後放電",
-            "en": "last wing-MN spike"
+            "zh": "翅膀肌運動神經元最後一次放電(20 次的範圍)",
+            "en": "last spike of the wing motor neurons, range across 20 runs"
           },
           "provenance": "measured",
-          "source": "docs/verification_log.md §模型不會自己停"
+          "source": "public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py",
+          "value_en": "562.1–599.9 ms"
+        },
+        {
+          "value": "0 / 20",
+          "value_en": "0 / 20",
+          "label": {
+            "zh": "20 次跑滿 600 ms,有幾次在中途自己停下來",
+            "en": "of 20 runs to 600 ms, how many stopped on their own"
+          },
+          "provenance": "measured",
+          "source": "public/data/playground.json probe_600(20 次 600 ms 探測);scripts/build_playground.py"
         }
       ]
     },
@@ -792,14 +804,14 @@
           "value_en": "0 spikes"
         },
         {
-          "value": "12.2–15.7 ms",
-          "value_en": "12.2–15.7 ms",
+          "value": "11.9–15.7 ms",
+          "value_en": "11.9–15.7 ms",
           "label": {
-            "zh": "同一組刺激跑五次,翅膀肌運動神經元首次放電的範圍(出貨那次是 15.7)",
-            "en": "range across five runs for the wing motor neuron's first spike (the shipped run was 15.7)"
+            "zh": "同一組刺激跑 20 次,翅膀肌運動神經元首次放電的範圍(出貨那次是 15.7)",
+            "en": "range across 20 runs for the wing motor neuron's first spike (the shipped run was 15.7)"
           },
           "provenance": "measured",
-          "source": "public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py"
+          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py"
         }
       ]
     },
@@ -1432,11 +1444,11 @@
           "value": "2.8–3.3 ms",
           "value_en": "2.8–3.3 ms",
           "label": {
-            "zh": "同一組刺激跑五次,巨纖維首次放電的範圍(出貨那次是 3.3)",
-            "en": "range across five runs for the giant fiber's first spike (the shipped run was 3.3)"
+            "zh": "同一組刺激跑 20 次,巨纖維首次放電的範圍(出貨那次是 3.3)",
+            "en": "range across 20 runs for the giant fiber's first spike (the shipped run was 3.3)"
           },
           "provenance": "measured",
-          "source": "public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py"
+          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py"
         }
       ]
     },
@@ -1579,8 +1591,8 @@
         "en": "Our first stimulus lasted 25 ms and the whole screen lit up at once — no relay to see. At 3 ms the jump muscle never fired at all. 6 ms was right: detectors first, giant fiber at 3.3 ms, the jump-muscle nerve cell at 14.4 ms, the wing-muscle one at 15.7 ms. The site plays the 6 ms version."
       },
       "more": {
-        "zh": "三版對照(6 ms 出貨):25 ms → 偵測器 0-32 ms、巨纖維 3.3-31.9、全部重疊;3 ms → 巨纖維 5 次、TTMn 沒放電、PSI 沒放電;6 ms → 巨纖維 7 次、TTMn 14.4 ms 一次、DLMn 15.7-249.1、PSI 沒放電。要有接力,脈衝必須比傳遞(3-13 ms)短。注意 6 ms 版 TTMn 只放電 1 次、巨纖維 7 次,統計極薄,字幕只寫首次時刻不寫速率。\n\n**2026-09-17 補**:做實驗台時把同一組刺激用五個亂數種子各跑一次,才發現這些毫秒數有跑次之間的離散:巨纖維 2.8–3.3、跳躍肌 14.4–16.3、翅膀肌 12.2–15.7。網站重播的是其中一次(種子 1),它的三個數字分別落在範圍的兩端,不是中位數。重播的字幕講的是你正在看的那一次,卡片這裡給的是五次的範圍。",
-        "en": "Three versions (6 ms shipped): 25 ms → detectors 0-32 ms, giant fiber 3.3-31.9, everything overlapping; 3 ms → giant fiber 5 spikes, TTMn silent, PSI silent; 6 ms → giant fiber 7 spikes, TTMn once at 14.4 ms, DLMn 15.7-249.1 ms, PSI silent. For a visible relay the pulse must be shorter than the transit (3-13 ms). Note the 6 ms version has TTMn firing once and the giant fiber seven times — thin statistics, so captions give first-spike times only, never rates.\n\n**Added 2026-09-17:** building the lab meant running the same stimulus set under five random seeds, which showed these millisecond values vary from run to run: giant fiber 2.8 to 3.3, jump muscle 14.4 to 16.3, wing muscle 12.2 to 15.7. The replay on the site is one of those runs (seed 1), and its three numbers sit at the ends of the range rather than at the median. The replay captions describe the run you are watching; the range here is what five runs give."
+        "zh": "三版對照(6 ms 出貨):25 ms → 偵測器 0-32 ms、巨纖維 3.3-31.9、全部重疊;3 ms → 巨纖維 5 次、TTMn 沒放電、PSI 沒放電;6 ms → 巨纖維 7 次、TTMn 14.4 ms 一次、DLMn 15.7-249.1、PSI 沒放電。要有接力,脈衝必須比傳遞(3-13 ms)短。注意 6 ms 版 TTMn 只放電 1 次、巨纖維 7 次,統計極薄,字幕只寫首次時刻不寫速率。\n\n**2026-09-17 補**:做實驗台時把同一組刺激用 20 個亂數種子各跑一次,才發現這些毫秒數有跑次之間的離散:巨纖維 2.8–3.3 ms、跳躍肌 13.8–16.8 ms、翅膀肌 11.9–15.7 ms。網站重播的是其中一次(種子 1:3.3 / 14.4 / 15.7),它的三個數字都落在範圍的端點,不是中位數。重播的字幕講的是你正在看的那一次,卡片這裡給的是 20 次的範圍。",
+        "en": "Three versions (6 ms shipped): 25 ms → detectors 0-32 ms, giant fiber 3.3-31.9, everything overlapping; 3 ms → giant fiber 5 spikes, TTMn silent, PSI silent; 6 ms → giant fiber 7 spikes, TTMn once at 14.4 ms, DLMn 15.7-249.1 ms, PSI silent. For a visible relay the pulse must be shorter than the transit (3-13 ms). Note the 6 ms version has TTMn firing once and the giant fiber seven times — thin statistics, so captions give first-spike times only, never rates.\n\n**Added 2026-09-17:** building the lab meant running the same stimulus set under 20 random seeds, which showed these millisecond values vary from run to run: giant fiber 2.8–3.3 ms, jump muscle 13.8–16.8 ms, wing muscle 11.9–15.7 ms. The replay on the site is one of those runs (seed 1, at 3.3 / 14.4 / 15.7), and its three numbers sit at the ends of the range rather than at the median. The replay captions describe the run you are watching; the range here is what 20 runs give."
       },
       "facts": [
         {
@@ -1602,14 +1614,14 @@
           "source": "runs/build/escape.csv"
         },
         {
-          "value": "14.4–16.3 / 12.2–15.7 ms",
-          "value_en": "14.4–16.3 / 12.2–15.7 ms",
+          "value": "13.8–16.8 / 11.9–15.7 ms",
+          "value_en": "13.8–16.8 / 11.9–15.7 ms",
           "label": {
-            "zh": "跑五次的範圍:跳躍肌 / 翅膀肌(出貨那次是 14.4 / 15.7)",
-            "en": "range across five runs: jump / wing (the shipped run was 14.4 / 15.7)"
+            "zh": "跑 20 次的範圍:跳躍肌 / 翅膀肌(出貨那次是 14.4 / 15.7)",
+            "en": "range across 20 runs: jump / wing (the shipped run was 14.4 / 15.7)"
           },
           "provenance": "measured",
-          "source": "public/data/playground.json conditions[both](同一組刺激,5 個亂數種子);scripts/build_playground.py"
+          "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py"
         }
       ]
     },

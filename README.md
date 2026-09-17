@@ -13,7 +13,7 @@
 | 項目 | 狀態 |
 |---|---|
 | 3D 點雲、逃跑情境重播、身體線稿、肌肉圖解、電壓計 | 完成 |
-| 實驗台:換刺激條件,看真的跑過五次的結果(9 種條件,4 種可在舞台上播) | 完成 |
+| 實驗台:換刺激條件,看真的各跑過 20 次的結果(9 種條件,4 種可在舞台上播) | 完成 |
 | 34 張說明卡(小朋友 / 想知道更多 × 中 / 英),每個數字附出處與標記 | 完成,經一輪 validity-audit(內審 + 獨立冷審)|
 | 字幕與介面雙語 | 完成;**英文翻譯尚未經母語者或第二模型複審** |
 | 確定性閘門(見下)| 全部 PASS |
@@ -62,6 +62,7 @@ python3 scripts/verify_stages.py        # 字幕裡的毫秒數必須等於出�
 python3 scripts/retraction_lint.py      # 已撤回的說法不得再出現(卡片、字幕,以及 docs/ 與 README 這些讀者讀得到的檔)
 python3 scripts/citation_record_lint.py # ◆ 的每條來源,作者字串必須出現在查證紀錄裡(它驗登記,不驗你真的讀過)
 python3 scripts/lang_residue.py         # 英文版六個畫面不得殘留中文(含實驗台;需 vite build + Chrome)
+python3 scripts/verify_playground.py    # 實驗台:summary 必須由 runs 重算得出,種子 1 必須等於出貨情境
 ```
 
 每支都有 `--self-test` 負向案例,證明它擋得住錯的東西(2026-09-16 實跑七支 exit 0)。
@@ -71,8 +72,8 @@ python3 scripts/lang_residue.py         # 英文版六個畫面不得殘留中�
 
 ## 實驗台
 
-`?lab=1` 打開。九種刺激條件,協定與重播完全相同,只換「刺激哪些神經元」,每一格**真的各跑五次**,
-顯示中位數與五次的範圍(`scripts/build_playground.py` → `public/data/playground.json`)。
+`?lab=1` 打開。九種刺激條件,協定與重播完全相同,只換「刺激哪些神經元」,每一格**真的各跑 20 次**,
+顯示中位數與 20 次的範圍(`scripts/build_playground.py` → `public/data/playground.json`)。
 
 **這不是瀏覽器裡的即時模擬。** 每一格都是先用完整連接組跑出來的。不做即時是有原因的:
 出貨的連線檔只有興奮性邊,拿它即時算會一點就爆,而且會推翻本站自己的發現

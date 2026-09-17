@@ -34,7 +34,8 @@ const UI = {
 // 英文版的出處欄:source 是機器用的指標(路徑/§段名),裡面幾句固定的中文註記在英文版換成英文;
 // 沒對到的中文由 scripts/lang_residue.py 抓出來(§ 後的段名例外:那是中文文件裡的錨點)。
 export const SRC_EN: [RegExp, string][] = [
-  [/同一組刺激,5 個亂數種子/g, 'same stimulus set, 5 random seeds'],
+  [/probe_600\((\d+) 次 600 ms 探測\)/g, 'probe_600 ($1 runs of 600 ms)'],
+  [/同一組刺激,(\d+) 個亂數種子/g, 'same stimulus set, $1 random seeds'],   // 次數會改,別把數字寫死進對照表
   [/亂數種子/g, 'random seeds'],
   // VA 2026-09-16 新增的出處註記(英文版也要讀得懂;長句在前,避免被短句先吃掉)
   [/摘要親讀,原句/g, 'abstract read first-hand, verbatim: '],

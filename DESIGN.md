@@ -4,7 +4,7 @@
 預覽頁:`~/.gstack/projects/fly-explorer/designs/design-system-20260915/preview.html`(已發佈為 artifact 16e59188)。
 
 ## Product Context
-- **What this is:** 把 MaleCNS 真實果蠅腦連接組(140,024 顆有座標的神經元)做成 3D 互動網站,重播模擬的逃跑反射;33 張說明卡雙層雙語。
+- **What this is:** 把 MaleCNS 真實果蠅腦連接組(140,024 顆有座標的神經元)做成 3D 互動網站,重播模擬的逃跑反射;34 張說明卡雙層雙語。
 - **Who it's for:** 國小到國中生,以及他們的家長與老師。
 - **Space/industry:** 兒童科普 / 神經科學教育。同類:NASA Space Place(兒童、暗底亮徽章)、BrainPOP(K-6 edtech、青白平面)、BrainFacts 3D brain(成人、白底臨床)、FlyWire Codex(研究工具、深藍)。
 - **Project type:** 互動教育網站(3D 舞台 + 內容抽屜),手機直式 308px 為主要裝置。

@@ -310,6 +310,8 @@ applyStaticLang(storedLang());
   // 非基準時字幕必須換掉——基準字幕在講逃跑的時間軸(「跳躍肌與翅膀肌動了」),
   // 套到「隨機 311 顆」那種條件上就是說謊。放電計數器同理(它的累計值只對基準那一次成立)。
   let labCond: { key: string; label: string } | null = null;
+  const loF = () => labCond ? 0 : -PRELUDE;
+  const hiF = () => (scn ? (labCond ? scn.nFrames - 1 : scn.nFrames - 1 + EPILOGUE) : 0);
   const PRELUDE = 24;                       // 前奏幀數(以 dtMs 計的虛擬毫秒)
   // 結局幀數(我們加的,不是模擬):模型跑到 600 ms 都還在放電、真果蠅這時也還在飛,
   // 使用者仍希望畫面收在靜止——那就明標「我們加的結局」(洋紅,跟前奏同一套標示),把光與翅膀慢慢關掉。
@@ -376,8 +378,8 @@ applyStaticLang(storedLang());
 
   function showFrame(f: number) {
     if (!scn) return;
-    frame = Math.max(-PRELUDE, Math.min(scn.nFrames - 1 + EPILOGUE, f));
-    if (frame < 0) {
+    frame = Math.max(loF(), Math.min(hiF(), f));
+    if (frame < 0 && !labCond) {
       // 前奏:真實放電全清零,只畫洋紅示意
       cloud.brightness.fill(0); cloud.attrBrightness.needsUpdate = true;
       if (edgeLayer) { edgeLayer.nodeBright.fill(0); edgeLayer.update(); muscles?.update(edgeLayer.nodeBright); }
@@ -396,7 +398,8 @@ applyStaticLang(storedLang());
       cards.chipsFor(-24); cards.setSpikes(0, 0, 'prelude');
       return;
     }
-    if (frame > scn.nFrames - 1) {
+    if (frame > scn.nFrames - 1 && !labCond) {   // 結局是為逃跑故事加的,實驗台的其他條件沒有結局
+
       // 結局(我們加的):最後一幀的真實放電乘上一個遞減係數。資料本身沒被改——escape.bin 不動,
       // 改的是顯示;PiP 的驅動跟著這個係數衰減,翅膀就自己收回靜止姿勢。標示全走洋紅。
       const k = (frame - (scn.nFrames - 1)) / EPILOGUE, decay = Math.pow(1 - k, 2);
@@ -458,7 +461,7 @@ applyStaticLang(storedLang());
 
   document.getElementById('play')!.addEventListener('click', () => {
     if (!scn) return;
-    if (frame >= scn.nFrames - 1 + EPILOGUE) frame = -PRELUDE;   // 播完(含我們加的結局)才重播;停在 250 ms 再按是繼續進結局
+    if (frame >= hiF()) frame = loF();   // 播完(含我們加的結局)才重播;停在 250 ms 再按是繼續進結局
     playing = !playing; lastT = performance.now();
     if (playing && frame === -PRELUDE) startCinematic();   // 從頭播放才走預設運鏡;中途暫停再播不動視角
     document.getElementById('play')!.textContent = playing ? '❚❚' : '▶';
@@ -563,6 +566,7 @@ applyStaticLang(storedLang());
       document.body.classList.remove('track', 'kid', 'more'); nav.hidden = true; scrolly.hidden = true; exitBtn.hidden = true;
       controls.enabled = true; cards.close(); userMoved = false; fitCamera(); return;
     }
+    document.getElementById('lab')!.hidden = true;   // 引導版是捲動敘事,實驗台會跟它搶鏡頭與字幕
     cards.setLevel(t); document.body.classList.add('track'); document.body.classList.remove('kid', 'more'); document.body.classList.add(t);
     nav.hidden = true; controls.enabled = false;               // 捲動模式:手勢給捲動,不給旋轉
     scrolly.hidden = false; exitBtn.hidden = false; cards.close();
@@ -601,12 +605,11 @@ applyStaticLang(storedLang());
       // 電壓計換成同一次執行的軌跡;基準以外的條件沒有前奏與結局(那兩段是為逃跑故事做的)
       const host = document.getElementById('gaugeHost')!;
       host.innerHTML = ''; gauge = await loadGauge(trace, host); host.hidden = false; gauge.setLang(lg());
-      const lo = labCond ? 0 : -PRELUDE, hi = labCond ? scn.nFrames - 1 : scn.nFrames - 1 + EPILOGUE;
-      $p('scrub').min = String(lo); $p('scrub').max = String(hi);
+      $p('scrub').min = String(loF()); $p('scrub').max = String(hiF());
       document.getElementById('spk')!.hidden = !!labCond;
       playing = false; stopAt = null; cine = null;
       document.getElementById('play')!.textContent = '▶';
-      showFrame(lo);
+      showFrame(loF());
     } catch (err) {
       console.warn('實驗台情境未載入:', err);
       document.getElementById('stage')!.innerHTML = `<b class="inj">${lg() === 'en' ? 'Could not load that run' : '這個條件的資料載入失敗'}</b>`;
@@ -616,7 +619,10 @@ applyStaticLang(storedLang());
   document.getElementById('mLab')!.addEventListener('click', () => { lab.isOpen() ? lab.close() : lab.open(); });
   // 深連結:?lab=1 打開實驗台;?lab=<條件> 直接選那個條件;再加 &labplay=1 就在舞台上播
   { const q = new URLSearchParams(location.search), v = q.get('lab');
-    if (v === '1') lab.open(); else if (v) lab.select(v, q.get('labplay') === '1'); }
+    // 引導版是捲動敘事,實驗台會跟它搶鏡頭與字幕:?track=kid&lab=1 這種組合以引導版為準
+    if (v && !document.body.classList.contains('track')) {
+      if (v === '1') lab.open(); else lab.select(v, q.get('labplay') === '1');
+    } }
 
   if (scn && new URLSearchParams(location.search).get('play') === '1') setTimeout(() => document.getElementById('play')!.click(), 600);   // 測試用:自動播放(延後,等載入時的重新取景先跑完)
 
@@ -637,8 +643,8 @@ applyStaticLang(storedLang());
         if (stopAt !== null && nf >= stopAt) {
           showFrame(stopAt); playing = false; stopAt = null;
           document.getElementById('play')!.textContent = '▶';
-        } else if (nf >= scn.nFrames - 1 + EPILOGUE) {
-          showFrame(scn.nFrames - 1 + EPILOGUE); playing = false;
+        } else if (nf >= hiF()) {
+          showFrame(hiF()); playing = false;
           // 模擬在 250 ms 切斷(模型此時仍在放電,探測到 600ms 都沒停),後面 EPILOGUE 幀是我們加的結局,
           // 洋紅明標。按鈕改成「重播」。見 verification_log §模型不會自己停 / §我們加的結局。
           document.getElementById('play')!.textContent = '↺';
