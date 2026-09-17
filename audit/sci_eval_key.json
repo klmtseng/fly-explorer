@@ -1,0 +1,311 @@
+{
+  "seed": 20260917,
+  "key": {
+    "it-4650b926": {
+      "src_id": "ok-01",
+      "label": "ok",
+      "class": "-",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-fc72408b": {
+      "src_id": "ok-02",
+      "label": "ok",
+      "class": "-",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-1b2f163a": {
+      "src_id": "ok-03",
+      "label": "ok",
+      "class": "-",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-18ee2547": {
+      "src_id": "ok-04",
+      "label": "ok",
+      "class": "-",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-9b91d6c6": {
+      "src_id": "ok-05",
+      "label": "ok",
+      "class": "-",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-7cb9cf3a": {
+      "src_id": "ok-06",
+      "label": "bad",
+      "class": "overgeneralization",
+      "needs": "literature",
+      "in_sample": true,
+      "why_wrong": "從解剖/形態分類推到知覺能力:同一個感覺模態可以有多個細胞類別,十二類不等於十二種感覺。網站原文是逐項列出八種模態,沒有做這個推論。",
+      "source": "由 2026-09-17 盲測的冷審指出,主線判斷後採納"
+    },
+    "it-fc034811": {
+      "src_id": "ok-07",
+      "label": "ok",
+      "class": "-",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-24385d41": {
+      "src_id": "ok-08",
+      "label": "ok",
+      "class": "-",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-e75f4310": {
+      "src_id": "ok-09",
+      "label": "ok",
+      "class": "-",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-c365e46a": {
+      "src_id": "ok-10",
+      "label": "ok",
+      "class": "-",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-94bed661": {
+      "src_id": "ok-11",
+      "label": "ok",
+      "class": "-",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-168fe7fb": {
+      "src_id": "ok-12",
+      "label": "ok",
+      "class": "-",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-94d57442": {
+      "src_id": "bad-mech-01",
+      "label": "bad",
+      "class": "mechanism-swap",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "Augustin 2019 寫的是 mixed(電 + 化學)突觸,而且電突觸才是這條迴路的主要型別;講成化學突觸把最快的那一段機制換掉了。",
+      "source": "PMC6469880"
+    },
+    "it-27b3216a": {
+      "src_id": "bad-mech-02",
+      "label": "bad",
+      "class": "mechanism-swap",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "方向搞反了:混合突觸在 GF→PSI 那一段,PSI→DLMn 原文明講是化學突觸。",
+      "source": "PMC6469880"
+    },
+    "it-6517cccc": {
+      "src_id": "bad-mech-03",
+      "label": "bad",
+      "class": "mechanism-swap",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "與自家邊資料(GF→TTMn 2 條邊 90 個突觸)和文獻都相反;GF→TTMn 是直連。",
+      "source": "own-data + PMC6469880"
+    },
+    "it-85871fb4": {
+      "src_id": "bad-cause-01",
+      "label": "ok",
+      "class": "-",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-1b4a3252": {
+      "src_id": "bad-cause-04",
+      "label": "bad",
+      "class": "causal-misattribution",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "消融測試反證:只要把進 PSI 的抑制性邊歸零,同樣那 16 個突觸就足以讓它放電(3/3 種子)。把沉默歸因於突觸太少與實測相反。",
+      "source": "runs/build/psi_ablation.json"
+    },
+    "it-0a5c44ca": {
+      "src_id": "bad-cause-02",
+      "label": "bad",
+      "class": "causal-misattribution",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "自家卡片寫的原因是模型沒有適應、沒有關迴路的抑制;把模型缺陷講成生物特性。",
+      "source": "own-data"
+    },
+    "it-f573e116": {
+      "src_id": "bad-cause-03",
+      "label": "bad",
+      "class": "causal-misattribution",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "自家結論是斷點在髓質運動偵測那一級(模型的視覺前端不通),不是果蠅視力差。",
+      "source": "own-data"
+    },
+    "it-fef62faf": {
+      "src_id": "bad-form-01",
+      "label": "ok",
+      "class": "-",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "",
+      "source": ""
+    },
+    "it-d8735434": {
+      "src_id": "bad-form-02",
+      "label": "bad",
+      "class": "functional-form",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "漏電積分放電的膜電位是指數衰減(時間常數),不是線性下降。",
+      "source": "PMC11446845"
+    },
+    "it-603027c7": {
+      "src_id": "bad-form-03",
+      "label": "bad",
+      "class": "functional-form",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "有不應期上限(2.2 毫秒 → 約 454 赫茲)與閾值非線性,不是比例關係。",
+      "source": "PMC11446845 + own-data"
+    },
+    "it-d495c125": {
+      "src_id": "bad-unit-01",
+      "label": "bad",
+      "class": "unit-or-denominator",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "分母換了口徑:0.04% 是用突觸數算的舊值,對連線數的正確比例是 0.24%,這條在 2026-09-15 已經更正過一次。",
+      "source": "own-data"
+    },
+    "it-0b530214": {
+      "src_id": "bad-unit-02",
+      "label": "bad",
+      "class": "unit-or-denominator",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "邊與突觸混用:2 是邊數,突觸數是 90。",
+      "source": "own-data"
+    },
+    "it-0a5930bc": {
+      "src_id": "bad-unit-03",
+      "label": "bad",
+      "class": "unit-or-denominator",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "單位錯三個數量級,原文是毫秒。",
+      "source": "PMC6469880"
+    },
+    "it-0fb99f0b": {
+      "src_id": "bad-modelbio-01",
+      "label": "bad",
+      "class": "model-as-biology",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "207 赫茲是模型在特定刺激下的輸出,不是量到的果蠅生理放電率;而且這隻雄性連接組沒有糖受器。",
+      "source": "own-data"
+    },
+    "it-cb2999db": {
+      "src_id": "bad-modelbio-02",
+      "label": "bad",
+      "class": "model-as-biology",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "14.4 毫秒是模型值,而且模型的視覺前端是注入的;真果蠅這一段的實測是另一組數字。",
+      "source": "own-data"
+    },
+    "it-ccaee336": {
+      "src_id": "bad-modelbio-03",
+      "label": "bad",
+      "class": "model-as-biology",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "停不下來的是模型;自家卡片明寫真果蠅不是這樣。",
+      "source": "own-data"
+    },
+    "it-e50f1673": {
+      "src_id": "bad-general-01",
+      "label": "bad",
+      "class": "overgeneralization",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "3.3 是種子 1 那一次的值,也是二十次範圍(2.8–3.3)的上端;講成定值等於把單次當常態。",
+      "source": "own-data"
+    },
+    "it-771888f7": {
+      "src_id": "bad-general-02",
+      "label": "bad",
+      "class": "overgeneralization",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "二十次裡有三次脫隊,其中兩次下游放電近九萬;安靜的是中位數不是全部。",
+      "source": "own-data"
+    },
+    "it-cfc552e9": {
+      "src_id": "bad-general-03",
+      "label": "bad",
+      "class": "overgeneralization",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "本模型量不了那條路(缺電突觸),而且結構上 GF→PSI→DLMn 在資料裡完全存在;從不能測跳到不存在。",
+      "source": "PMC6469880 + own-data"
+    },
+    "it-9825c72f": {
+      "src_id": "bad-dir-01",
+      "label": "bad",
+      "class": "direction-reversal",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "自家量測是最強的早期輸入為抑制性,方向相反。",
+      "source": "own-data"
+    },
+    "it-f8b0388d": {
+      "src_id": "bad-dir-02",
+      "label": "bad",
+      "class": "direction-reversal",
+      "needs": "literature",
+      "in_sample": false,
+      "why_wrong": "果蠅蘑菇體的規則是被壓抑而非增強,自家卡片專門講過這個反直覺點。",
+      "source": "own-data"
+    },
+    "it-584fc938": {
+      "src_id": "bad-dir-03",
+      "label": "bad",
+      "class": "direction-reversal",
+      "needs": "own-data",
+      "in_sample": false,
+      "why_wrong": "實測是移除抑制後衝到 308 赫茲(失控),方向相反。",
+      "source": "own-data"
+    }
+  }
+}

@@ -183,7 +183,7 @@ export function createCards(): Cards {
       const el = document.getElementById('spk')!; el.hidden = false;
       const N = n.toLocaleString(), T = ms.toFixed(0);
       if (phase === 'prelude') el.innerHTML = lang === 'zh' ? `<span class="inj">前奏是注入的,真實放電還沒開始</span>` : `<span class="inj">prelude is injected; no real spikes yet</span>`;
-      else if (level === 'kid') el.innerHTML = lang === 'zh' ? `你剛剛看到真的神經細胞放電 <b>✓ ${N}</b> 次` : `You just watched real nerve cells fire <b>✓ ${N}</b> times`;
+      else if (level === 'kid') el.innerHTML = lang === 'zh' ? `你剛剛看到真實神經細胞的模擬放電 <b>✓ ${N}</b> 次` : `You just watched simulated firing from real nerve cells <b>✓ ${N}</b> times`;
       else el.innerHTML = `n = <b>${N}</b> spikes · t = 0–${T} ms`;
       if (phase === 'epilogue') el.innerHTML += lang === 'zh' ? ` <span class="inj">· 之後是我們加的結局</span>` : ` <span class="inj">· ending is ours</span>`;
       lastSpk = [n, ms, phase];

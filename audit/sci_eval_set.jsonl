@@ -1,0 +1,34 @@
+{"item": "it-0a5930bc", "where": "", "text": "真果蠅的巨纖維到跳躍肌只要 0.93 秒。"}
+{"item": "it-584fc938", "where": "", "text": "移除抑制性連線之後放電率掉下來,可見抑制本來在推動迴路。"}
+{"item": "it-27b3216a", "where": "", "text": "教科書的路線是巨纖維先接到 PSI,PSI 再用電突觸推動翅膀下壓肌的運動神經元。"}
+{"item": "it-f8b0388d", "where": "", "text": "KC 與該區室的多巴胺神經元同時活躍時,那條連線被增強。"}
+{"item": "it-771888f7", "where": "", "text": "隨機刺激不會讓腦活躍起來,二十次都很安靜。"}
+{"item": "it-7cb9cf3a", "where": "", "text": "連接組裡有 15,912 顆感覺神經元,分成十二類,所以果蠅能分辨的感覺比課本教的五種多。"}
+{"item": "it-18ee2547", "where": "card:escape-converge/more", "text": "LC4 的 126 顆全部、LPLC2 的 185 顆裡的 183 顆連到巨纖維,合計 309 顆,每顆只連同側那一顆。"}
+{"item": "it-0b530214", "where": "", "text": "巨纖維到跳躍肌的運動神經元之間有 2 個突觸。"}
+{"item": "it-ccaee336", "where": "", "text": "果蠅的腦一旦被驚動就停不下來,六百毫秒後還在放電。"}
+{"item": "it-fc72408b", "where": "card:model-vs-real/kid", "text": "真果蠅的巨纖維到跳躍肌只要 0.93 毫秒,因為那兩個細胞之間是直接通電的。"}
+{"item": "it-c365e46a", "where": "card:no-learning/kid", "text": "這個模型學不會東西,因為連線的強弱在載入之後就是常數,沒有任何一行程式去改它。"}
+{"item": "it-1b2f163a", "where": "card:why-sudden/facts", "text": "模型裡每個突觸把下游的電位推高 0.275 毫伏,靜息是 −52 毫伏、閾值是 −45 毫伏。"}
+{"item": "it-d495c125", "where": "", "text": "KC 到 MBON 的 61,210 條連線佔全腦連線的 0.04%。"}
+{"item": "it-6517cccc", "where": "", "text": "巨纖維沒有直接接到管跳躍肌的神經細胞,它跟翅膀一樣要先經過 PSI 轉一手。"}
+{"item": "it-f573e116", "where": "", "text": "刺激視覺柱時 LC4 只到 1.23 赫茲,因為果蠅其實看不太清楚逼近的東西。"}
+{"item": "it-cb2999db", "where": "", "text": "果蠅從看到逼近到跳躍肌收到指令要 14.4 毫秒。"}
+{"item": "it-e50f1673", "where": "", "text": "巨纖維在逃跑開始後 3.3 毫秒放電。"}
+{"item": "it-94d57442", "where": "", "text": "真果蠅的巨纖維到跳躍肌只要 0.93 毫秒,因為那兩個細胞之間是很強的化學突觸。"}
+{"item": "it-85871fb4", "where": "stage:30", "text": "教科書裡的中繼站 PSI 在這個情境裡完全沒放電,是被抑制壓住了。"}
+{"item": "it-603027c7", "where": "", "text": "放電率與輸入強度成正比,所以刺激加倍,下游的赫茲數就加倍。"}
+{"item": "it-d8735434", "where": "", "text": "模型的電位隨時間線性下降到靜息值,所以輸入來得慢就累積不起來。"}
+{"item": "it-fc034811", "where": "card:no-soma/kid", "text": "昆蟲感覺神經細胞的本體長在觸角和腳毛上,不在被掃描的體積裡,所以資料裡找不到它們的位置。"}
+{"item": "it-9825c72f", "where": "", "text": "PSI 最強的早期輸入是興奮性的,所以它一開始就被推向閾值。"}
+{"item": "it-0fb99f0b", "where": "", "text": "果蠅的 MN9 在嚐到糖的時候會用 207 赫茲放電。"}
+{"item": "it-94bed661", "where": "card:eye-columns/more", "text": "右眼 892 根柱子、左眼 879 根,有十二種細胞幾乎每根柱子恰好出現一顆。"}
+{"item": "it-cfc552e9", "where": "", "text": "連接組模型證明教科書那條翅膀迴路不存在。"}
+{"item": "it-168fe7fb", "where": "promo", "text": "隨機刺激那一格,二十次裡有三次脫隊,下游放電 9,872、86,872、90,851 次,其餘十七次的中位數是 47。"}
+{"item": "it-9b91d6c6", "where": "lab", "text": "改成隨機刺激 311 顆神經細胞,二十次執行裡巨纖維一次都沒有放電。"}
+{"item": "it-4650b926", "where": "card:escape-converge/more", "text": "文獻上 LC4 編碼逼近速度、LPLC2 編碼視角大小,兩型都直接連到巨纖維。"}
+{"item": "it-24385d41", "where": "card:never-stops/more", "text": "跑到 600 毫秒,二十次執行沒有任何一次自己停下來,因為模型沒有適應也沒有關掉迴路的抑制。"}
+{"item": "it-0a5c44ca", "where": "", "text": "模型跑到 600 毫秒還在放電,因為果蠅逃跑之後本來就會持續飛很久。"}
+{"item": "it-1b4a3252", "where": "", "text": "PSI 沒放電,是因為巨纖維到它的突觸只有 16 個,驅動不夠。"}
+{"item": "it-fef62faf", "where": "card:escape-converge/more", "text": "文獻上巨纖維把 LC4 的速度與 LPLC2 的大小線性整合後決定要不要發放。"}
+{"item": "it-e75f4310", "where": "card:model-vs-real/more", "text": "巨纖維與下游是混合突觸:化學突觸加上由 Shaking-B innexin 構成的間隙連接。"}

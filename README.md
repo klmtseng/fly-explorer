@@ -73,6 +73,28 @@ python3 scripts/verify_playground.py    # 實驗台:summary 必須由 runs 重�
 撤回過的說法只要搬進程式碼字串或打包產物就能活下來。已經把撤回掃描與卡數比對擴到那些目錄,
 並把英文殘留掃描從 6 個畫面擴到 74 個;`audit/va_20260918.md` 裡有完整清單與還沒補的洞。
 
+## 科學宣稱的檢查與評估(2026-09-17 新增,尚未列入發佈閘門)
+
+上面八支管的是「數字對不對、撤回有沒有回流、英文有沒有殘留中文」。
+管不到的是「科學上說錯但用詞乾淨」。這條線另有四支,方法與第一次實跑的數字在
+`docs/sci_eval.md`:
+
+```bash
+python3 scripts/sci_claims.py       # 揀出值得查文獻的句子(73 句,不是全站)
+python3 scripts/verify_quotes.py    # 「文獻說 X」必須逐字對得上原文(引文接地)
+python3 scripts/disclosure_lint.py  # 專業層承認的模型限制,讀者層不准悄悄不提
+python3 scripts/sci_eval.py         # 盲測上面這些檢查器:逐類召回 + 誤報率 + 兩條基線
+```
+
+`disclosure_lint.py` 曾經是紅的:它指出小朋友層與字幕講 PSI 沒放電,卻沒說這個模型
+量不了教科書那條路。**2026-09-18 已修**——同時做了消融測試(`scripts/fly/ablate_psi_inhibition.py`):
+把進 PSI 的 309 條抑制性邊歸零重跑,PSI 三個種子都放電,所以「被抑制壓住」是對的;
+但解除抑制後翅膀讀數完全沒變,而真正的限制是連接組只記錄化學突觸。全部寫在
+`docs/verification_log.md §PSI 抑制消融`。
+
+`disclosure_lint.py` 與 `verify_quotes.py` 現在也是發佈前要跑的(前者純離線;
+後者第一次要 `--fetch` 抓原文進 `audit/sources/` 快取,之後離線重驗)。
+
 閘門管不到的事,寫在這裡比較誠實:它們驗的是「登記有沒有做、數字對不對得上、禁用詞有沒有出現」,
 不驗「這個說法在科學上對不對」,也不驗英文翻譯品質。那兩件事目前靠人審,見 `audit/`。
 

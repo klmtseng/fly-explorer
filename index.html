@@ -258,7 +258,13 @@
     #sheet.kid{left:12px;right:12px;width:auto;border-radius:4px 4px 0 0;border-bottom:0}
     #sheet.more{left:0;right:0;width:100%;border-left:0;border-right:0;border-bottom:0}
     #sheetBody{padding:12px 14px 16px} #chips button{font-size:10px;padding:5px 8px}
-    #sheet.kid h2{font-size:24px}
+    #sheet.kid h2{font-size:22px;line-height:1.25}
+    #sheet.kid .txt{font-size:16px;line-height:1.58}
+    #sheet.kid .fact{flex-basis:100%;padding:7px 9px}
+    #sheet.kid .fact b{font-size:16px;overflow-wrap:anywhere}
+    #sheet.more h2{font-size:19px}
+    #sheet.more table.ftab{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    #sheet.more .refs{font-size:10.5px}
   }
 
   /* ===== 首頁三扇門 + 引導版導覽列(2026-09-16 三分流示意版) ===== */
@@ -343,7 +349,16 @@
   body.track #stage,body.track #spk,body.track #hud{display:none!important}
   @media (max-width:560px){
     #scrolly .sec.left,#scrolly .sec.right{justify-content:center;padding:0}
-    #scrolly .paper{top:36vh;width:calc(100vw - 24px);padding:14px 16px;max-height:56vh}   /* 手機:紙黏在下 56vh,腦在上方;長卡片在紙裡自己捲 */
+    #scrolly .paper{top:34vh;width:calc(100vw - 24px);padding:13px 14px;max-height:58vh;overscroll-behavior:contain}   /* 手機:紙黏在下方,腦在上方;長卡片在紙裡自己捲 */
+    body.kid #scrolly .paper .num{font-size:32px}
+    body.kid #scrolly .paper h2{font-size:21px;line-height:1.24}
+    body.kid #scrolly .paper .txt{font-size:15px;line-height:1.55}
+    body.kid #scrolly .paper .fact{flex-basis:100%;padding:7px 9px}
+    body.kid #scrolly .paper .fact b{font-size:16px;overflow-wrap:anywhere}
+    body.more #scrolly .paper h2{font-size:18px}
+    body.more #scrolly .paper .txt{font-size:13.5px;line-height:1.62}
+    body.more #scrolly .paper table.ftab{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    body.more #scrolly .paper .refs{font-size:10px}
     #scrolly .hero{padding-bottom:14vh}
   }
 </style>

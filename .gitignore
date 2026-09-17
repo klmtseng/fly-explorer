@@ -10,3 +10,4 @@ scratch/
 # 中繼產物(可由 scripts/ 重新生成)
 # 建置期產物,不進版控也不部署
 .gstack/
+audit/sources/

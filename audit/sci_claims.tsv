@@ -1,0 +1,74 @@
+claim_id	where	lang	trigger	sentence
+b7e6bc86	card:body-overview/more	zh	quant	論文說 166,691 顆神經元(含只有軸突伸進來的感覺神經元);
+992bc89a	card:neck-gap/more	en	quant	Brain cell bodies stop at Z=44,160 and nerve-cord bodies start at Z=60,697 — 16,537 units (~132 µm) of pure passing axons in between, including the giant fiber's own enormous axon.
+17796fd5	card:motor-map/more	zh	quant	翅膀那 67 顆裡,24 顆接到真正拍動翅膀的動力肌,其餘多是控制翅膀角度的轉向肌——文獻若只數動力肌會得到比較小的數字。
+b5fe1bc6	card:wing-beat/more	zh	quant	數字來自一篇起飛空氣動力學**數值模擬**論文所引用的量測(二手轉引,標 ○):翅長 2.83 mm、平均翅弦 0.85 mm、拍翅 169 Hz、拍幅 134°;
+fd6e82d8	card:hex-columns/more	zh	quant	我們逐柱數過:L1、L2、L5、Mi1、Mi4、Mi9、Tm1、Tm2、Tm9、Tm20、C3、T1 這 12 種細胞型,在 96.7%-99.8% 的柱子裡恰好一顆(各型總數 1,732-1,773,對上 1,771 柱)。
+5eed7abd	card:hex-columns/more	en	quant	We counted column by column: 12 cell types — L1, L2, L5, Mi1, Mi4, Mi9, Tm1, Tm2, Tm9, Tm20, C3, T1 — appear exactly once in 96.7-99.8% of columns (type totals 1,732-1,773 against 1,771 columns).
+b9ca7285	card:spikes-hz/more	zh	quant	我們在模型裡量到 MN9 207 赫茲(刺激 21 顆 × 200 Hz,落在引爆區,是模型值不是果蠅的生理放電率,只能當相對指標);
+a81577f3	card:spikes-hz/more	en	quant	In the model we measured MN9 at 207 Hz (21 neurons stimulated at 200 Hz, inside the ignition regime — a model value, not a fly's physiological rate, usable only as a relative index);
+28d3bc05	card:shuffle-control/more	zh	quant	真實連接組下 MN9 是 207.00 赫茲,三個打亂版本都是 0.00。
+1437114b	card:shuffle-control/more	en	quant	On the real connectome MN9 fires at 207.00 Hz;
+b193cba8	card:no-learning/more	zh	quant	資料本身帶著學習所需的結構——KC→MBON 的 61,210 條連線就在圖裡,多巴胺神經元也在——但模型不把多巴胺當調節訊號,它跟其他神經元一樣只是放電。
+d77a742c	card:escape-converge/more	zh	quant	在本站出貨的邊檔門檻(權重 ≥2)下,LC4 126 顆全部、LPLC2 185 顆裡的 183 顆連到 DNp01,合計 309/311,分別貢獻 6,362 與 4,860 個突觸;
+7482927d	card:escape-converge/more	zh	causal	文獻上 LC4 編碼逼近速度、LPLC2 編碼視角大小,巨纖維把兩者線性整合後決定要不要發放。
+91269b0a	card:escape-two-muscles/title	zh	causal	跳是直連,翅膀教科書說要轉手——模擬卻沒走那條路
+0edc3f26	card:escape-two-muscles/kid	zh	causal	畫面照模擬畫,所以你看到的跟教科書不完全一樣。
+a1f5b4bd	card:escape-two-muscles/kid	en	causal	The giant fiber connects directly to the nerve cell that drives the jump muscle, but not to the one that drives the wing muscle — the textbook says the wing signal goes through a relay cell (PSI).
+da1a2bc3	card:escape-two-muscles/more	zh	quant	實測:巨纖維→TTMn(跳躍肌)2 條邊 90 個突觸,是直連;
+b7b5fbd3	card:escape-two-muscles/more	zh	quant	巨纖維→DLMn(翅膀下壓肌)0 條邊,必須經過 PSI(巨纖維→PSI 4 條邊,PSI→DLMn 10 條邊 449 個突觸)。
+4a672f57	card:escape-two-muscles/more	zh	quant	出貨情境的模擬裡 PSI 完全沒放電(最強的早期輸入是抑制性的),翅膀下壓肌 DLMn 首波 15.7 ms 走 LC4→DNp03→AN19B001→DLMn 這條路(AN19B001→DLMn 權重 +802/+672)。
+40ed13a3	card:escape-two-muscles/more	zh	quant	教科書的 GF→PSI→DLMn 含電突觸,本模型只有化學突觸、GF→PSI 僅 16 個突觸,PSI 被驅動得又弱又慢。
+667f842b	card:escape-two-muscles/more	en	quant	the wing depressor DLMn's first wave at 15.7 ms travels LC4→DNp03→AN19B001→DLMn (AN19B001→DLMn weights +802/+672).
+6a92189f	card:muscle-link/more	zh	quant	我們用 24 顆 DLMn/DVMn 與 2 顆 TTMn 的真實細胞體座標當連線起點,濃淡跟著它們逐幀的放電;
+f5067f3b	card:escape-speed/kid	zh	quant	實驗裡燈突然熄掉,果蠅腦裡的巨纖維 18 毫秒後就放電(一毫秒是千分之一秒),25 毫秒後整隻飛起來——差不多是眨一次眼的十分之一。
+24e5c62e	card:escape-speed/kid	en	quant	When the lights suddenly go out, the giant fiber in the fly's brain fires 18 milliseconds later (a millisecond is a thousandth of a second) and the whole fly is airborne at 25 ms — about a tenth of a blink.
+25b243a9	card:escape-speed/more	zh	quant	Fotowat 等人 2009 的量測:燈熄後巨纖維單一放電平均 18 ms(SD 1.5),起飛平均 25 ms(SD 2);
+be1a5eda	card:escape-is-decision/more	zh	causal	③短模式與長模式由巨纖維相對於平行迴路的放電時序決定,而且巨纖維可以否決進行中的長模式,強制切成短跳。
+5551e6f6	card:model-vs-real/kid	zh	causal	再說模型跟真果蠅不一樣的地方:真果蠅的巨纖維到跳躍肌只要 0.93 毫秒,因為那兩個細胞之間是「直接通電」的。
+5e25181f	card:model-vs-real/kid	en	causal	Now the place where the model and a real fly differ: in a real fly, the giant fiber reaches the jump muscle in 0.93 ms, because those two cells are wired to conduct electricity directly.
+4825dbcc	card:mushroom-body/more	zh	quant	果蠅腦的可塑位置不只一處,研究最透徹的是 KC→MBON 的 61,210 條連線(合計 463,640 個突觸),佔全腦 2,560 萬條連線的 0.24%。
+2f42bf82	card:mushroom-body/more	zh	quant	另外兩顆 APL 神經元對全部 4,064 顆 KC 做回饋抑制,權重高達 42-45(全腦平均 2.05),強制只有約 5% 同時活躍。
+5175ad9e	card:mushroom-body/more	en	quant	Two APL neurons also feed inhibition back onto all 4,064 Kenyon cells, at weights of 42-45 against a brain-wide average of 2.05, forcing only about 5% to be active at once.
+bfada07e	card:tried-visual-frontend/more	zh	quant	刺激視覺柱:LC4 只到 1.23 Hz、LPLC2 0。
+7cc7869a	card:tried-visual-frontend/more	zh	quant	直接刺激 LC4+LPLC2 共 311 顆:巨纖維 283.80 ± 0.45 Hz、跳躍肌 73.0、翅膀下壓肌 114.9;
+d01fd517	card:tried-visual-frontend/more	zh	quant	對照隨機 311 顆:巨纖維 0.00。
+4ff46668	card:tried-visual-frontend/more	en	quant	Stimulating the visual columns: LC4 reaches only 1.23 Hz, LPLC2 stays at 0.
+53a35e93	card:tried-visual-frontend/more	en	quant	Stimulating the 311 LC4+LPLC2 neurons directly: giant fiber 283.80 ± 0.45 Hz, jump muscle 73.0, wing depressor 114.9;
+ad3b28d2	card:tried-pulse-length/kid	zh	quant	6 毫秒剛剛好:偵測器先亮、巨纖維 3.3 毫秒接到、管跳躍肌的神經細胞 14.4 毫秒放電、管翅膀肌的 15.7 毫秒放電。
+99cce692	card:tried-pulse-length/kid	en	quant	At 3 ms the jump muscle never fired at all. 6 ms was right: detectors first, giant fiber at 3.3 ms, the jump-muscle nerve cell at 14.4 ms, the wing-muscle one at 15.7 ms.
+a42e80e2	card:tried-pulse-length/more	zh	quant	三版對照(6 ms 出貨):25 ms → 偵測器 0-32 ms、巨纖維 3.3-31.9、全部重疊;
+a3f7cc27	card:tried-pulse-length/more	zh	quant	3 ms → 巨纖維 5 次、TTMn 沒放電、PSI 沒放電;
+fcc59164	card:tried-pulse-length/more	zh	quant	6 ms → 巨纖維 7 次、TTMn 14.4 ms 一次、DLMn 15.7-249.1、PSI 沒放電。
+da3466d4	card:tried-pulse-length/more	zh	quant	注意 6 ms 版 TTMn 只放電 1 次、巨纖維 7 次,統計極薄,字幕只寫首次時刻不寫速率。
+90574665	card:tried-pulse-length/more	zh	quant	2026-09-17 補**:做實驗台時把同一組刺激用 20 個亂數種子各跑一次,才發現這些毫秒數有跑次之間的離散:巨纖維 2.8–3.3 ms、跳躍肌 13.8–16.8 ms、翅膀肌 11.9–15.7 ms。
+07a0f335	card:tried-pulse-length/more	en	quant	Three versions (6 ms shipped): 25 ms → detectors 0-32 ms, giant fiber 3.3-31.9, everything overlapping;
+5eeb74a8	card:tried-pulse-length/more	en	quant	3 ms → giant fiber 5 spikes, TTMn silent, PSI silent;
+d46f6720	card:tried-pulse-length/more	en	quant	6 ms → giant fiber 7 spikes, TTMn once at 14.4 ms, DLMn 15.7-249.1 ms, PSI silent.
+00b076c0	card:tried-pulse-length/more	en	quant	Note the 6 ms version has TTMn firing once and the giant fiber seven times — thin statistics, so captions give first-spike times only, never rates.
+901c2ec8	card:tried-pulse-length/more	en	quant	Added 2026-09-17:** building the lab meant running the same stimulus set under 20 random seeds, which showed these millisecond values vary from run to run: giant fiber 2.8–3.3 ms, jump muscle 13.8–16.8 ms, wing muscle 11.9–15.7 ms.
+ad73b63d	card:next-fix-model/more	zh	quant	①視覺前端:LC4 從視覺柱只收到 1.23 Hz,要追髓質運動路徑(T4/T5)為何靜默——是權重門檻、還是缺少視網膜的時間濾波。
+b2e4e5cb	card:next-fix-model/more	zh	quant	②電突觸:巨纖維到跳躍肌實際 0.93 ms,模型固定 1.8 ms 化學延遲;
+3bddd379	card:next-fix-model/more	en	quant	① Visual front end: LC4 receives only 1.23 Hz from the columns;
+b6b913c1	card:next-fix-model/more	en	quant	trace why the medulla motion pathway (T4/T5) is silent — a weight threshold, or missing temporal filtering in the retina. ② Electrical synapses: giant fiber to jump muscle takes 0.93 ms in the real fly against a fixed 1.8 ms chemical delay in the model;
+620b206e	card:next-fix-model/more	en	quant	adding gap junctions needs a different coupling term and annotation of where Shaking-B is expressed. ③ A stop mechanism: still firing at 600 ms;
+f3250fc8	card:next-new-stories/more	zh	causal	①求偶情境:MaleCNS 的受器標註只有 ppk23/ppk25/IR52b(費洛蒙),沒有糖受器,所以「嚐糖」在這隻腦上做不了,「聞到雌蠅」可以。
+92277c97	card:next-new-stories/more	zh	quant	②學習:KC→MBON 61,210 條可塑連線,規則是多巴胺同時活躍時壓抑而非增強;
+d25e4656	stage:1	zh	quant	偵測器正在放電,巨纖維要到 3.3 ms 才收到。
+df4c9c66	stage:1	zh	quant	中間沒有別的神經細胞——偵測器直接接到巨纖維,兩顆細胞交接訊號的那個接點叫突觸,訊號跨過去要 1.8 ms。
+53a64d7e	stage:1	zh	causal	看右上角的電壓計:巨纖維的電壓正在從 −52 往 −45 爬,爬過那條線它才會放電。
+d95ed155	stage:1	en	quant	the giant fiber receives it only at 3.3 ms.
+82eca589	stage:3	zh	quant	311 顆逼近偵測器裡有 309 顆直接接到同側的巨纖維(本站的連線檔只留權重 2 以上的邊);
+0cd19799	stage:14	zh	quant	管跳躍肌的神經細胞 14.4 ms 放電(走巨纖維直連)、管翅膀下壓肌的 15.7 ms(走 AN19B001)。
+3c845706	stage:14	en	quant	The nerve cells driving the jump muscle fire at 14.4 ms (direct from the giant fiber);
+59a1c2a7	stage:14	en	causal	those driving the wing depressor at 15.7 ms (via AN19B001).
+c3a7edbe	stage:30	zh	causal	教科書裡的中繼站 PSI 在這個情境裡完全沒放電(被抑制壓住)。
+c26be2f5	promo:25	en	causal	What the replay shows: 309 of the 311 looming detectors wire straight into one giant fiber on their own side.
+aea3d02c	promo:25	en	quant	In the run the site plays, the giant fiber fires at 3.3 ms, the jump muscle nerve at 14.4 ms, the wing depressor at 15.7 ms.
+f169d953	promo:81	en	quant	Driving the optic columns gets LC4 to 1.23 Hz and LPLC2 to zero, so the looming step is injected instead.
+68c1ca04	promo:85	en	quant	Across 20 runs the giant fiber lands between 2.8 and 3.3 ms, the jump nerve between 13.8 and 16.8, the wing nerve between 11.9 and 15.7.
+21b1b3a4	promo:98	en	causal	A diamond means we read the paper.
+559faf6d	promo:151	zh	quant	有東西朝牠撲過來,311 顆偵測器裡有 309 顆直接接到同一側的巨纖維,巨纖維放電,然後是管跳躍肌的神經細胞,再來是管翅膀的。
+0ab83645	promo:157	zh	quant	第一,把偵測器從 311 顆減到 39 顆,巨纖維二十次都照樣放電,可是管跳躍肌的神經細胞二十次裡一次都沒動。
+c9479e6d	promo:157	zh	quant	第二,改成隨機刺激 311 顆神經元,巨纖維二十次都沒放電,但二十次裡有三次脫隊:下游放電 9,872、86,872、90,851 次,而其餘十七次的中位數是 47 次,後兩次等於整顆腦被點燃。
+d90253b4	promo:187	zh	causal	巨纖維那張的圖上時間是 4 毫秒,因為播放以 1 毫秒為一幀;

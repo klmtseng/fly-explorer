@@ -1,0 +1,97 @@
+{
+  "note": "每條引文都由 scripts/verify_quotes.py 逐字對過原文;原文快取在 audit/sources/(不進版控)。",
+  "records": [
+    {
+      "claim_id": "7482927d",
+      "where": "card:escape-converge/more",
+      "site_claim": "巨纖維把 LC4 的速度與 LPLC2 的大小「線性整合」後決定要不要發放。",
+      "under_test": "整合的函數形式是線性的",
+      "verdict": "supported",
+      "note": "**2026-09-17 撤回**。我原本判 overstated,理由是 Ache 2019 摘要寫「速度的線性函數 + 大小的高斯函數」相加,所以『線性整合』誤述了函數形式。盲測的冷審引 von Reyn 2017 反駁,我親查該篇摘要,逐字就是「linear integration of these two features within the GF」。兩篇不衝突:**整合**(把兩個通道相加)是線性的,而**各通道自己**對刺激幾何的轉換可以非線性(大小通道是高斯)。我把通道內的轉換誤當成通道間的整合——前提對、推論錯,正好是這套系統要抓的那一類,而這次犯的人是我。網站那句維持原狀。",
+      "source": {
+        "pmid": "28641115",
+        "doi": "10.1016/j.neuron.2017.05.036",
+        "cite": "von Reyn CR, et al. Neuron 94:1190-1204.e6 (2017)"
+      },
+      "quote": "Motor program selection and timing emerge from linear integration of these two features within the GF",
+      "quote_source": "abstract",
+      "fetched_on": "2026-09-17",
+      "also_read": {
+        "cite": "Ache JM, et al. Curr Biol 29:1073-1081.e4 (2019), PMID 30827912",
+        "quote": "A model summing a linear function of angular velocity (provided by LC4) and a Gaussian function of angular size (provided by LPLC2) replicates GF looming response dynamics",
+        "why": "這是通道內的轉換,不是通道間的整合;兩者並存。"
+      },
+      "source_sha256": "7c2bd177d4731248"
+    },
+    {
+      "claim_id": "c3a7edbe",
+      "where": "stage:30",
+      "site_claim": "教科書裡的中繼站 PSI 在這個情境裡完全沒放電(被抑制壓住)。",
+      "under_test": "字幕把 PSI 的沉默歸因於抑制,而且沒有提這個模型缺了教科書那條路的主要傳遞方式",
+      "verdict": "incomplete",
+      "note": "**2026-09-18 部分撤回**。我原本判 contradicted,說「被抑制壓住」是歸因錯誤。消融測試否證了我:把進 PSI 的 309 條抑制性邊歸零重跑,PSI 三個種子全部放電(docs/verification_log.md §PSI 抑制消融),所以那句歸因**成立**。真正的缺陷是**省略**:字幕沒說這個模型只有化學突觸,而教科書那條 GF→PSI 是混合突觸、電性成分才是主力,於是讀者會把「PSI 沒放電」讀成教科書有問題。字幕已改寫,補上消融結果與這個限制;disclosure_lint 現在守著這件事。",
+      "source": {
+        "pmcid": "PMC6469880",
+        "pmid": "31001574",
+        "cite": "Augustin H, et al. eNeuro 6(2) ENEURO.0423-18.2019"
+      },
+      "quote": "the GFs form a mixed synapse with the PSI",
+      "quote_source": "fulltext",
+      "source_sha256": "fbbd2a100e730ed3",
+      "fetched_on": "2026-09-17",
+      "status": "fixed 2026-09-18"
+    },
+    {
+      "claim_id": "0edc3f26",
+      "where": "card:escape-two-muscles/kid",
+      "site_claim": "那顆轉手細胞從頭到尾沒放電,翅膀的訊號走了另一條路……你看到的跟教科書不完全一樣。",
+      "under_test": "小朋友層讓讀者以為模擬結果與教科書衝突,卻沒說模型量不了那條路",
+      "verdict": "incomplete",
+      "note": "缺陷是省略不是歸因錯:原文「翅膀的訊號走了另一條路……跟教科書不完全一樣」,沒有交代模型只記錄化學接線。已改寫成「不是教科書錯了,是我們的模型看不到那條路」,並加上消融結果(拿掉抑制 PSI 會放電,但翅膀讀數完全沒變)。",
+      "source": {
+        "pmcid": "PMC6469880",
+        "pmid": "31001574",
+        "cite": "Augustin H, et al. eNeuro 6(2) ENEURO.0423-18.2019"
+      },
+      "quote": "electrical synapses are a dominant type of synapse in the Drosophila GFS",
+      "quote_source": "fulltext",
+      "source_sha256": "fbbd2a100e730ed3",
+      "fetched_on": "2026-09-17",
+      "status": "fixed 2026-09-18"
+    },
+    {
+      "claim_id": "5551e6f6",
+      "where": "card:model-vs-real/kid",
+      "site_claim": "真果蠅的巨纖維到跳躍肌只要 0.93 毫秒,因為那兩個細胞之間是直接通電的。",
+      "under_test": "巨纖維與跳躍肌運動神經元之間有電性連接",
+      "verdict": "supported",
+      "note": "原文寫的是 mixed(電 + 化學)突觸,「直接通電」成立;卡片沒有把它講成純電突觸,措辭可以維持。",
+      "source": {
+        "pmcid": "PMC6469880",
+        "pmid": "31001574",
+        "cite": "Augustin H, et al. eNeuro 6(2) ENEURO.0423-18.2019"
+      },
+      "quote": "via a mixed (electrical and chemical) synapse, to the TTMn",
+      "quote_source": "fulltext",
+      "source_sha256": "fbbd2a100e730ed3",
+      "fetched_on": "2026-09-17"
+    },
+    {
+      "claim_id": "shiu-params",
+      "where": "card:why-sudden/facts",
+      "site_claim": "模型的每個突觸貢獻 0.275 mV,靜息 −52 mV、閾值 −45 mV,突觸延遲 1.8 ms,不應期 2.2 ms。",
+      "under_test": "這四個參數與其單位來自 Shiu et al. 2024 的模型",
+      "verdict": "supported",
+      "note": "2026-09-17 第三輪稽核補登的親讀記錄,見 docs/verification_log.md 末節。",
+      "source": {
+        "pmcid": "PMC11446845",
+        "pmid": "39358519",
+        "cite": "Shiu PK, et al. Nature 634:210-219 (2024)"
+      },
+      "quote": "W syn = 0.275 mV (free parameter; synaptic weight",
+      "quote_source": "fulltext",
+      "source_sha256": "b246e8202e0ced79",
+      "fetched_on": "2026-09-17"
+    }
+  ]
+}

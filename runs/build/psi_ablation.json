@@ -1,0 +1,142 @@
+{
+  "protocol": {
+    "w_syn": 0.179,
+    "r_poi_hz": 150.0,
+    "t_run_ms": 250.0,
+    "stim_ms": 6.0,
+    "stim": "runs/build/escape.stim",
+    "seeds": [
+      1,
+      2,
+      3
+    ]
+  },
+  "ablation": {
+    "psi_body_ids": [
+      802401,
+      903327
+    ],
+    "inhibitory_edges_zeroed": 309,
+    "weight_sum": -4762
+  },
+  "result": {
+    "psi_fired_baseline": "0/3",
+    "psi_fired_without_inhibition": "3/3"
+  },
+  "runs": [
+    {
+      "seed": 1,
+      "baseline": {
+        "total": 2205,
+        "psi": null,
+        "gf": {
+          "first_ms": 3.3,
+          "count": 7
+        },
+        "jump": {
+          "first_ms": 14.4,
+          "count": 1
+        },
+        "wing": {
+          "first_ms": 15.7,
+          "count": 56
+        }
+      },
+      "no_psi_inhibition": {
+        "total": 2209,
+        "psi": {
+          "first_ms": 14.4,
+          "count": 2
+        },
+        "gf": {
+          "first_ms": 3.3,
+          "count": 7
+        },
+        "jump": {
+          "first_ms": 14.4,
+          "count": 1
+        },
+        "wing": {
+          "first_ms": 15.7,
+          "count": 56
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "baseline": {
+        "total": 2266,
+        "psi": null,
+        "gf": {
+          "first_ms": 2.8,
+          "count": 7
+        },
+        "jump": {
+          "first_ms": 15.2,
+          "count": 1
+        },
+        "wing": {
+          "first_ms": 15.5,
+          "count": 55
+        }
+      },
+      "no_psi_inhibition": {
+        "total": 2270,
+        "psi": {
+          "first_ms": 14.8,
+          "count": 2
+        },
+        "gf": {
+          "first_ms": 2.8,
+          "count": 7
+        },
+        "jump": {
+          "first_ms": 15.2,
+          "count": 1
+        },
+        "wing": {
+          "first_ms": 15.5,
+          "count": 56
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "baseline": {
+        "total": 2136,
+        "psi": null,
+        "gf": {
+          "first_ms": 3.0,
+          "count": 6
+        },
+        "jump": {
+          "first_ms": 15.2,
+          "count": 1
+        },
+        "wing": {
+          "first_ms": 13.8,
+          "count": 54
+        }
+      },
+      "no_psi_inhibition": {
+        "total": 2138,
+        "psi": {
+          "first_ms": 15.2,
+          "count": 2
+        },
+        "gf": {
+          "first_ms": 3.0,
+          "count": 6
+        },
+        "jump": {
+          "first_ms": 15.2,
+          "count": 1
+        },
+        "wing": {
+          "first_ms": 13.8,
+          "count": 54
+        }
+      }
+    }
+  ]
+}

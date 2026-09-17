@@ -774,11 +774,11 @@
         "en": "Jumping is direct; the textbook wing relay never fired"
       },
       "kid": {
-        "zh": "巨纖維直接接到管跳躍肌的神經細胞,卻沒有直接接到管翅膀肌的——教科書說翅膀要經過一顆轉手細胞(叫 PSI)。但我們的模擬裡,那顆轉手細胞從頭到尾沒放電,翅膀的訊號走了另一條路,而且跳躍和翅膀幾乎同時動。畫面照模擬畫,所以你看到的跟教科書不完全一樣。",
-        "en": "The giant fiber connects directly to the nerve cell that drives the jump muscle, but not to the one that drives the wing muscle — the textbook says the wing signal goes through a relay cell (PSI). In our simulation, though, that relay cell never fired at all: the wing signal took a different route, and jump and wings moved almost together. The screen follows the simulation, so what you see isn't quite the textbook story."
+        "zh": "巨纖維直接接到管跳躍肌的神經細胞,卻沒有直接接到管翅膀肌的——教科書說翅膀要經過一顆轉手細胞(叫 PSI)。我們的模擬裡那顆轉手細胞從頭到尾沒放電。我們試著把壓住它的東西拿掉重跑,它就放電了,可是翅膀的讀數一點也沒變。而且教科書那條路靠的是「直接通電」的接法,我們的資料只記錄「用化學物質傳話」的接法,所以這個模型量不了那一段。不是教科書錯了,是我們的模型看不到那條路。",
+        "en": "The giant fiber connects directly to the nerve cell that drives the jump muscle, but not to the one that drives the wing muscle — the textbook says the wing signal goes through a relay cell (PSI). In our simulation that relay cell never fired. We tried taking away what was holding it down, and then it did fire — but the wing readout did not change at all. And the textbook route runs on cells wired together electrically, while our data only records the chemical kind of wiring, so this model cannot measure that step. The textbook isn't wrong; our model cannot see that route."
       },
       "more": {
-        "zh": "實測:巨纖維→TTMn(跳躍肌)2 條邊 90 個突觸,是直連;巨纖維→DLMn(翅膀下壓肌)0 條邊,必須經過 PSI(巨纖維→PSI 4 條邊,PSI→DLMn 10 條邊 449 個突觸)。這在**結構上**與教科書描述的 GF→PSI→DLMn 完全吻合,而我們是從資料量出來的。**但這是結構,不是動態。**出貨情境的模擬裡 PSI 完全沒放電(最強的早期輸入是抑制性的),翅膀下壓肌 DLMn 首波 15.7 ms 走 LC4→DNp03→AN19B001→DLMn 這條路(AN19B001→DLMn 權重 +802/+672)。教科書的 GF→PSI→DLMn 含電突觸,本模型只有化學突觸、GF→PSI 僅 16 個突觸,PSI 被驅動得又弱又慢。",
+        "zh": "實測:巨纖維→TTMn(跳躍肌)2 條邊 90 個突觸,是直連;巨纖維→DLMn(翅膀下壓肌)0 條邊,必須經過 PSI(巨纖維→PSI 4 條邊,PSI→DLMn 10 條邊 449 個突觸)。這在**結構上**與教科書描述的 GF→PSI→DLMn 完全吻合,而我們是從資料量出來的。**但這是結構,不是動態。**出貨情境的模擬裡 PSI 完全沒放電。**消融測試**(scripts/fly/ablate_psi_inhibition.py):把進 PSI 的 309 條抑制性邊歸零、其餘一個位元不動,同一協定重跑三個種子,PSI 三次都放電(首次 14.4 / 14.8 / 15.2 ms,各 2 次),所以「被抑制壓住」成立;但解除抑制之後翅膀下壓肌的讀數完全沒變(種子 1 都是 15.7 ms、56 次),而且 PSI 就算放電也在 14 ms 之後、遠晚於巨纖維的 3.3 ms。翅膀下壓肌 DLMn 首波 15.7 ms 走 LC4→DNp03→AN19B001→DLMn 這條路(AN19B001→DLMn 權重 +802/+672)。更根本的限制在別處:教科書的 GF→PSI 是**電化學混合突觸**,而電突觸是果蠅巨纖維系統的**主要**突觸型別(Augustin et al. 2019, PMC6469880 全文親讀);連接組只記錄化學突觸,GF→PSI 在本模型只剩 16 個突觸。於是 PSI 在本模型裡只被 16 個化學突觸驅動,又弱又慢——電突觸那一半連接組沒有記錄;**這個模型按建構就量不了教科書那條路**——它沒放電不能拿來當「教科書不對」的證據。",
         "en": "Measured: giant fiber → TTMn (jump muscle) is 2 edges and 90 synapses, direct. Giant fiber → DLMn (wing depressor) is zero edges — it must route through PSI (GF→PSI 4 edges; PSI→DLMn 10 edges, 449 synapses). That matches the textbook GF→PSI→DLMn chain **structurally**, except we read it out of the data rather than out of a book. **But that is structure, not dynamics.** In the shipped simulation PSI never fires (its strongest early input is inhibitory); the wing depressor DLMn's first wave at 15.7 ms travels LC4→DNp03→AN19B001→DLMn (AN19B001→DLMn weights +802/+672). The textbook GF→PSI→DLMn chain relies on electrical synapses; this model has only chemical ones and GF→PSI carries just 16 synapses, so PSI is driven weakly and late."
       },
       "facts": [
@@ -830,6 +830,39 @@
           "provenance": "measured",
           "source": "public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py",
           "source_en": "public/data/playground.json conditions[both](same stimulus set, 20 random seeds); scripts/build_playground.py"
+        },
+        {
+          "value": "3/3",
+          "value_en": "3/3",
+          "label": {
+            "zh": "拿掉 PSI 的抑制性輸入後,PSI 放電的種子數",
+            "en": "seeds in which PSI fires once its inhibitory input is removed"
+          },
+          "provenance": "measured",
+          "source": "scripts/fly/ablate_psi_inhibition.py;runs/build/psi_ablation.json;docs/verification_log.md §PSI 抑制消融",
+          "source_en": "scripts/fly/ablate_psi_inhibition.py; runs/build/psi_ablation.json; docs/verification_log.md §PSI inhibition ablation"
+        },
+        {
+          "value": "309 條",
+          "value_en": "309 edges",
+          "label": {
+            "zh": "消融測試歸零的抑制性入邊",
+            "en": "inhibitory edges into PSI zeroed in the ablation"
+          },
+          "provenance": "measured",
+          "source": "scripts/fly/ablate_psi_inhibition.py;runs/build/psi_ablation.json",
+          "source_en": "scripts/fly/ablate_psi_inhibition.py; runs/build/psi_ablation.json"
+        },
+        {
+          "value": "14.4–15.2 ms",
+          "value_en": "14.4-15.2 ms",
+          "label": {
+            "zh": "消融版裡 PSI 的首次放電(三個種子)",
+            "en": "PSI first spike in the ablated run (three seeds)"
+          },
+          "provenance": "measured",
+          "source": "runs/build/psi_ablation.json",
+          "source_en": "runs/build/psi_ablation.json"
         }
       ]
     },

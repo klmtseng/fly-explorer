@@ -1,6 +1,6 @@
 # 宣稱清單(機器產生,validity-audit 第 1 步)
 
-卡片 34 張,事實 92 條,階段字幕 8 段。
+卡片 34 張,事實 95 條,階段字幕 8 段。
 
 | 卡/階段 | 數值 | 標籤 | 標記 | 來源欄 | 路徑檢查 |
 |---|---|---|---|---|---|
@@ -44,6 +44,9 @@
 | escape-two-muscles | 15.7 ms | 模擬裡翅膀肌運動神經元首次放電(走 AN19B001) | measured | runs/build/escape.csv;docs/verification_log.md §DLMn 首波 | 路徑OK |
 | escape-two-muscles | 0 次 | PSI 在本情境的放電 | measured | runs/build/escape.csv | 路徑OK |
 | escape-two-muscles | 11.9–15.7 ms | 同一組刺激跑 20 次,翅膀肌運動神經元首次放電的範圍(出貨那次是 15.7) | measured | public/data/playground.json conditions[both](同一組刺激,20 個亂數種子);scripts/build_playground.py | 路徑OK |
+| escape-two-muscles | 3/3 | 拿掉 PSI 的抑制性輸入後,PSI 放電的種子數 | measured | scripts/fly/ablate_psi_inhibition.py;runs/build/psi_ablation.json;docs/verification_log.md §PSI 抑制消融 | 路徑OK |
+| escape-two-muscles | 309 條 | 消融測試歸零的抑制性入邊 | measured | scripts/fly/ablate_psi_inhibition.py;runs/build/psi_ablation.json | 路徑OK |
+| escape-two-muscles | 14.4–15.2 ms | 消融版裡 PSI 的首次放電(三個種子) | measured | runs/build/psi_ablation.json | 路徑OK |
 | muscle-link | 26 | 連線起點:真實運動神經元 | measured | scripts/export_edges.py(nodesByStage wing/jump) | 路徑OK |
 | muscle-link | 0 | 資料集裡的肌肉 | measured | annotation superclass 清單(scripts/fly/io_inventory.py) | 路徑OK |
 | escape-speed | 18 ms | 燈熄 → 巨纖維放電 | paper | Fotowat et al. J Neurophysiol 102(2):875-885 (2009),PMC3817277 全文親讀 | 非路徑(論文/標註) |
